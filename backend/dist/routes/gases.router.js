@@ -48,44 +48,54 @@ exports.gasesRouter = express_1.default.Router();
 exports.gasesRouter.use(express_1.default.json());
 // GET
 exports.gasesRouter.get("/", function (_req, res) { return __awaiter(void 0, void 0, void 0, function () {
-    var gases, error_1;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var gases, gases_collections, i, error_1;
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
-                return [4 /*yield*/, database_service_1.collections.gases.find({}).toArray()];
+                _b.trys.push([0, 3, , 4]);
+                gases = [];
+                if (!database_service_1.collections) return [3 /*break*/, 2];
+                return [4 /*yield*/, ((_a = database_service_1.collections.gases) === null || _a === void 0 ? void 0 : _a.find({}).toArray())];
             case 1:
-                gases = (_a.sent());
-                res.status(200).send(gases);
-                return [3 /*break*/, 3];
+                gases_collections = _b.sent();
+                if (gases_collections) {
+                    for (i = 0; i < gases_collections.length; i++) {
+                        gases.push(gases_collections[i]);
+                    }
+                }
+                _b.label = 2;
             case 2:
-                error_1 = _a.sent();
-                res.status(500).send(error_1.message);
-                return [3 /*break*/, 3];
-            case 3: return [2 /*return*/];
+                res.status(200).send(gases);
+                return [3 /*break*/, 4];
+            case 3:
+                error_1 = _b.sent();
+                res.status(500).send(error_1);
+                return [3 /*break*/, 4];
+            case 4: return [2 /*return*/];
         }
     });
 }); });
 exports.gasesRouter.get("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, query, gas, error_2;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 id = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id;
-                _b.label = 1;
+                _c.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _c.trys.push([1, 3, , 4]);
                 query = { _id: new mongodb_1.ObjectId(id) };
-                return [4 /*yield*/, database_service_1.collections.gases.findOne(query)];
+                return [4 /*yield*/, ((_b = database_service_1.collections === null || database_service_1.collections === void 0 ? void 0 : database_service_1.collections.gases) === null || _b === void 0 ? void 0 : _b.findOne(query))];
             case 2:
-                gas = (_b.sent());
+                gas = (_c.sent());
                 if (gas) {
                     res.status(200).send(gas);
                 }
                 return [3 /*break*/, 4];
             case 3:
-                error_2 = _b.sent();
+                error_2 = _c.sent();
                 res.status(404).send("Unable to find matching document with id: " + req.params.id);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
@@ -95,22 +105,23 @@ exports.gasesRouter.get("/:id", function (req, res) { return __awaiter(void 0, v
 // POST
 exports.gasesRouter.post("/", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var newGas, result, error_3;
-    return __generator(this, function (_a) {
-        switch (_a.label) {
+    var _a;
+    return __generator(this, function (_b) {
+        switch (_b.label) {
             case 0:
-                _a.trys.push([0, 2, , 3]);
+                _b.trys.push([0, 2, , 3]);
                 newGas = req.body;
-                return [4 /*yield*/, database_service_1.collections.gases.insertOne(newGas)];
+                return [4 /*yield*/, ((_a = database_service_1.collections === null || database_service_1.collections === void 0 ? void 0 : database_service_1.collections.gases) === null || _a === void 0 ? void 0 : _a.insertOne(newGas))];
             case 1:
-                result = _a.sent();
+                result = _b.sent();
                 result
                     ? res.status(201).send("Successfully created a new gase with id " + result.insertedId)
                     : res.status(500).send("Failed to create a new gase.");
                 return [3 /*break*/, 3];
             case 2:
-                error_3 = _a.sent();
+                error_3 = _b.sent();
                 console.error(error_3);
-                res.status(400).send(error_3.message);
+                res.status(400).send(error_3);
                 return [3 /*break*/, 3];
             case 3: return [2 /*return*/];
         }
@@ -119,27 +130,27 @@ exports.gasesRouter.post("/", function (req, res) { return __awaiter(void 0, voi
 // PUT
 exports.gasesRouter.put("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, updatedGame, query, result, error_4;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 id = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id;
-                _b.label = 1;
+                _c.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _c.trys.push([1, 3, , 4]);
                 updatedGame = req.body;
                 query = { _id: new mongodb_1.ObjectId(id) };
-                return [4 /*yield*/, database_service_1.collections.gases.updateOne(query, { $set: updatedGame })];
+                return [4 /*yield*/, ((_b = database_service_1.collections === null || database_service_1.collections === void 0 ? void 0 : database_service_1.collections.gases) === null || _b === void 0 ? void 0 : _b.updateOne(query, { $set: updatedGame }))];
             case 2:
-                result = _b.sent();
+                result = _c.sent();
                 result
                     ? res.status(200).send("Successfully updated gas with id " + id)
                     : res.status(304).send("Game with id: " + id + " not updated");
                 return [3 /*break*/, 4];
             case 3:
-                error_4 = _b.sent();
-                console.error(error_4.message);
-                res.status(400).send(error_4.message);
+                error_4 = _c.sent();
+                console.error(error_4);
+                res.status(400).send(error_4);
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }
@@ -148,18 +159,18 @@ exports.gasesRouter.put("/:id", function (req, res) { return __awaiter(void 0, v
 // DELETE
 exports.gasesRouter.delete("/:id", function (req, res) { return __awaiter(void 0, void 0, void 0, function () {
     var id, query, result, error_5;
-    var _a;
-    return __generator(this, function (_b) {
-        switch (_b.label) {
+    var _a, _b;
+    return __generator(this, function (_c) {
+        switch (_c.label) {
             case 0:
                 id = (_a = req === null || req === void 0 ? void 0 : req.params) === null || _a === void 0 ? void 0 : _a.id;
-                _b.label = 1;
+                _c.label = 1;
             case 1:
-                _b.trys.push([1, 3, , 4]);
+                _c.trys.push([1, 3, , 4]);
                 query = { _id: new mongodb_1.ObjectId(id) };
-                return [4 /*yield*/, database_service_1.collections.gases.deleteOne(query)];
+                return [4 /*yield*/, ((_b = database_service_1.collections === null || database_service_1.collections === void 0 ? void 0 : database_service_1.collections.gases) === null || _b === void 0 ? void 0 : _b.deleteOne(query))];
             case 2:
-                result = _b.sent();
+                result = _c.sent();
                 if (result && result.deletedCount) {
                     res.status(202).send("Successfully removed gas with id " + id);
                 }
@@ -171,9 +182,9 @@ exports.gasesRouter.delete("/:id", function (req, res) { return __awaiter(void 0
                 }
                 return [3 /*break*/, 4];
             case 3:
-                error_5 = _b.sent();
-                console.error(error_5.message);
-                res.status(400).send(error_5.message);
+                error_5 = _c.sent();
+                console.error(error_5);
+                res.status(400).send();
                 return [3 /*break*/, 4];
             case 4: return [2 /*return*/];
         }

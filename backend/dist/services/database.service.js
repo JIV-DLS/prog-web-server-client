@@ -57,15 +57,44 @@ function connectToDatabase() {
             switch (_a.label) {
                 case 0:
                     dotenv.config();
+                    if (!process.env.DB_CONN_STRING) return [3 /*break*/, 2];
                     client = new mongoDB.MongoClient(process.env.DB_CONN_STRING);
                     return [4 /*yield*/, client.connect()];
                 case 1:
                     _a.sent();
                     db = client.db(process.env.DB_NAME);
-                    gasesCollection = db.collection(process.env.GASES_COLLECTION_NAME);
-                    exports.collections.gases = gasesCollection;
-                    console.log("Successfully connected to database: " + db.databaseName + " and collection: " + gasesCollection.collectionName);
-                    return [2 /*return*/];
+                    /*await db.command({
+                        "collMod": process.env.GASES_COLLECTION_NAME,
+                        "validator": {
+                            $jsonSchema: {
+                                bsonType: "object",
+                                required: ["name", "price", "category"],
+                                additionalProperties: false,
+                                properties: {
+                                    _id: {},
+                                    name: {
+                                        bsonType: "string",
+                                        description: "'name' is required and is a string"
+                                    },
+                                    price: {
+                                        bsonType: "number",
+                                        description: "'price' is required and is a number"
+                                    },
+                                    category: {
+                                        bsonType: "string",
+                                        description: "'category' is required and is a string"
+                                    }
+                                }
+                            }
+                        }
+                    });*/
+                    if (process.env.GASES_COLLECTION_NAME) {
+                        gasesCollection = db.collection(process.env.GASES_COLLECTION_NAME);
+                        exports.collections.gases = gasesCollection;
+                        console.log("Successfully connected to database: " + db.databaseName + " and collection: " + gasesCollection.collectionName);
+                    }
+                    _a.label = 2;
+                case 2: return [2 /*return*/];
             }
         });
     });
