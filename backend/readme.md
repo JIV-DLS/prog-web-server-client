@@ -1,9 +1,9 @@
-touche .env 
-and put 
+touch .env
+and put
 
 DB_CONN_STRING="__YOUR__DB__CONNECTION__STRING"
-DB_NAME="gasesDB" 
+DB_NAME="gasesDB"
 GASES_COLLECTION_NAME="gases"
 
 node install
-npm start
+npm run localStart
