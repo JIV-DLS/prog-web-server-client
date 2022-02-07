@@ -1,16 +1,46 @@
 import React from 'react';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route,
+  Link
+} from "react-router-dom";
 import './App.css';
 import MyMap from './components/myMap';
+import SignIn from './components/signIn';
+import SignUp from './components/signUp';
 
-function App() {
+
+export default function App() {
 
   const mapIsReadyCallback = (map) => {
     console.log(map);
   };
 
+  // return (
+  //   // <MyMap mapIsReadyCallback={mapIsReadyCallback}/>
+  //   //<SignIn></SignIn>
+  //   //<SignUp></SignUp>
+  //   <Router path="/"></Router>
+  // );
+
   return (
-    <MyMap mapIsReadyCallback={mapIsReadyCallback}/>
+    <Router>
+      <div>
+        {/* A <Switch> looks through its children <Route>s and
+            renders the first one that matches the current URL. */}
+        <Switch>
+          <Route path="/signIn">
+            <SignIn />
+          </Route>
+          <Route path="/signUp">
+            <SignUp />
+          </Route>
+          <Route path="/">
+          <MyMap mapIsReadyCallback={mapIsReadyCallback}/>
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
-
-export default App;
