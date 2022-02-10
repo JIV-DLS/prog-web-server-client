@@ -6,6 +6,8 @@ const gas = new mongoose.Schema({
   description: {type: String},
   name: {type: String},
   price: {type: Number},
+  maj: {type: Date},
+
 },
     {
       timestamps: true,
