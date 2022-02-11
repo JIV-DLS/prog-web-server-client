@@ -4,6 +4,7 @@ import mongoose, {Schema} from "mongoose";
 const station = new Schema({
     name: {type: String},
     coordinates: Schema.Types.Mixed,
+    automate_24_24: { type: Boolean },
     services: [Schema.Types.ObjectId],
     gases:[{
         _id: { type: Schema.Types.ObjectId },
@@ -14,6 +15,12 @@ const station = new Schema({
     addresses: {
         address: { type: String, trim: true },
         town: { type: String, trim: true }
+    },
+    closed:{
+        state:{ type: Boolean },
+        type:{ type: String },
+        start:{ type: Date },
+        end:{ type: Date },
     }
 },
     {
