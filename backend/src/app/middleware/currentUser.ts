@@ -1,4 +1,5 @@
 
+import {logger} from "src/app/utils/logger.ts"
 import jwt from "jsonwebtoken";
 
 export const currentUser = (req, res, next) => {
@@ -7,7 +8,7 @@ export const currentUser = (req, res, next) => {
             throw new Error("Invalid user ID");
         } else {
             // tslint:disable-next-line:no-console
-            console.log("here2");
+            //logger.info("here2");
             next();
         }
     } catch {

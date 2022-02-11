@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import {Password} from "../../models";
 import {TmpUserAuth} from "../../models/tmpUserAuth.model";
 import {User} from "../../models/user.model";
+import {logger} from "src/app/utils/logger.ts"
+
 import deleteProperty = Reflect.deleteProperty;
 
 function userTokenResponse(user) {
@@ -19,7 +21,7 @@ function userTokenResponse(user) {
 export const signinWithPhoneNumber = (req, res) => {
     if (req.params.phoneNumber != null) {
         User.findOne({phoneNumber: req.params.phoneNumber}).then((_) => {
-            console.log(_);
+            //logger.info(_);
             if (_ == null) {
                 new TmpUserAuth({
                     code: Math.floor(
@@ -78,7 +80,7 @@ export const signup = (req, res) => {
                     user.save()
                         .then(() => res.status(201).json(userTokenResponse(user)))
                         .catch((error) => {
-                            console.log(error);
+                            logger.error(error);
                             res.status(400).json({ error });
                         });
                 })

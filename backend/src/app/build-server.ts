@@ -10,6 +10,7 @@ import { RessourcesAndRoutes } from "./models/ressourcesAndRoutes";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 
+import {logger} from "src/app/utils/logger.ts"
 
 export const buildServer = (cb) => {
   const app = express();
@@ -73,7 +74,7 @@ export const buildServer = (cb) => {
   if (process.env.DB_CONN_STRING){
     // tslint:disable-next-line:max-line-length
 
-    console.log("Connexion à la BD ",process.env.DB_CONN_STRING," ...");
+    logger.info("Connexion à la BD ",process.env.DB_CONN_STRING," ...");
 
     mongoose.connect(process.env.DB_CONN_STRING,
         {
@@ -82,7 +83,7 @@ export const buildServer = (cb) => {
         })
         .then(() => {
           // tslint:disable-next-line:no-console
-          console.log("Connexion à MongoDB réussie !");
+          logger.info("Connexion à MongoDB réussie !");
           mongoose.set("useNewUrlParser", true);
           mongoose.set("useFindAndModify", false);
           mongoose.set("useCreateIndex", true);
@@ -91,11 +92,11 @@ export const buildServer = (cb) => {
 
         })
         // tslint:disable-next-line:no-console
-        .catch(() => console.log("Connexion à MongoDB échouée !"));
+        .catch(() => logger.error("Connexion à MongoDB échouée !"));
 
   }
   else{
-    console.log("la variable DB_CONN_STRING est introuvable!");
+    logger.error("la variable DB_CONN_STRING est introuvable!");
   }
 
   // const server = app.listen(process.env.PORT || 9428, () => cb && cb(server))
