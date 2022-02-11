@@ -1,6 +1,6 @@
-var AdmZip = require('adm-zip');
-var request = require('request');
-var x2j = require('xml-js');
+const AdmZip = require('adm-zip');
+const request = require('request');
+const x2j = require('xml-js');
 
 
 export function getData(url) {
