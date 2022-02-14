@@ -3,9 +3,16 @@ import mongoose, {Schema} from "mongoose";
 
 const station = new Schema({
     name: {type: String},
-    coordinates: Schema.Types.Mixed,
+    coordinates: {
+        longitude: Number,
+        latitude: Number,
+        cp: Number,
+    },
     automate_24_24: { type: Boolean },
     services: [Schema.Types.ObjectId],
+    pop:{
+      type: String
+    },
     gases:[{
         _id: { type: Schema.Types.ObjectId },
         price: { type: Number },

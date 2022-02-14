@@ -13,16 +13,25 @@ import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 
 import {logger} from "./utils/logger"
+import {Station} from "./models/station.model";
 
+/*
 const cron = require('node-cron');
 
-cron.schedule('*/5 * * * *', () => {
+cron.schedule('*//*5 * * * *', () => {
   console.log('running a task in 5 minutes');
   fetch_data_from_server();
 })
+*/
 
 function fetch_data_from_server() {
-  const file_url = 'https://donnees.roulez-eco.fr/opendata/annee/2022';
+  const currentDate = new Date();
+  const currentYear = currentDate.getFullYear();
+  const oldestKnownDate = 2020;
+
+  console.log("getting data for year",typeof currentYear)
+
+  const file_url = `https://donnees.roulez-eco.fr/opendata/annee/${currentYear}`;
 
   getData(file_url).then(function (json) {
     //console.log("raw xml : " + rawXML.toString());
@@ -30,10 +39,36 @@ function fetch_data_from_server() {
     if (typeof json === "string") {
       var jsonObject = JSON.parse(json)
     }
-    var pdv_list = jsonObject.elements[0].elements
-    console.log(pdv_list[0])
+    //var pdv_list = jsonObject.elements[0].elements
+
+    const pdvs = jsonObject["pdv_liste"]["pdv"]
+
+    for (let i = 0; i < pdvs.length; i++) {
+        const station = new Station()
+        const longitude = pdvs[i]["longitude"]
+        const latitude = pdvs[i]["latitude"]
+        const cp = pdvs[i]["cp"]
+        const pop =  pdvs[i]["pop"]
+        const address =  pdvs[i]["address"]
+        const ville =  pdvs[i]["ville"]
+        const automate_24_24 = pdvs[i]["automate_24_24"]
+        const horaire = []
+
+
+    }
+    //console.log(pdv_list[0])
+    console.log(json.toString().substring(0,10000))
 
   })
+  /*
+  for (let i = currentYear; i < oldestKnownDate; i--) {
+    console.log("=>_______",i)
+
+
+
+  }*/
+
+
 }
 
 export const buildServer = (cb) => {

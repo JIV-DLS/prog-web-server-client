@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mkdirp_1 = __importDefault(require("mkdirp"));
 const build_server_1 = require("./build-server");
 const logger_1 = require("./utils/logger");
-const api_fetcher_1 = require("./utils/api-fetcher");
 mkdirp_1.default("./ressources/downloaded");
 mkdirp_1.default("./mocks");
 var apifetcher = require('./utils/api-fetcher');
