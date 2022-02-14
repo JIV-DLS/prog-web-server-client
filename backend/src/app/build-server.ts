@@ -12,7 +12,7 @@ import {getData} from "./utils/api-fetcher";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 
-import {logger} from "src/app/utils/logger.ts"
+import {logger} from "./utils/logger"
 
 const cron = require('node-cron');
 

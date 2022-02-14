@@ -1,5 +1,5 @@
 
-import {logger} from "src/app/utils/logger.ts"
+import {logger} from "../utils/logger"
 import jwt from "jsonwebtoken";
 
 export const currentUser = (req, res, next) => {
