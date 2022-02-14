@@ -7,10 +7,34 @@ import path from "path";
 import {api} from "./api";
 import { RessourcesAndRoutes } from "./models/ressourcesAndRoutes";
 
+import {getData} from "./utils/api-fetcher";
+
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 
 import {logger} from "src/app/utils/logger.ts"
+
+const cron = require('node-cron');
+
+cron.schedule('*/5 * * * *', () => {
+  console.log('running a task in 5 minutes');
+  fetch_data_from_server();
+})
+
+function fetch_data_from_server() {
+  const file_url = 'https://donnees.roulez-eco.fr/opendata/annee/2022';
+
+  getData(file_url).then(function (json) {
+    //console.log("raw xml : " + rawXML.toString());
+    //console.log('JSon :  ', json.toString().substring(0,1000));
+    if (typeof json === "string") {
+      var jsonObject = JSON.parse(json)
+    }
+    var pdv_list = jsonObject.elements[0].elements
+    console.log(pdv_list[0])
+
+  })
+}
 
 export const buildServer = (cb) => {
   const app = express();
@@ -70,7 +94,6 @@ export const buildServer = (cb) => {
 
 
   dotenv.config();
-
   if (process.env.DB_CONN_STRING){
     // tslint:disable-next-line:max-line-length
 
@@ -87,6 +110,9 @@ export const buildServer = (cb) => {
           mongoose.set("useNewUrlParser", true);
           mongoose.set("useFindAndModify", false);
           mongoose.set("useCreateIndex", true);
+
+          fetch_data_from_server();
+
 
           const server = http.listen(process.env.PORT || 9428, () => cb && cb(server));
 

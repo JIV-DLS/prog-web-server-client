@@ -9,6 +9,7 @@ const station = new Schema({
     gases:[{
         _id: { type: Schema.Types.ObjectId },
         price: { type: Number },
+        maj: {type: Date},
         available: { type: Boolean },
         unavailabilityDate: {type: Date}
     }],
