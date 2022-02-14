@@ -1,41 +1,50 @@
-import React, { useEffect, useRef } from 'react';
-import { map, tileLayer, Browser } from 'leaflet';
-
 import './myMap.css';
+import React, {useState} from "react";
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { Icon } from "leaflet";
 
-const MyMap = ({
-  mapIsReadyCallback /* To be triggered when a map object is created */,
-}) => {
-  const mapContainer = useRef(null);
+function MyMap() {
+  const [activePark, setActivePark] = useState(null);
+  const icon = new Icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/784/784867.png",
+    iconSize: [20, 20]
+  });
 
-  useEffect(() => {
-    const initialState = {
-      lng: 11,
-      lat: 49,
-      zoom: 4,
-    };
+  return (
+    <MapContainer center={[45.4, -75.7]} zoom={12} scrollWheelZoom={false}>
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  />
+       <Marker
+          position={[
+            45.323,
+            -75.25
+          ]}
+          icon={icon}>
+            <Popup>
+              A pretty CSS3 popup. <br /> Easily customizable.
+            </Popup> 
+        </Marker>
 
-    const leafletMap = map(mapContainer.current).setView(
-      [initialState.lat, initialState.lng],
-      initialState.zoom
-    );
-
-    const myAPIKey = 'e4c5acaaf4314c26b815cb595c0d23fe';
-    const isRetina = Browser.retina;
-    var baseUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${myAPIKey}`;
-    var retinaUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey=${myAPIKey}`;
-
-    tileLayer(isRetina ? retinaUrl : baseUrl, {
-      attribution:
-        'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" rel="nofollow" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" rel="nofollow" target="_blank">© OpenStreetMap</a> contributors',
-      maxZoom: 20,
-      id: 'osm-bright',
-    }).addTo(leafletMap);
-
-    mapIsReadyCallback(leafletMap);
-  }, [mapContainer.current]);
-
-  return <div className="map-container" ref={mapContainer}></div>;
-};
+      {activePark && (
+        <Popup
+          position={[
+            45.323,
+            -75.25
+          ]}
+          onClose={() => {
+            setActivePark(null);
+          }}
+        >
+          <div>
+            <h2>{activePark.properties.NAME}</h2>
+            <p>{activePark.properties.DESCRIPTIO}</p>
+          </div>
+        </Popup>
+      )}
+</MapContainer>
+  );
+}
 
 export default MyMap;
