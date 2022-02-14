@@ -9,8 +9,9 @@ const logger_1 = require("./utils/logger");
 const api_fetcher_1 = require("./utils/api-fetcher");
 mkdirp_1.default("./ressources/downloaded");
 mkdirp_1.default("./mocks");
+var apifetcher = require('./utils/api-fetcher');
 build_server_1.buildServer((server) => logger_1.logger.info(`Server is listening on port ${server.address().port}`));
-var file_url = 'https://donnees.roulez-eco.fr/opendata/annee/2022';
-api_fetcher_1.getData(file_url).then(function (json) {
+api_fetcher_1.getData(apifetcher.annee).then(function (json) {
+    console.log(json.toString().substring(0, 500));
 });
 //# sourceMappingURL=app.js.map
