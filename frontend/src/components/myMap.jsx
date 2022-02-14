@@ -4,6 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import { Icon } from "leaflet";
 import STATIONS from "../data/stations.mock"
 
+
 function MyMap() {
   const [activeStation, setActiveStation] = useState(null);
   const stationList = STATIONS; 
@@ -13,7 +14,15 @@ function MyMap() {
   });
 
   return (
-  <MapContainer center={[43.677, 7.226]} zoom={12} scrollWheelZoom={true}>
+    <MapContainer 
+    center={[43.7101728, 7.2619532]} 
+    zoom={13} 
+    scrollWheelZoom={true}
+    whenReady={(map) => {
+      map.target.on("move", function (e) {
+            console.log(map.target.getCenter())
+      });
+   }}>
   <TileLayer
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
