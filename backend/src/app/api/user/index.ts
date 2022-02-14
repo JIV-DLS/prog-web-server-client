@@ -3,7 +3,7 @@ import jwt from "jsonwebtoken";
 import {Password} from "../../models";
 import {TmpUserAuth} from "../../models/tmpUserAuth.model";
 import {User} from "../../models/user.model";
-import {logger} from "src/app/utils/logger.ts"
+import {logger} from "../../utils/logger"
 
 import deleteProperty = Reflect.deleteProperty;
 

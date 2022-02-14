@@ -10,7 +10,7 @@ import { RessourcesAndRoutes } from "./models/ressourcesAndRoutes";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 
-import {logger} from "src/app/utils/logger.ts"
+import {logger} from "./utils/logger"
 
 export const buildServer = (cb) => {
   const app = express();
