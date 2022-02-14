@@ -23,7 +23,7 @@ function MyMap() {
     zoom={13} 
     scrollWheelZoom={true}
     whenReady={(map) => {
-      map.target.on("drag", function (e) {
+      map.target.on("move", function (e) {
             console.log(map.target.getCenter())
 }
           );
