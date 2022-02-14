@@ -8,5 +8,9 @@ const build_server_1 = require("./build-server");
 const logger_1 = require("./utils/logger");
 mkdirp_1.default("./ressources/downloaded");
 mkdirp_1.default("./mocks");
+var apifetcher = require('./utils/api-fetcher');
 build_server_1.buildServer((server) => logger_1.logger.info(`Server is listening on port ${server.address().port}`));
+api_fetcher_1.getData(apifetcher.annee).then(function (json) {
+    console.log(json.toString().substring(0, 500));
+});
 //# sourceMappingURL=app.js.map
