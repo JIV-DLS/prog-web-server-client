@@ -17,13 +17,6 @@ export default function App() {
     console.log(map);
   };
 
-  // return (
-  //   // <MyMap mapIsReadyCallback={mapIsReadyCallback}/>
-  //   //<SignIn></SignIn>
-  //   //<SignUp></SignUp>
-  //   <Router path="/"></Router>
-  // );
-
   return (
     <Router>
       <div>
@@ -37,7 +30,7 @@ export default function App() {
             <SignUp />
           </Route>
           <Route path="/">
-          <MyMap mapIsReadyCallback={mapIsReadyCallback}/>
+          <MyMap />
           </Route>
         </Switch>
       </div>

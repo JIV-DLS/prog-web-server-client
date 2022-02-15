@@ -1,41 +1,53 @@
-import React, { useEffect, useRef } from 'react';
-import { map, tileLayer, Browser } from 'leaflet';
-
 import './myMap.css';
+import React, {useState} from "react";
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+import { Icon } from "leaflet";
+import STATIONS from "../data/stations.mock"
 
-const MyMap = ({
-  mapIsReadyCallback /* To be triggered when a map object is created */,
-}) => {
-  const mapContainer = useRef(null);
 
-  useEffect(() => {
-    const initialState = {
-      lng: 11,
-      lat: 49,
-      zoom: 4,
-    };
+function MyMap() {
+  const [activeStation, setActiveStation] = useState(null);
+  const stationList = STATIONS; 
+  const icon = new Icon({
+    iconUrl: "https://cdn-icons-png.flaticon.com/512/784/784867.png",
+    iconSize: [20, 20]
+  });
 
-    const leafletMap = map(mapContainer.current).setView(
-      [initialState.lat, initialState.lng],
-      initialState.zoom
-    );
+  return (
+    <MapContainer 
+    center={[43.7101728, 7.2619532]} 
+    zoom={13} 
+    scrollWheelZoom={true}
+    whenReady={(map) => {
+      map.target.on("move", function (e) {
+            console.log(map.target.getCenter())
+      });
+   }}>
+  <TileLayer
+    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+  />
 
-    const myAPIKey = 'e4c5acaaf4314c26b815cb595c0d23fe';
-    const isRetina = Browser.retina;
-    var baseUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}.png?apiKey=${myAPIKey}`;
-    var retinaUrl = `https://maps.geoapify.com/v1/tile/osm-bright/{z}/{x}/{y}@2x.png?apiKey=${myAPIKey}`;
-
-    tileLayer(isRetina ? retinaUrl : baseUrl, {
-      attribution:
-        'Powered by <a href="https://www.geoapify.com/" target="_blank">Geoapify</a> | <a href="https://openmaptiles.org/" rel="nofollow" target="_blank">© OpenMapTiles</a> <a href="https://www.openstreetmap.org/copyright" rel="nofollow" target="_blank">© OpenStreetMap</a> contributors',
-      maxZoom: 20,
-      id: 'osm-bright',
-    }).addTo(leafletMap);
-
-    mapIsReadyCallback(leafletMap);
-  }, [mapContainer.current]);
-
-  return <div className="map-container" ref={mapContainer}></div>;
-};
+{stationList.map(station => (
+        <Marker
+          key={station._id}
+          position={[
+            station._latitude,
+            station._longitude
+          ]}
+          icon={icon}
+        >
+          <Popup> 
+            Station: {station.adresse} 
+            {station.prix[0]._valeur}
+            {station.prix.map(s => ( 
+                <p>{s._nom}: {s._valeur}€</p>
+              ))}
+          </Popup>
+        </Marker>
+      ))}
+  </MapContainer>
+  );
+}
 
 export default MyMap;
