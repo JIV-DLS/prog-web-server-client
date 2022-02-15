@@ -8,8 +8,7 @@ const router = Router();
 router.get("/", async(req,res)=> {
     try {
         const labels = await Service.distinct('label');
-        labels.filter(label => label.length>2);
-        res.status(200).json(labels);
+        res.status(200).json(labels.filter(label => label.length>2));
     } catch (error) {
         logger.error(error);
         res.status(500).json({details: error});
