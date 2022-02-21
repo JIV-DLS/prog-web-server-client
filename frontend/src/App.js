@@ -9,6 +9,7 @@ import './App.css';
 import MyMap from './components/myMap';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
+import EnhancedTable from './components/table';
 
 
 export default function App() {
@@ -28,6 +29,9 @@ export default function App() {
           </Route>
           <Route path="/signUp">
             <SignUp />
+          </Route>
+          <Route path="/dataTable">
+          <EnhancedTable />
           </Route>
           <Route path="/">
           <MyMap />
