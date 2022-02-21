@@ -8,5 +8,4 @@ const station = new Schema({
     {
       timestamps: true,
     });
-
 export const Station = mongoose.model("Station", station);

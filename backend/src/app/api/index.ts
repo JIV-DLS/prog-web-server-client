@@ -6,6 +6,7 @@ import {currentUser} from "../middleware/currentUser";
 import {GasRouter} from "./gas";
 import {confirmPhoneNumber, get, login, pseudoValidity, signinWithPhoneNumber, signup} from "./user";
 import {ServiceRouter} from "./service";
+import {StationRouter} from "./station";
 
 
 
@@ -22,6 +23,7 @@ router.post("/auth/login", appAuth, login);
 router.get("/auth/:_id", appAuth, auth, currentUser, get);
 router.use("/gas", GasRouter);
 router.use("/service", ServiceRouter);
+router.use('/station', StationRouter)
 
 
 export const api = router;
