@@ -4,9 +4,7 @@ import mongoose from "mongoose";
 const gas = new mongoose.Schema({
   cover: {type: String},
   description: {type: String},
-  name: {type: String},
-  price: {type: Number},
-  maj: {type: Date},
+  name: {type: String}
 
 },
     {

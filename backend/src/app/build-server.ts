@@ -12,30 +12,85 @@ import {getData} from "./utils/api-fetcher";
 import mongoose from "mongoose";
 import * as dotenv from "dotenv";
 
-import {logger} from "./utils/logger"
+import {logger, loggerToFile} from "./utils/logger"
 import {Station} from "./models/station.model";
+import {Gas} from "./models/gas.model";
+import {Service} from "./models/service.model";
 
-/*
+
 const cron = require('node-cron');
 
-cron.schedule('*//*5 * * * *', () => {
-  console.log('running a task in 5 minutes');
-  fetch_data_from_server();
+cron.schedule('0 7 * * *', () => {
+  console.log('running an automatic task...');
+  fetch_data_from_server("instantane");
 })
-*/
 
-function fetch_data_from_server() {
-  const currentDate = new Date();
-  const currentYear = currentDate.getFullYear();
-  const oldestKnownDate = 2020;
 
-  console.log("getting data for year",typeof currentYear)
+function save_services(services) {
+  if(!services)return
+  for (let j = 0; j < services.length; j++) {
+    if (services[j].length <3) continue
+    Service.findOne({"label": services[j]}, function (err, service) {
+      if (!err) {
+        if (!service) {
+          service = new Service();
+          loggerToFile.log("Adding new Service...");
+          service["label"] = services[j];
 
-  const file_url = `https://donnees.roulez-eco.fr/opendata/annee/${currentYear}`;
+          service.save(function (err) {
+            if (!err) {
+              loggerToFile.log("Service " + service["id"] + " created at " + service.createdAt + " updated at " + service.updatedAt);
+            } else {
+              loggerToFile.log("Error: could not save station " + service["id"]);
+            }
+          });
+        }
+      }
+    });
+  }
+}
 
-  getData(file_url).then(function (json) {
+function save_gases(prices) {
+  if (!prices)return
+  for (let j = 0; j < prices.length; j++) {
+
+    if (prices[j]["nom"].length <3) continue
+    Gas.findOne({"name": prices[j]["nom"]}, function (err, gas) {
+      if (!err) {
+        if (!gas) {
+          gas = new Gas();
+          loggerToFile.log("Adding new Gas...");
+          gas["name"] = prices[j]["nom"];
+
+          gas.save(function (err) {
+            if (!err) {
+              loggerToFile.log("Gas " + gas["id"] + " created at " + gas.createdAt + " updated at " + gas.updatedAt);
+            } else {
+              loggerToFile.log("Error: could not save station " + gas["id"]);
+            }
+          });
+        }
+      }
+    });
+  }
+}
+
+function fetch_data_from_server(url=null) {
+
+  if(!url){
+    const currentDate = new Date();
+
+    const currentYear = currentDate.getFullYear();
+    const oldestKnownDate = 2020;
+    url = "annee/"+currentYear
+  }
+
+
+  getData(url).then(function (json) {
+
     //console.log("raw xml : " + rawXML.toString());
     //console.log('JSon :  ', json.toString().substring(0,1000));
+
     if (typeof json === "string") {
       var jsonObject = JSON.parse(json)
     }
@@ -44,22 +99,44 @@ function fetch_data_from_server() {
     const pdvs = jsonObject["pdv_liste"]["pdv"]
 
     for (let i = 0; i < pdvs.length; i++) {
-        const station = new Station()
-        const longitude = pdvs[i]["longitude"]
-        const latitude = pdvs[i]["latitude"]
-        const cp = pdvs[i]["cp"]
-        const pop =  pdvs[i]["pop"]
-        const address =  pdvs[i]["address"]
-        const ville =  pdvs[i]["ville"]
-        const automate_24_24 = pdvs[i]["automate_24_24"]
-        const horaire = []
 
+
+      setTimeout(function(){
+
+        loggerToFile.log("Adding",pdvs[i]["id"],"...")
+
+        setTimeout(function(){save_gases(pdvs[i]["prix"]);}, 600000);
+        setTimeout(function(){save_gases(pdvs[i]["rupture"]);}, 900000);
+        setTimeout(function(){save_services(pdvs[i]["services"]["service"]);}, 1200000);
+
+        Station.findOne({"id":pdvs[i]["id"]}, function(err, pdv) {
+          if(!err) {
+            if(!pdv) {
+              pdv = new Station();
+              loggerToFile.log("Adding new Station...");
+              pdv["id"] = pdvs[i]["id"];
+            }
+            pdv["pdv_content"] = pdvs[i];
+            pdv.save(function(err) {
+              if(!err) {
+                loggerToFile.log("Station " + pdv["id"] + " created at " + pdv.createdAt + " updated at " + pdv.updatedAt);
+              }
+              else {
+                loggerToFile.log("Error: could not save station " + pdv["id"]);
+              }
+            });
+          }
+        });}, 60000 + i*5000);
 
     }
-    //console.log(pdv_list[0])
-    console.log(json.toString().substring(0,10000))
+    //
+    //console.log("New version",json.toString())
 
-  })
+  }).catch((error) => {
+    console.error(`error gotten...retrying in 5min`,error);
+    loggerToFile.log(`error gotten...retrying in 5min`,error);
+    setTimeout(function(){fetch_data_from_server();}, 300000);
+  });
   /*
   for (let i = currentYear; i < oldestKnownDate; i--) {
     console.log("=>_______",i)

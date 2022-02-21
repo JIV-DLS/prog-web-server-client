@@ -1,21 +1,17 @@
 import './myMap.css';
 import React, {useState} from "react";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import { Icon } from "leaflet";
+import STATIONS from "../data/stations.mock"
 
 
 function MyMap() {
-
-  
-
-  const [activePark, setActivePark] = useState(null);
+  const [activeStation, setActiveStation] = useState(null);
+  const stationList = STATIONS; 
   const icon = new Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/784/784867.png",
     iconSize: [20, 20]
   });
-
-  
-
 
   return (
     <MapContainer 
@@ -25,41 +21,32 @@ function MyMap() {
     whenReady={(map) => {
       map.target.on("move", function (e) {
             console.log(map.target.getCenter())
-}
-          );
-        }}>
+      });
+   }}>
   <TileLayer
     url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
     attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
   />
-       <Marker
-          position={[
-            43.7101728,
-            7.2619532
-          ]}
-          icon={icon}>
-            <Popup>
-              A pretty CSS3 popup. <br /> Easily customizable.
-            </Popup> 
-        </Marker>
 
-      {activePark && (
-        <Popup
+{stationList.map(station => (
+        <Marker
+          key={station._id}
           position={[
-            45.323,
-            -75.25
+            station._latitude,
+            station._longitude
           ]}
-          onClose={() => {
-            setActivePark(null);
-          }}
+          icon={icon}
         >
-          <div>
-            <h2>{activePark.properties.NAME}</h2>
-            <p>{activePark.properties.DESCRIPTIO}</p>
-          </div>
-        </Popup>
-      )}
-</MapContainer>
+          <Popup> 
+            Station: {station.adresse} 
+            {station.prix[0]._valeur}
+            {station.prix.map(s => ( 
+                <p>{s._nom}: {s._valeur}€</p>
+              ))}
+          </Popup>
+        </Marker>
+      ))}
+  </MapContainer>
   );
 }
 
