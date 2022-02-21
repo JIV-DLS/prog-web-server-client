@@ -147,8 +147,8 @@ const rows = STATIONS;
 
 export default function CollapsibleTable() {
   return (
-    
-      <TableContainer component={Paper}>
+    <div style={{ height: "100%", width: '100%',overflow:'scroll' }}>
+      <TableContainer component={Paper} >
         <Table aria-label="collapsible table">
           <TableHead>
             <TableRow>
@@ -167,6 +167,9 @@ export default function CollapsibleTable() {
           </TableBody>
         </Table>
       </TableContainer>
+    </div>
+    
+      
      
   );
 }
