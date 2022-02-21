@@ -2,10 +2,11 @@ import './myMap.css';
 import React, {useState} from "react";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import { Icon } from "leaflet";
+import Header from './header';
 import STATIONS from "../data/stations.mock"
 
 
-function MyMap() {
+export default function MyMap() {
   const [activeStation, setActiveStation] = useState(null);
   const stationList = STATIONS; 
   const icon = new Icon({
@@ -14,21 +15,20 @@ function MyMap() {
   });
 
   return (
-    <MapContainer 
-    center={[43.7101728, 7.2619532]} 
-    zoom={13} 
-    scrollWheelZoom={true}
-    whenReady={(map) => {
-      map.target.on("move", function (e) {
-            console.log(map.target.getCenter())
-      });
-   }}>
-  <TileLayer
-    url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-    attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-  />
+    <><Header/><MapContainer
+      center={[43.7101728, 7.2619532]}
+      zoom={13}
+      scrollWheelZoom={true}
+      whenReady={(map) => {
+        map.target.on("move", function (e) {
+          console.log(map.target.getCenter());
+        });
+      } }>
+      <TileLayer
+        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' />
 
-{stationList.map(station => (
+      {stationList.map(station => (
         <Marker
           key={station._id}
           position={[
@@ -37,17 +37,15 @@ function MyMap() {
           ]}
           icon={icon}
         >
-          <Popup> 
-            Station: {station.adresse} 
+          <Popup>
+            Station: {station.adresse}
             {station.prix[0]._valeur}
-            {station.prix.map(s => ( 
-                <p>{s._nom}: {s._valeur}€</p>
-              ))}
+            {station.prix.map(s => (
+              <p>{s._nom}: {s._valeur}€</p>
+            ))}
           </Popup>
         </Marker>
       ))}
-  </MapContainer>
+    </MapContainer></>
   );
 }
-
-export default MyMap;

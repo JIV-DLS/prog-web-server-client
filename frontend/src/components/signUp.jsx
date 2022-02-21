@@ -18,7 +18,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        www.smartfioul.com
+        www.smartcarburant.com
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -50,11 +50,11 @@ export default function SignUp() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} style={{backgroundColor: '#211E1E'}}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            S'inscrire
           </Typography>
           <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
@@ -65,7 +65,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="firstName"
-                  label="First Name"
+                  label="Prénom"
                   autoFocus
                 />
               </Grid>
@@ -74,7 +74,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="lastName"
-                  label="Last Name"
+                  label="Nom"
                   name="lastName"
                   autoComplete="family-name"
                 />
@@ -84,7 +84,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   id="email"
-                  label="Email Address"
+                  label="Adresse mail"
                   name="email"
                   autoComplete="email"
                 />
@@ -94,7 +94,7 @@ export default function SignUp() {
                   required
                   fullWidth
                   name="password"
-                  label="Password"
+                  label="Mot de passe"
                   type="password"
                   id="password"
                   autoComplete="new-password"
@@ -105,9 +105,10 @@ export default function SignUp() {
               type="submit"
               fullWidth
               variant="contained"
+              style={{backgroundColor: '#211E1E'}}
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              S'inscrire
             </Button>
           </Box>
         </Box>

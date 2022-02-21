@@ -9,6 +9,8 @@ import './App.css';
 import MyMap from './components/myMap';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
+import CollapsibleTable from './components/table';
+
 
 
 export default function App() {
@@ -28,6 +30,9 @@ export default function App() {
           </Route>
           <Route path="/signUp">
             <SignUp />
+          </Route>
+          <Route path="/dataTable">
+          <CollapsibleTable />
           </Route>
           <Route path="/">
           <MyMap />

@@ -18,7 +18,7 @@ function Copyright(props) {
     <Typography variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        www.smartfioul.com
+        www.smartcarburant.com
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -50,11 +50,11 @@ export default function SignIn() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }} style={{backgroundColor: '#211E1E'}}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign in
+            Connexion
           </Typography>
           <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
@@ -62,7 +62,7 @@ export default function SignIn() {
               required
               fullWidth
               id="email"
-              label="Email Address"
+              label="Adresse mail"
               name="email"
               autoComplete="email"
               autoFocus
@@ -72,27 +72,28 @@ export default function SignIn() {
               required
               fullWidth
               name="password"
-              label="Password"
+              label="Mot de passe"
               type="password"
               id="password"
               autoComplete="current-password"
             />
-            <FormControlLabel
+            <FormControlLabel  style={{marginLeft: '25%'}}
               control={<Checkbox value="remember" color="primary" />}
-              label="Remember me"
+              label="Se souvenir de moi"
             />
             <Button
               type="submit"
               fullWidth
               variant="contained"
+              style={{backgroundColor: '#211E1E'}}
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign In
+              Se connecter
             </Button>
-            <Grid container>
+            <Grid container  style={{marginLeft: '15%'}}>
               <Grid item justifyContent="center">
-                <Link href="/signUp" variant="body2">
-                  {"Don't have an account? Sign Up"}
+                <Link href="/signUp" variant="body2" style={{color: '#211E1E'}}>
+                  {"Vous n'avez pas un compte ? Inscrivez-vous."}
                 </Link>
               </Grid>
             </Grid>
