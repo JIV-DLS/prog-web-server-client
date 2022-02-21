@@ -2,10 +2,13 @@ import bodyParser from "body-parser";
 import cors from "cors";
 import express from "express";
 import httpS from "http";
+import https from "https";
 import morgan from "morgan";
 import path from "path";
 import {api} from "./api";
 import { RessourcesAndRoutes } from "./models/ressourcesAndRoutes";
+
+import fs, {mkdirSync} from "fs";
 
 import {getData} from "./utils/api-fetcher";
 
@@ -223,14 +226,26 @@ export const buildServer = (cb) => {
           mongoose.set("useFindAndModify", false);
           mongoose.set("useCreateIndex", true);
 
-          fetch_data_from_server();
+          //fetch_data_from_server();
 
+          const privateKey  = fs.readFileSync('./certificate/server.key', 'utf8');
+          const certificate = fs.readFileSync('./certificate/server.crt', 'utf8');
 
-          const server = http.listen(process.env.PORT || 9428, () => cb && cb(server));
+          const credentials = {key: privateKey, cert: certificate};
 
+          //const server = http.listen(process.env.PORT || 9428, () => cb && cb(server));
+
+          const SECURED_POST = process.env.PORT || 9428;
+          console.log("Launching secured server")
+          const secured_server = https.createServer(credentials, app);
+
+          const secured_server_launched = secured_server.listen(SECURED_POST,() => cb && cb(secured_server_launched));
         })
         // tslint:disable-next-line:no-console
-        .catch(() => logger.error("Connexion à MongoDB échouée !"));
+        .catch((err) => {
+          logger.error(err)
+          logger.error("Connexion à MongoDB échouée !")
+        });
 
   }
   else{
