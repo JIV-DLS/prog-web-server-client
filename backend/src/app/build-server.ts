@@ -105,9 +105,9 @@ function fetch_data_from_server(url=null) {
 
         loggerToFile.log("Adding",pdvs[i]["id"],"...")
 
-        setTimeout(function(){save_gases(pdvs[i]["prix"]);}, 600000);
-        setTimeout(function(){save_gases(pdvs[i]["rupture"]);}, 900000);
-        setTimeout(function(){save_services(pdvs[i]["services"]["service"]);}, 1200000);
+        /*setTimeout(function(){save_gases(pdvs[i]["prix"]);}, 60000+i*5000);
+        setTimeout(function(){save_gases(pdvs[i]["rupture"]);}, 90000+i*5000);
+        setTimeout(function(){save_services(pdvs[i]["services"]["service"]);}, 120000+i*5000);*/
 
         Station.findOne({"id":pdvs[i]["id"]}, function(err, pdv) {
           if(!err) {
@@ -126,9 +126,10 @@ function fetch_data_from_server(url=null) {
               }
             });
           }
-        });}, 60000 + i*5000);
+        });}, 1);
 
     }
+    console.log('pdvs size : ' + pdvs.length)
     //
     //console.log("New version",json.toString())
 
