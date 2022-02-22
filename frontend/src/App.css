@@ -10,11 +10,6 @@ html {
   overflow: hidden;
 }
 
-.MuiToolbar-root {
-  background-color: #211E1E;
-  height: 10vh;
-}
-
 .MuiAutocomplete-root {
   background-color: ivory;
   border-radius: 10px;

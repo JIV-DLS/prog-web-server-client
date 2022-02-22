@@ -1,21 +1,35 @@
 import './myMap.css';
-import React, {useState} from "react";
+import React, {useState, useEffect} from "react";
 import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
 import { Icon } from "leaflet";
-import Header from './header';
 import STATIONS from "../data/stations.mock"
 
 
-export default function MyMap() {
-  const [activeStation, setActiveStation] = useState(null);
-  const stationList = STATIONS; 
+export default function MyMap(props)  {
+  const [stationList, setStationList] = useState([]);
+  useEffect(() => {
+    if(!props.onChange) {
+      setStationList(STATIONS);
+    } else {
+      const filtredStations = stationList.filter( station => {
+        let flag = false;
+        station.prix.map( p => {
+           if(p._nom.includes(props.onChange)) flag = true;
+         })
+         return flag;
+      }
+      );
+      setStationList(filtredStations);
+    }
+  }, [props]);
+
   const icon = new Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/784/784867.png",
     iconSize: [20, 20]
   });
 
   return (
-    <><Header/><MapContainer
+    <MapContainer
       center={[43.7101728, 7.2619532]}
       zoom={13}
       scrollWheelZoom={true}
@@ -46,6 +60,6 @@ export default function MyMap() {
           </Popup>
         </Marker>
       ))}
-    </MapContainer></>
+    </MapContainer>
   );
 }

@@ -7,17 +7,11 @@ import {
 } from "react-router-dom";
 import './App.css';
 import MyMap from './components/myMap';
+import Header from './components/header';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
-import EnhancedTable from './components/table';
-
 
 export default function App() {
-
-  const mapIsReadyCallback = (map) => {
-    console.log(map);
-  };
-
   return (
     <Router>
       <div>
@@ -30,11 +24,8 @@ export default function App() {
           <Route path="/signUp">
             <SignUp />
           </Route>
-          <Route path="/dataTable">
-          <EnhancedTable />
-          </Route>
           <Route path="/">
-          <MyMap />
+          <Header />
           </Route>
         </Switch>
       </div>
