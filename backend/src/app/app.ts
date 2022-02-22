@@ -3,7 +3,7 @@ import {buildServer} from "./build-server";
 import {logger,closeFileLoggers} from "./utils/logger";
 import {getData} from "./utils/api-fetcher";
 import {api} from "./api";
-mkdirp("./ressources/downloaded");
+mkdirp("./ressources/downlo___aded");
 mkdirp("./mocks");
 var apifetcher = require('./utils/api-fetcher')
 buildServer((server) => logger.info(`Server is listening on port ${server.address().port}`));
