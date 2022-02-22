@@ -2,14 +2,14 @@ import React from 'react';
 import {
   BrowserRouter as Router,
   Switch,
-  Route,
-  Link
+  Route
 } from "react-router-dom";
 import './App.css';
-import MyMap from './components/myMap';
 import Header from './components/header';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
+import EnhancedTable from './components/table';
+
 
 export default function App() {
   return (
@@ -23,6 +23,9 @@ export default function App() {
           </Route>
           <Route path="/signUp">
             <SignUp />
+          </Route>
+          <Route path="/dataTable">
+           <EnhancedTable />
           </Route>
           <Route path="/">
           <Header />

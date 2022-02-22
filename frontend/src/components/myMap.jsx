@@ -1,6 +1,6 @@
 import './myMap.css';
 import React, {useState, useEffect} from "react";
-import { MapContainer, TileLayer, Marker, Popup, Tooltip } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import { Icon } from "leaflet";
 import STATIONS from "../data/stations.mock"
 
