@@ -1,7 +1,7 @@
 const STATIONS = [
    {
        "adresse": "111, Avenue Saint-Augustin",
-       "ville": "Nice",
+       "ville": "Paris",
        "services": {
           "service": [
              "Carburant additiv�",
@@ -185,6 +185,7 @@ const STATIONS = [
        "_cp": "06300",
        "_pop": "R"
     }
+   
 ]
 
 export default STATIONS; 

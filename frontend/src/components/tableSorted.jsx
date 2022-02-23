@@ -312,7 +312,7 @@ function EnhancedTableHead(props) {
 
   return (
     <TableHead style={{ color:'red' }}>
-      <TableRow style={{ backgroundColor:'grey' }}>
+      <TableRow style={{ backgroundColor:'green' }}>
         {headCells.map((headCell) => (
           <TableHeaderCellAlpha
             key={headCell.id}
@@ -417,7 +417,7 @@ export default function CollapsibleTable() {
   return (
     
     <div style={{ height: "100%", width: '100%',overflow:'scroll',textAlign:'center'}}>
-    <Typography variant="h2" gutterBottom component="div" style={{ width:'100%'}}>
+    <Typography variant="h2" gutterBottom component="div" style={{ width:'100%', }}>
                 Gas Stations
               </Typography>
       <TableContainer component={Paper} >
@@ -450,8 +450,8 @@ export default function CollapsibleTable() {
             </TableBody>
           <TableFooter >
           <TableRow>
-            <TablePagination 
-              rowsPerPageOptions={[5, 10, 25]}
+            <TablePagination
+              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
               colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}
@@ -465,7 +465,6 @@ export default function CollapsibleTable() {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
-    
             />
           </TableRow>
         </TableFooter>
