@@ -153,27 +153,7 @@ function fetch_data_from_server(url=null) {
 }
 
 export const buildServer = (cb) => {
-  const app = express();
-
-  app.disable("x-powered-by");
-  app.use(cors());
-  app.use(bodyParser.json({}));
-  app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Headers",
-        "Origin," +
-        " X-Requested-With," +
-        " Content, " +
-        "Accept, Content-Type, Authorization");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
-    next();
-  });
-  app.use(morgan("[:date[iso]] :method :url :status :response-time ms - :res[content-length]"));
-  app.use("/fonts", express.static(path.join(__dirname, `../${RessourcesAndRoutes.fonts}`)));
-  app.use("/model_images", express.static(path.join(__dirname, `../${RessourcesAndRoutes.model_images}`)));
-  app.use("/images", express.static(path.join(__dirname, `../${RessourcesAndRoutes.images}`)));
-  app.use("/api", api);
-  app.use("*", (req, res) => res.status(404).end());
+  const app = createServer();
 
   const http = new httpS.Server(app);
   // const io = socketIO(http);
@@ -255,3 +235,28 @@ export const buildServer = (cb) => {
 
   // const server = app.listen(process.env.PORT || 9428, () => cb && cb(server))
 };
+export function createServer() {
+  const app = express();
+
+  app.disable("x-powered-by");
+  app.use(cors());
+  app.use(bodyParser.json({}));
+  app.use((req, res, next) => {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Headers",
+      "Origin," +
+      " X-Requested-With," +
+      " Content, " +
+      "Accept, Content-Type, Authorization");
+    res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, PATCH, OPTIONS");
+    next();
+  });
+  app.use(morgan("[:date[iso]] :method :url :status :response-time ms - :res[content-length]"));
+  app.use("/fonts", express.static(path.join(__dirname, `../${RessourcesAndRoutes.fonts}`)));
+  app.use("/model_images", express.static(path.join(__dirname, `../${RessourcesAndRoutes.model_images}`)));
+  app.use("/images", express.static(path.join(__dirname, `../${RessourcesAndRoutes.images}`)));
+  app.use("/api", api);
+  app.use("*", (req, res) => res.status(404).end());
+  return app;
+}
+
