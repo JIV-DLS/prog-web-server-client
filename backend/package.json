@@ -1,20 +1,37 @@
 {
-  "name": "node-jest-with-supertest",
+  "name": "prog_web_gas_backend",
   "version": "1.0.0",
-  "description": "",
-  "main": "../../backend/tmp/index.ts",
+  "description": "getting and preparing gas business",
+  "main": "dist/app.js",
   "scripts": {
     "localStart": "tsc>logs.log 2>warnings.log || rm logs.log || rm warnings.log && node dist/app/app.js",
-    "test": "jest",
+    "test": "jest --detectOpenHandles",
     "dev": "./node_modules/.bin/nodemon dist/app.js",
-    "start": "clear && jest && tsc>logs.log 2>warnings.log || rm logs.log || rm warnings.log && node dist/app/app.js",
+    "start": "clear && npm test && npm run compile && npm run launchServer",
     "tscWatch": "tsc -w",
+    "compile": "tsc >logs.log 2>warnings.log || rm logs.log || rm warnings.log",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "postinstall": "tsc",
+    "launchServer": "node dist/app/app.js",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
-  "keywords": [],
-  "author": "",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JIV-DLS/prog-web-server-client.git"
+  },
+  "keywords": [
+    "backend",
+    "gas",
+    "nodejs"
+  ],
+  "engines": {
+    "node": "16.x"
+  },
+  "author": "Jonas Vihoalé ANIGLO & Soulaiman Zabourdine",
+  "bugs": {
+    "url": "https://github.com/JIV-DLS/prog-web-server-client/issues"
+  },
+  "homepage": "https://github.com/JIV-DLS/prog-web-server-client#readme",
   "license": "ISC",
   "devDependencies": {
     "@types/bcrypt": "^5.0.0",

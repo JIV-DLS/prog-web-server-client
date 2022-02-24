@@ -23,12 +23,6 @@ import {Service} from "./models/service.model";
 
 const cron = require('node-cron');
 
-cron.schedule('0 7 * * *', () => {
-  console.log('running an automatic task...');
-  fetch_data_from_server("instantane");
-})
-
-
 function save_services(services:[string]) {
   if(!services)return
   for (let j = 0; j < services.length; j++) {
@@ -223,6 +217,11 @@ export const buildServer = (cb) => {
           mongoose.set("useCreateIndex", true);
 
           //fetch_data_from_server();
+
+          cron.schedule('0 7 * * *', () => {
+            console.log('running an automatic task...');
+            fetch_data_from_server("instantane");
+          })
 
           const privateKey  = fs.readFileSync('./certificate/server.key', 'utf8');
           const certificate = fs.readFileSync('./certificate/server.crt', 'utf8');
