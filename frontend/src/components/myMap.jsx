@@ -1,16 +1,17 @@
 import './myMap.css';
 import React, {useState, useEffect} from "react";
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
 import { Icon } from "leaflet";
 import STATIONS from "../data/stations.mock"
+import { popupContent, popupHead, popupText, okText } from "./popupStyles";
 
 
-export default function MyMap(props)  {
+export default function MyMap(props) {
   const [stationList, setStationList] = useState([]);
   useEffect(() => {
-    if(!props.onChange) {
+    if(!props.onChange && !props.service) {
       setStationList(STATIONS);
-    } else {
+    } else if (props.onChange) {
       const filtredStations = stationList.filter( station => {
         let flag = false;
         station.prix.map( p => {
@@ -20,7 +21,18 @@ export default function MyMap(props)  {
       }
       );
       setStationList(filtredStations);
+    } else {
+      const filtredStations = stationList.filter( station => {
+        let flag = false;
+        station.services.service.map( s => {
+           if(s.includes(props.service)) flag = true;
+         })
+         return flag;
+      }
+      );
+      setStationList(filtredStations);
     }
+
   }, [props]);
 
   const icon = new Icon({
@@ -39,8 +51,9 @@ export default function MyMap(props)  {
         });
       } }>
       <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors' />
+       url= {props.displayMode}
+       attribution= '&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors'
+      />
 
       {stationList.map(station => (
         <Marker
@@ -51,13 +64,36 @@ export default function MyMap(props)  {
           ]}
           icon={icon}
         >
-          <Popup>
-            Station: {station.adresse}
-            {station.prix[0]._valeur}
-            {station.prix.map(s => (
-              <p>{s._nom}: {s._valeur}€</p>
-            ))}
-          </Popup>
+          <Popup className="request-popup">
+          <div style={popupContent}>
+            <img
+              src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg"
+              width="80"
+              height="50"
+              alt="no img"
+            />
+            <div className="m-2" style={okText}>
+              <div className="m-2" style={popupHead}>
+                Station :
+              </div>
+               {station.adresse}
+            </div>
+            <div className="m-2" style={okText}>
+              <div className="m-2" style={popupHead}>
+                Les carburants :
+              </div>
+               {station.prix.map(p => (
+              <p>{p._nom}: {p._valeur}€</p>
+              ))}
+              <div className="m-2" style={popupHead}>
+                Les services :
+              </div>
+               {station.services.service.map(s => (
+              <p>{s}</p>
+              ))}
+            </div>
+          </div>
+        </Popup>     
         </Marker>
       ))}
     </MapContainer>

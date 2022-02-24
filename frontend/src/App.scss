@@ -1,0 +1,146 @@
+@import '~leaflet/dist/leaflet.css';
+html,
+body,
+#root,
+#root > div {
+  height: 100%;
+  margin: 0;
+}
+html {
+  overflow: hidden;
+}
+
+.leaflet-popup-content-wrapper {
+  overflow-y: auto;
+} 
+.react-toggle {
+  float: right;
+  margin-top: 0.5%;
+}
+::-webkit-scrollbar {
+  width: 20px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: #f3f3f3;
+  border-radius: 20px;
+  border: 6px solid transparent;
+  background-clip: content-box;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background-color: #f3f3f3;
+}
+
+.MuiAutocomplete-root {
+  background-color: ivory;
+  border-radius: 10px;
+}
+
+.MuiAutocomplete-root .Mui-focused{
+  border-radius: 10px;
+}
+
+#AppBar {
+  background-color: white;
+  border: solid 1px #282c35;
+  height: 10vh;
+}
+
+#AppBarTypo {
+  color: black;
+}
+
+#AppBarTypoButton {
+  color: black;
+}
+
+#signInButton {
+  color: #fff;
+  background-color: #211E1E;
+}
+
+
+#signInButton:hover {
+  color: #282c35;
+  background-color: #f3f3f3;
+}
+
+
+#signInBox {
+  #email ,#password, #firstName, #lastName {
+    background-color: #fff;
+  }
+}
+
+#signInTypo {
+  color: #282c35;
+  text-decoration-color: #282c35;
+}
+
+.App {
+	&.dark {
+	  background-color: #282c35;
+	  color: #fff;
+
+    html {
+      background-color: #282c35;
+      overflow: hidden;
+    }
+
+    .leaflet-popup-content-wrapper {
+      background-color: #282c35;
+      overflow-y: auto;
+    } 
+
+    .m-2 {
+      color: #fff;
+    }
+
+    #AppBar {
+      background-color: #282c35;
+      border: solid 1px #fff;
+      height: 10vh;
+    }
+    
+    #AppBarTypo {
+      color: white;
+    }
+
+    #AppBarTypoButton {
+      color: #fff;
+    }
+
+    #AppBarTypoButton:hover {
+      color: #282c35;
+      background-color: #f3f3f3;
+    }
+
+    #signInButton {
+      color: #282c35;
+      background-color: #f3f3f3;
+    }
+
+    #signInButton:hover {
+      color: #fff;
+      background-color: lightgrey;
+    }
+
+
+    #signInBox {
+      #email ,#password, #firstName, #lastName {
+        background-color: #fff;
+      }
+    }
+
+    #signInTypo {
+      color: #fff;
+      text-decoration-color: #fff;
+    }
+  
+	}
+}

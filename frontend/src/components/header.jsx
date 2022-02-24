@@ -8,21 +8,32 @@ import Avatar from '@mui/material/Avatar';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { useHistory } from "react-router-dom";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import MyMap from './myMap';
 
-export default function Header() {
+export default function Header(mode) {
   const typeOfGas = ['SP98','SP95','Gazole'];
-  const typeOfService = ['Lavage automatique', 'Lavage','Air pneu','Restaurant'];
-  const [filter, setFilter] = useState('');
+  const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
+  const [gasFilter, setGasFilter] = useState('');
+  const [serviceFilter, setServiceFilter] = useState('');
+  const [tileLayer, setTayelLayer] = useState('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+
+  useEffect(() => {
+    if(mode.mode) {
+        setTayelLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
+    } else {
+        setTayelLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    }
+  }, [mode]);
 
   let history = useHistory(); 
   const routeChange = () => {
     history.push("/signIn")
   }
+
   return (
-    <><Box sx={{ flexGrow: 1 }}>
-          <AppBar position="static" style={{backgroundColor: "#211E1E", height: "10vh" }}>
+        <><Box sx={{ flexGrow: 1 }}>
+          <AppBar id="AppBar" position="static">
               <Toolbar>
                   <IconButton
                       size="large"
@@ -33,29 +44,30 @@ export default function Header() {
                   >
                       <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
                   </IconButton>
-                  <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+                  <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       SmartCarburant
                   </Typography>
                   <Autocomplete
                       disablePortal
                       id="carburant-box"
                       options={typeOfGas}
-                      style={{ marginRight: '1%' , marginTop: '5px'}}
+                      style={{ marginRight: '1%', marginTop: '5px' }}
                       sx={{ width: 200 }}
-                      onChange={(event, value) => setFilter(value)}
+                      onChange={(event, value) => setGasFilter(value)}
                       renderInput={(params) => <TextField {...params} label="Carburants" />} />
                   <Autocomplete
                       disablePortal
                       id="service-box"
                       options={typeOfService}
-                      style={{ marginRight: '5%' , marginTop: '5px'}}
+                      style={{ marginRight: '5%', marginTop: '5px' }}
                       sx={{ width: 200 }}
+                      onChange={(event, value) => setServiceFilter(value)}
                       renderInput={(params) => <TextField {...params} label="Services" />} />
-                  <Button color="inherit" onClick={routeChange}>
+                  <Button id="AppBarTypoButton" color="inherit" onClick={routeChange}>
                       Connexion
                   </Button>
               </Toolbar>
           </AppBar>
-      </Box><MyMap onChange={filter} /></>
+      </Box><MyMap displayMode={tileLayer} onChange={gasFilter} service={serviceFilter}/></>
   );
 }
