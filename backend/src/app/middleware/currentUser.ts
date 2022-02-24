@@ -2,6 +2,7 @@
 import {logger} from "../utils/logger"
 import jwt from "jsonwebtoken";
 
+// @ts-ignore
 export const currentUser = (req, res, next) => {
     try {
         if ((req.userDoingRequest._id + "").localeCompare( req.params._id + "")) {

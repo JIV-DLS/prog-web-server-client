@@ -12,7 +12,7 @@ import fs, {mkdirSync} from "fs";
 
 import {getData} from "./utils/api-fetcher";
 
-import mongoose from "mongoose";
+import mongoose, {EnforceDocument} from "mongoose";
 import * as dotenv from "dotenv";
 
 import {logger, loggerToFile} from "./utils/logger"
@@ -29,21 +29,25 @@ cron.schedule('0 7 * * *', () => {
 })
 
 
-function save_services(services) {
+function save_services(services:[string]) {
   if(!services)return
   for (let j = 0; j < services.length; j++) {
     if (services[j].length <3) continue
-    Service.findOne({"label": services[j]}, function (err, service) {
+    Service.findOne({"label": services[j]}, function (err: string, service: {  }) {
       if (!err) {
         if (!service) {
           service = new Service();
           loggerToFile.log("Adding new Service...");
+          // @ts-ignore
           service["label"] = services[j];
 
-          service.save(function (err) {
+          // @ts-ignore
+          service.save(function (err:string) {
             if (!err) {
+              // @ts-ignore
               loggerToFile.log("Service " + service["id"] + " created at " + service.createdAt + " updated at " + service.updatedAt);
             } else {
+              // @ts-ignore
               loggerToFile.log("Error: could not save station " + service["id"]);
             }
           });
@@ -53,11 +57,14 @@ function save_services(services) {
   }
 }
 
+// @ts-ignore
 function save_gases(prices) {
   if (!prices)return
   for (let j = 0; j < prices.length; j++) {
 
     if (prices[j]["nom"].length <3) continue
+
+    // @ts-ignore
     Gas.findOne({"name": prices[j]["nom"]}, function (err, gas) {
       if (!err) {
         if (!gas) {
@@ -65,6 +72,7 @@ function save_gases(prices) {
           loggerToFile.log("Adding new Gas...");
           gas["name"] = prices[j]["nom"];
 
+          // @ts-ignore
           gas.save(function (err) {
             if (!err) {
               loggerToFile.log("Gas " + gas["id"] + " created at " + gas.createdAt + " updated at " + gas.updatedAt);
@@ -78,9 +86,9 @@ function save_gases(prices) {
   }
 }
 
-function fetch_data_from_server(url=null) {
+function fetch_data_from_server(url:string) {
 
-  if(!url){
+  if(url.length>0){
     const currentDate = new Date();
 
     const currentYear = currentDate.getFullYear();
@@ -112,6 +120,7 @@ function fetch_data_from_server(url=null) {
         setTimeout(function(){save_gases(pdvs[i]["rupture"]);}, 90000+i*5000);
         setTimeout(function(){save_services(pdvs[i]["services"]["service"]);}, 120000+i*5000);*/
 
+        // @ts-ignore
         Station.findOne({"id":pdvs[i]["id"]}, function(err, pdv) {
           if(!err) {
             if(!pdv) {
@@ -120,6 +129,8 @@ function fetch_data_from_server(url=null) {
               pdv["id"] = pdvs[i]["id"];
             }
             pdv["pdv_content"] = pdvs[i];
+
+            // @ts-ignore
             pdv.save(function(err) {
               if(!err) {
                 loggerToFile.log("Station " + pdv["id"] + " created at " + pdv.createdAt + " updated at " + pdv.updatedAt);
@@ -139,7 +150,9 @@ function fetch_data_from_server(url=null) {
   }).catch((error) => {
     console.error(`error gotten...retrying in 5min`,error);
     loggerToFile.log(`error gotten...retrying in 5min`,error);
-    setTimeout(function(){fetch_data_from_server();}, 300000);
+
+    // @ts-ignore
+    setTimeout(function(){fetch_data_from_server("");}, 300000);
   });
   /*
   for (let i = currentYear; i < oldestKnownDate; i--) {
@@ -152,6 +165,8 @@ function fetch_data_from_server(url=null) {
 
 }
 
+
+// @ts-ignore
 export const buildServer = (cb) => {
   const app = createServer();
 

@@ -21,6 +21,7 @@ const E2E_DIR = '.'
 
 export const logger = console
 
+// @ts-ignore
 function initLogs( timestamp ) {
   const dir = path.join( E2E_DIR, 'logs', `${ timestamp }` );
 
@@ -44,6 +45,7 @@ function initLogs( timestamp ) {
 
 const fileLoggers = initLogs(new Date().getTime())
 
+// @ts-ignore
 const writeLog = (...args) =>{
   fs.writeSync( fileLoggers.appLog.fd, [`[${new Date().toISOString()}]`, ...args,'\n'].join(' '));
 }

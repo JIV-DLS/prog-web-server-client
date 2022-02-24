@@ -8,11 +8,17 @@ const MIME_TYPES = {
 };
 
 const storage = multer.diskStorage({
+
+// @ts-ignore
   destination: (req, file, callback) => {
     callback(null, "ressources/model_ressources/images/post");
   },
+
+// @ts-ignore
   filename: (req, file, callback) => {
     const name = file.originalname.split(" ").join("_").replace(/[^a-z0-9]/gi, "_").toLowerCase();
+
+// @ts-ignore
     const extension = MIME_TYPES[file.mimetype];
     callback(null, `${name + Date.now()}.${extension}`);
   },
