@@ -15,7 +15,7 @@ import { createTheme, ThemeProvider } from '@mui/material/styles';
 
 function Copyright(props) {
   return (
-    <Typography variant="body2" color="text.secondary" align="center" {...props}>
+    <Typography id="signInTypo" variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
         www.smartcarburant.com
@@ -56,7 +56,7 @@ export default function SignUp() {
           <Typography component="h1" variant="h5">
             S'inscrire
           </Typography>
-          <Box component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
+          <Box id="signInBox" component="form" noValidate onSubmit={handleSubmit} sx={{ mt: 3 }}>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
                 <TextField
@@ -102,10 +102,10 @@ export default function SignUp() {
               </Grid>
             </Grid>
             <Button
+              id="signInButton"
               type="submit"
               fullWidth
               variant="contained"
-              style={{backgroundColor: '#211E1E'}}
               sx={{ mt: 3, mb: 2 }}
             >
               S'inscrire
