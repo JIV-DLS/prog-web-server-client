@@ -1,0 +1,1 @@
+{"version":3,"file":"station.model.js","sourceRoot":"","sources":["../../src/app/models/station.model.ts"],"names":[],"mappings":";;;;;;;;;;;;;;;;;;;;;;AAAA,qDAA0C;AAG1C,MAAM,OAAO,GAAG,IAAI,iBAAM,CAAC;IACnB,IAAI,EAAC,MAAM;IACX,aAAa,EAAC,EAAE;CACvB,EACG;IACE,UAAU,EAAE,IAAI;CACjB,CAAC,CAAC;AACM,QAAA,OAAO,GAAG,kBAAQ,CAAC,KAAK,CAAC,SAAS,EAAE,OAAO,CAAC,CAAC"}
