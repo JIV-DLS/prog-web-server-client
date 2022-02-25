@@ -6,9 +6,20 @@ const router = Router();
 var xMargin = 50000
 var yMargin = 50000
 
+router.get("/",async(req,res)=> {
+    try {
+        return await Station.find();
+    } catch (error) {
+        logger.error(error);
+        res.status(500).json({details: error});
+    }
+})
+
 router.get("/latitude=:latitude&longitude=:longitude", async(req,res)=> {
         console.log('Called station request...');
+        // @ts-ignore
         var x = parseFloat(req.params.latitude)
+        // @ts-ignore
         var y = parseFloat(req.params.longitude)
         var leftMargin = x - xMargin
         var rightMargin = x + xMargin
@@ -17,12 +28,14 @@ router.get("/latitude=:latitude&longitude=:longitude", async(req,res)=> {
 
         try {
             var stations = await Station.find();
-            var stationsInZone = []
+            var stationsInZone: any[] = []
             console.log('size : ' + stations.length);
             var i = 0
-            stations.forEach(element => {
+            stations.forEach((element: { [x: string]: string; }) => {
                 i = i+1
+                // @ts-ignore
                 var latitude = element['pdv_content']['latitude'];
+                // @ts-ignore
                 var longitude = element['pdv_content']['longitude'];
                 var latitudeInt = parseInt(latitude)
                 var longitudeInt = parseInt(longitude)

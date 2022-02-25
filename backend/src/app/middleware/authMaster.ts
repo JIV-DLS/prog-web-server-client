@@ -1,6 +1,9 @@
 import jwt from "jsonwebtoken";
 import { Password } from "../models";
 import {User} from "../models/user.model";
+
+
+// @ts-ignore
 export const authMaster = (req, res, next) => {
 
         if (req.userDoingRequest.master) {

@@ -1,14 +1,19 @@
 import jwt from "jsonwebtoken";
 import { Password } from "../models";
 import {User} from "../models/user.model";
+
+// @ts-ignore
 export const auth = (req, res, next) => {
     try {
         const splitted = req.headers.authorization.split(" ");
         const token = splitted[1];
         const decodedToken = jwt.verify(token, Password);
+
+        // @ts-ignore
         const userId = decodedToken.userId;
         req.body.userId = splitted[2];
         User.findOne({ _id: splitted[2] })
+            // @ts-ignore
             .then((user) => {
 
                 if (!user) {
@@ -21,6 +26,8 @@ export const auth = (req, res, next) => {
                     next();
                 }
             })
+
+            // @ts-ignore
             .catch((error) => res.status(500).json({ error }));
 
     } catch {

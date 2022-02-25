@@ -15,11 +15,17 @@ router.get("/status", (req, res) => res.status(200).json("ok"));
 
 
 
+// @ts-ignore
 router.get("/auth/signupWithNumber/:phoneNumber", appAuth, signinWithPhoneNumber);
+// @ts-ignore
 router.post("/auth/confirmWithNumber/:_id", appAuth, confirmPhoneNumber);
+// @ts-ignore
 router.post("/auth/signup/:_id", appAuth, signup);
+// @ts-ignore
 router.get("/auth/signup/pseudo_validity/:pseudo", appAuth, pseudoValidity);
+// @ts-ignore
 router.post("/auth/login", appAuth, login);
+// @ts-ignore
 router.get("/auth/:_id", appAuth, auth, currentUser, get);
 router.use("/gas", GasRouter);
 router.use("/service", ServiceRouter);

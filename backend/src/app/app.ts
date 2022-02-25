@@ -6,7 +6,7 @@ import {api} from "./api";
 mkdirp("./ressources/downlo___aded");
 mkdirp("./mocks");
 var apifetcher = require('./utils/api-fetcher')
-buildServer((server) => logger.info(`Server is listening on port ${server.address().port}`));
+buildServer((server: { address: () => { (): any; new(): any; port: any; }; }) => logger.info(`Server is listening on port ${server.address().port}`));
 
 process.on('exit', function() {
     closeFileLoggers()
