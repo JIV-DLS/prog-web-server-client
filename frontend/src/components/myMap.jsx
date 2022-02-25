@@ -1,9 +1,14 @@
 import './myMap.css';
 import React, {useState, useEffect} from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
-import { Icon } from "leaflet";
+import { Icon , LatLng} from "leaflet";
 import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
+import {getItinerary,testmethod, testmethod2, testmethod3, drawItinerary} from "../utils/itineraryCalculator";
+
+
+var center = new LatLng(43.7101728, 7.2619532, 0);
+var mapA;
 
 
 export default function MyMap(props) {
@@ -48,6 +53,8 @@ export default function MyMap(props) {
       whenReady={(map) => {
         map.target.on("move", function (e) {
           console.log(map.target.getCenter());
+          center = map.target.getCenter();
+
         });
       } }>
       <TileLayer
@@ -79,7 +86,9 @@ export default function MyMap(props) {
                {station.adresse}
             </div>
             <div className="m-2" style={okText}>
-              <div className="m-2" style={popupHead}>
+                <button onClick={() => drawItinerary(center.lng, center.lat, station._longitude,station._latitude)}>Itinerary</button>
+
+                <div className="m-2" style={popupHead}>
                 Les carburants :
               </div>
                {station.prix.map(p => (
