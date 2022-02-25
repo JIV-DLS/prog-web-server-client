@@ -14,9 +14,12 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import Container from '@material-ui/core/Container';
 import STATIONS from "../data/stations.mock";
+import './table.css';
+import { withStyles } from '@material-ui/core';
 
+import TableSortLabel from '@mui/material/TableSortLabel';
+import { visuallyHidden } from '@mui/utils';
 
 import { useTheme } from '@mui/material/styles';
 import TableFooter from '@mui/material/TableFooter';
@@ -26,6 +29,39 @@ import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
 
+
+
+function descendingComparator(a, b, orderBy) {
+  if (b[orderBy] < a[orderBy]) {
+    return -1;
+  }
+  if (b[orderBy] > a[orderBy]) {
+    return 1;
+  }
+  return 0;
+}
+
+function getComparator(order, orderBy) {
+  return order === 'desc'
+    ? (a, b) => descendingComparator(a, b, orderBy)
+    : (a, b) => -descendingComparator(a, b, orderBy);
+}
+
+// This method is created for cross-browser compatibility, if you don't
+// need to support IE11, you can use Array.prototype.sort() directly
+function stableSort(array, comparator) {
+  const stabilizedThis = array.map((el, index) => [el, index]);
+  stabilizedThis.sort((a, b) => {
+    const order = comparator(a[0], b[0]);
+    if (order !== 0) {
+      return order;
+    }
+    return a[1] - b[1];
+  });
+  return stabilizedThis.map((el) => el[0]);
+}
+
+
 const useRowStyles = makeStyles({
   root: {
     '& > *': {
@@ -34,20 +70,6 @@ const useRowStyles = makeStyles({
   },
 });
 
-function createData(name, calories, fat, carbs, protein, price) {
-  return {
-    name,
-    calories,
-    fat,
-    carbs,
-    protein,
-    price,
-    history: [
-      { date: '2020-01-05', customerId: '11091700', amount: 3 },
-      { date: '2020-01-02', customerId: 'Anonymous', amount: 1 },
-    ],
-  };
-}
 
 function NumberList(props) {
     const numbers = props.numbers;
@@ -65,10 +87,18 @@ function Row(props) {
   const { row } = props;
   const [open, setOpen] = React.useState(false);
   const classes = useRowStyles();
+  const TableHeaderCellNested = withStyles(theme => ({
+    root: {
+      color: 'white',
+      fontWeight:'bold'
+    }
+  }))(TableCell);
+
+
 
   return (
     <React.Fragment>
-      <TableRow className={classes.root}>
+      <TableRow className={classes.root} >
         <TableCell>
           <IconButton aria-label="expand row" size="small" onClick={() => setOpen(!open)}>
             {open ? <KeyboardArrowUpIcon /> : <KeyboardArrowDownIcon />}
@@ -91,10 +121,10 @@ function Row(props) {
               </Typography>
               <Table size="small" aria-label="purchases">
                 <TableHead>
-                  <TableRow>
-                    <TableCell>Nom</TableCell>
-                    <TableCell>Prix</TableCell>
-                    <TableCell align="right">Date dernière Màj</TableCell>
+                  <TableRow style={{ backgroundColor:'#211E1E' }}>
+                    <TableHeaderCellNested>Nom</TableHeaderCellNested>
+                    <TableHeaderCellNested>Prix</TableHeaderCellNested>
+                    <TableHeaderCellNested align="right">Date dernière Màj</TableHeaderCellNested>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -216,7 +246,150 @@ TablePaginationActions.propTypes = {
 const rows = STATIONS;
 
 
+
+
+
+
+
+
+
+
+
+
+const headCells = [
+  {
+    id: 'empty',
+    numeric: false,
+    disablePadding: true,
+    label: '',
+  },
+  {
+    id: 'adresse',
+    numeric: false,
+    disablePadding: true,
+    label: 'Adresse',
+  },
+  {
+    id: 'ville',
+    numeric: true,
+    disablePadding: false,
+    label: 'Ville',
+  },
+  {
+    id: '_cp',
+    numeric: true,
+    disablePadding: false,
+    label: 'Code postal',
+  },
+  {
+    id: '_latitude',
+    numeric: true,
+    disablePadding: false,
+    label: 'Latitude',
+  },
+  {
+    id: '_longitude',
+    numeric: true,
+    disablePadding: false,
+    label: 'Longitude',
+  },
+];
+
+function EnhancedTableHead(props) {
+  const {  order, orderBy, onRequestSort } =
+    props;
+  const createSortHandler = (property) => (event) => {
+    onRequestSort(event, property);
+  };
+
+  const TableHeaderCellAlpha = withStyles(theme => ({
+    root: {
+      color: 'white',
+      fontWeight:'bold',
+      fontSize:'16px'
+    }
+  }))(TableCell);
+
+  return (
+    <TableHead style={{ color:'red' }}>
+      <TableRow style={{ backgroundColor:'grey' }}>
+        {headCells.map((headCell) => (
+          <TableHeaderCellAlpha
+            key={headCell.id}
+            align={headCell.numeric ? 'right' : 'left'}
+            padding={headCell.disablePadding ? 'none' : 'normal'}
+            sortDirection={orderBy === headCell.id ? order : false}
+          >
+            <TableSortLabel
+              active={orderBy === headCell.id}
+              direction={orderBy === headCell.id ? order : 'asc'}
+              onClick={createSortHandler(headCell.id)}
+            >
+              {headCell.label}
+              {orderBy === headCell.id ? (
+                <Box component="span" sx={visuallyHidden} >
+                  {order === 'desc' ? 'sorted descending' : 'sorted ascending'}
+                </Box>
+              ) : null}
+            </TableSortLabel>
+          </TableHeaderCellAlpha>
+        ))}
+      </TableRow>
+    </TableHead>
+  );
+}
+
+EnhancedTableHead.propTypes = {
+  numSelected: PropTypes.number.isRequired,
+  onRequestSort: PropTypes.func.isRequired,
+  onSelectAllClick: PropTypes.func.isRequired,
+  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
+  orderBy: PropTypes.string.isRequired,
+  rowCount: PropTypes.number.isRequired,
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 export default function CollapsibleTable() {
+  const [order, setOrder] = React.useState('asc');
+  const [orderBy, setOrderBy] = React.useState('calories');
+  const [selected, setSelected] = React.useState([]);
+  const [dense, setDense] = React.useState(false);
+
+  const handleRequestSort = (event, property) => {
+    const isAsc = orderBy === property && order === 'asc';
+    setOrder(isAsc ? 'desc' : 'asc');
+    setOrderBy(property);
+  };
+
+  const handleSelectAllClick = (event) => {
+    if (event.target.checked) {
+      const newSelecteds = rows.map((n) => n.name);
+      setSelected(newSelecteds);
+      return;
+    }
+    setSelected([]);
+  };
+
+
+
+  
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -234,36 +407,51 @@ export default function CollapsibleTable() {
     setPage(0);
   };
 
+  const TableHeaderCell = withStyles(theme => ({
+    root: {
+      color: 'white',
+      fontWeight:'bold'
+    }
+  }))(TableCell);
+
   return (
     
-    <div style={{ height: "100%", width: '100%',overflow:'scroll' }}>
-    <Typography variant="h2" gutterBottom component="div">
-                Stations
+    <div style={{ height: "100%", width: '100%',overflow:'scroll',textAlign:'center'}}>
+    <Typography variant="h2" gutterBottom component="div" style={{ width:'100%'}}>
+                Gas Stations
               </Typography>
       <TableContainer component={Paper} >
-        <Table aria-label="collapsible table">
-          <TableHead>
-            <TableRow>
-              <TableCell />
-              <TableCell align="left">Adresse</TableCell>
-              <TableCell align="right">Ville</TableCell>
-              <TableCell align="right">Code postal</TableCell>
-              <TableCell align="right">Latitude</TableCell>
-              <TableCell align="right">Longitude</TableCell>
-            </TableRow>
-          </TableHead>
+        <Table aria-label="collapsible table" >
+        <EnhancedTableHead
+              numSelected={selected.length}
+              order={order}
+              orderBy={orderBy}
+              onSelectAllClick={handleSelectAllClick}
+              onRequestSort={handleRequestSort}
+              rowCount={rows.length}
+            />
           <TableBody>
-          {(rowsPerPage > 0
-            ? rows.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-            : rows
-          ).map((row) => (
+              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
+                 rows.slice().sort(getComparator(order, orderBy)) */}
+              {stableSort(rows, getComparator(order, orderBy))
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
               <Row key={row.name} row={row} />
             ))}
-          </TableBody>
+              {emptyRows > 0 && (
+                <TableRow
+                  style={{
+                    height: (dense ? 33 : 53) * emptyRows,
+                  }}
+                >
+                  <TableCell colSpan={6} />
+                </TableRow>
+              )}
+            </TableBody>
           <TableFooter >
           <TableRow>
-            <TablePagination
-              rowsPerPageOptions={[5, 10, 25, { label: 'All', value: -1 }]}
+            <TablePagination 
+              rowsPerPageOptions={[5, 10, 25]}
               colSpan={3}
               count={rows.length}
               rowsPerPage={rowsPerPage}
@@ -277,6 +465,7 @@ export default function CollapsibleTable() {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
+    
             />
           </TableRow>
         </TableFooter>
