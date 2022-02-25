@@ -1,3 +1,5 @@
+import {askOneAdress} from "./addressLocator";
+
 var openroute_api_key = "5b3ce3597851110001cf624802362b6174e54aa98a8f502fe809cafc";
 
 export async function getItinerary(startXString, startYString, endXString, endYString){
@@ -31,7 +33,18 @@ export function testmethod3(param1){
     console.log('param1 : ' + param1);
 }
 
-export async function drawItinerary(startXString, startYString, endXString, endYString) {
+export async function drawItinerary(endXString, endYString) {
+
+    var address = await askOneAdress(document.getElementById("fromAddress"));
+    var startYString = address.features[0].geometry.coordinates[1];
+    var startXString = address.features[0].geometry.coordinates[0];
+    if(startXString === "" || startYString === ""){
+        alert("Please enter a valid input");
+        return;
+    }
+
+
+
     var itinerary = await getItinerary(startXString, startYString, endXString, endYString)
     for (var i = 1; i < itinerary.features[0].geometry.coordinates.length; i++) {
         drawLine(itinerary.features[0].geometry.coordinates[i][1], itinerary.features[0].geometry.coordinates[i][0], itinerary.features[0].geometry.coordinates[i - 1][1], itinerary.features[0].geometry.coordinates[i - 1][0], '#6f79c9');
@@ -41,3 +54,4 @@ export async function drawItinerary(startXString, startYString, endXString, endY
 function drawLine(fromX, fromY, toX, toY, color){
     console.log("Drawing [" + fromX+", " + fromY +"] to [" + toX + ", " + toY + "]");
 }
+
