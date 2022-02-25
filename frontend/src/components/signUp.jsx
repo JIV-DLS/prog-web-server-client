@@ -28,10 +28,24 @@ function Copyright(props) {
 
 const theme = createTheme();
 
+/*async function subscribe(email,password,firstName,lastName) {
+  try {
+    const token = await Auth.signIn(email, password,firstName,lastName);
+    alert("Subscribed with success");
+    return token;
+  } catch (e) {
+    alert(e.message);
+  }
+}*/
+
 export default function SignUp() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    /*subscribe(data.get('email'), data.get('password'),data.get('firstName'),data.get('lastName')).then((r) =>{
+      console.log(r);
+    })*/
+
     console.log({
       email: data.get('email'),
       password: data.get('password'),

@@ -22,7 +22,7 @@ export const emailValidity = (req: { params: { email: any; }; }, res: { status: 
     catch((error: any) => res.status(200).json({"error": error}));
 };
 
-export const signup = (req: { body: { email: string;password: string; pseudo: string | null; firstName: string | null; lastName: string | null; }; params: { _id: null; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { userId?: any; token?: any; error?: any; message?: string; }): void; new(): any; }; }; }) => {
+export const signup = (req: { body: { email: string;password: string; pseudo: string | null; firstName: string ; lastName: string; }; params: { _id: null; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: { userId?: any; token?: any; error?: any; message?: string; }): void; new(): any; }; }; }) => {
     if (req.body.password != null
     && req.body.email != null) {
 

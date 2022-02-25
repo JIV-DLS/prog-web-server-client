@@ -4,7 +4,7 @@ import {appAuth} from "../middleware/appAuth";
 import {auth} from "../middleware/auth";
 import {currentUser} from "../middleware/currentUser";
 import {GasRouter} from "./gas";
-import {confirmPhoneNumber, get, login, emailValidity, signinWithPhoneNumber, signup} from "./user";
+import {get, login, emailValidity, signup} from "./user";
 import {ServiceRouter} from "./service";
 import {StationRouter} from "./station";
 
@@ -14,7 +14,7 @@ const router = Router();
 router.get("/status", (req, res) => res.status(200).json("ok"));
 
 // @ts-ignore
-router.post("/auth/signup/:_id", appAuth, signup);
+router.post("/auth/signup", appAuth, signup);
 // @ts-ignore
 router.get("/auth/signup/pseudo_validity/:pseudo", appAuth, emailValidity);
 // @ts-ignore
