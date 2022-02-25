@@ -85,7 +85,7 @@ export default function MyMap(props) {
             </div>
             <div className="m-2" style={okText}>
 
-                <button onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinerary</button>
+                <button onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
 
                 <div className="m-2" style={popupHead}>
                 Les carburants :
