@@ -39,7 +39,7 @@ mongoose.connection.db.dropDatabase(() => {
 
 jest.setTimeout(60 * 1000)
 
-test("GET /station", async () => {
+test("GET /status", async () => {
 	/*const post = await Post.create({
 		title: "Post 1",
 		content: "Lorem ipsum",
