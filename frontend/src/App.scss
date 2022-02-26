@@ -43,6 +43,43 @@ html {
   border-radius: 10px;
 }
 
+.itineraryButton{
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+
+.price{
+  margin-top: 20px;
+}
+
+.pricerow{
+  width: 100%;
+  height: 20px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.pricetag{
+  width: 30%;
+}
+
+.priceEdit{
+  margin-left: 20px;
+  width: 30%;
+  justify-content: center;
+
+}
+
+.priceEditButton{
+  width: 100%;
+}
+
+.oldPrice{
+  margin-left: 20px;
+  width: 35%;
+}
+
 .MuiAutocomplete-root .Mui-focused{
   border-radius: 10px;
 }
@@ -141,7 +178,6 @@ html {
       color: #fff;
       background-color: lightgrey;
     }
-
 
     #signInBox {
       #email ,#password, #firstName, #lastName {

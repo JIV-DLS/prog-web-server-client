@@ -5,7 +5,8 @@ const popupContent = {
   };
   const popupHead = {
     fontWeight: "bold",
-    fontSize: "22px"
+    fontSize: "22px",
+    marginTop: "10px"
   };
   
   const popupText = {
