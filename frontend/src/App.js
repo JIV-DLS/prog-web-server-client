@@ -5,6 +5,7 @@ import {
   Route
 } from "react-router-dom";
 import './App.scss';
+import BarChart from './components/chart';
 import Header from './components/header';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
@@ -16,7 +17,6 @@ import { useCallback } from 'react';
 import Api from "./helper/api";
 
 const api = new Api();
-import BarChart from './components/chart';
 
 export default function App() {
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
@@ -64,16 +64,11 @@ export default function App() {
 
   const [post, getPost] = useState([])
   const API = 'http://localhost:9428/api/station/latitude=4319219&longitude=14590';
-  const fetchPost = () => {
-    fetch(API)
-      .then((res) => res.json())
-      .then((res) => {
-        console.log(res)
-        getPost(res)
-      })
-  }
+
   useEffect(() => {
-    fetchPost()
+      api.getStations(14590,4319219).then((data)=>{
+          console.log("Stations to show",data)
+      })
   }, [])
 
 

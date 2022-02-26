@@ -88,6 +88,16 @@ export default class Api {
     logout(){
         localStorage.removeItem(token)
     }
+
+    async getStations(longitude,latitude){
+        return axios.get(`${this.api_url}/api/station/latitude=${longitude}&longitude=${latitude}`,this.getConfig()).then((response) => {
+            console.log("Stations gotten",response["data"])
+            return response["data"];
+        }).catch((error)=>{
+            console.log(error);
+        });
+    }
+
     async getUserInfo(){
         return axios.get(`${this.api_url}/api/auth/${this.getUserId()}`,this.getConfig()).then((response) => {
             console.log("User info gotten",response["data"])
