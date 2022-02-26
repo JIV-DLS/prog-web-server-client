@@ -90,7 +90,7 @@ export default class Api {
     }
 
     async getStations(longitude,latitude){
-        return axios.get(`${this.api_url}/api/station/latitude=${longitude}&longitude=${latitude}`,this.getConfig()).then((response) => {
+        return axios.get(`${this.api_url}/api/station/latitude=${latitude}&longitude=${longitude}`,this.getConfig()).then((response) => {
             console.log("Stations gotten",response["data"])
             return response["data"];
         }).catch((error)=>{

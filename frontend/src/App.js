@@ -63,8 +63,6 @@ export default function App() {
   const [user, setUser] = useState(tmpUser);
 
   const [post, getPost] = useState([])
-  const API = 'http://localhost:9428/api/station/latitude=4319219&longitude=14590';
-
   useEffect(() => {
       api.getStations(14590,4319219).then((data)=>{
           console.log("Stations to show",data)
