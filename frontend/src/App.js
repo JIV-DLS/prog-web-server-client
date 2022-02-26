@@ -13,10 +13,11 @@ import EnhancedTable from './components/table';
 import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
-
+import BarChart from './components/chart';
 import Api from "./helper/api";
 
 const api = new Api();
+
 
 export default function App() {
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
