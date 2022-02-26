@@ -20,6 +20,7 @@ const api = new Api();
 export default function App() {
 
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
+    const [token, setToken] = useLocalStorage('token');
 
   const handleChangeMode = useCallback(
       (e) => {
@@ -28,33 +29,6 @@ export default function App() {
       },
       [setStorageMode],
   );
-
-
-    const token = localStorage.getItem("token")
-    let userSaved = localStorage.getItem("user")
-    if (userSaved) userSaved = JSON.parse(userSaved)
-
-    let tmpUser = null;
-  if (token){
-      console.log("yes there is a token")
-      if(!userSaved){
-          api.getUserInfo().then((_user)=> {
-              localStorage.setItem("user",JSON.stringify(_user))
-
-              setUser(_user);
-          });
-      }else {
-          if(tmpUser!==userSaved){
-              tmpUser = userSaved
-          }
-      }
-
-  }
-  else{
-      console.log("nop there is any token!")
-  }
-
-  const [user, setUser] = useState(tmpUser);
 
   const [stationsChart, setStationsChart] = useState([]);
   const [stationsMap, setStationsMap] = useState([]);
@@ -66,9 +40,9 @@ export default function App() {
             var NewPrix=[];
             var NewPrix=[];
             if(d.pdv_content.prix){
-              
+
               for(let i=0; i<d.pdv_content.prix.length-1;i++){
-              
+
                 let carburant=d.pdv_content.prix[i];
 
                 if(carburant.nom  ){
@@ -76,16 +50,16 @@ export default function App() {
                     let temp=carburant.valeur;
                     if(carburant.valeur.length<4)
                       carburant.valeur=temp.slice(0, 0) + "0." + temp.slice(0 + Math.abs(0));
-                    else 
+                    else
                       carburant.valeur=temp.slice(0, 1) + "." + temp.slice(1 + Math.abs(0));
                     NewPrix.push(carburant);
                   }
-                    
+
                 }
 
                 }
             }
-            
+
             if(d.pdv_content.services===undefined){
               d.pdv_content["services"]  = "non definied"
             }
@@ -96,7 +70,7 @@ export default function App() {
 
 
           })
-          
+
           console.log("New data",DataStations);
           setStationsMap(DataStations);
 
@@ -116,10 +90,10 @@ export default function App() {
          </div>
         <Switch>
           <Route path="/signIn" >
-            <SignIn setUser={setUser}/>
+            <SignIn setUser={setToken}/>
           </Route>
           <Route path="/signUp" >
-            <SignUp setUser={setUser}/>
+            <SignUp setUser={setToken}/>
           </Route>
           <Route path="/dataTable">
            <CollapsibleTable parentToChild = {stationsMap}/>
@@ -128,7 +102,7 @@ export default function App() {
            <BarChart dataFromParent = {DataStations}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode} stations={stationsMap}/>
+            <Header mode={storageMode} stations={stationsMap} token={token}/>
           </Route>
         </Switch>
       </div>
