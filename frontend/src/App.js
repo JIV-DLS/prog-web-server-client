@@ -80,12 +80,14 @@ export default function App() {
 
           data.map( d => {
             var NewPrix=[];
+            var NewPrix=[];
             if(d.pdv_content.prix){
+              
               for(let i=0; i<d.pdv_content.prix.length-1;i++){
               
                 let carburant=d.pdv_content.prix[i];
 
-                if(carburant.nom ){
+                if(carburant.nom  ){
                   if( carburant.nom !== d.pdv_content.prix[i+1].nom){
                     let temp=carburant.valeur;
                     if(carburant.valeur.length<4)
@@ -95,9 +97,13 @@ export default function App() {
                     NewPrix.push(carburant);
                   }
                     
-                  }
+                }
 
                 }
+            }
+            
+            if(d.pdv_content.services===undefined){
+              d.pdv_content["services"]  = "non definied"
             }
             d.pdv_content.prix=NewPrix;
             d.pdv_content.latitude=d.pdv_content.latitude.slice(0, 2) + "." + d.pdv_content.latitude.slice(2 + Math.abs(0));

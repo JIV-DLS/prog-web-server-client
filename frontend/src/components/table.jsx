@@ -133,7 +133,7 @@ function Row(props) {
                   {row.prix.map((historyRow) => (
                     <TableRow key={historyRow.nom}>
                       <TableCell component="th" scope="row">
-                        {historyRow._nom}
+                        {historyRow.nom}
                       </TableCell>
                       <TableCell>{historyRow.valeur}</TableCell>
                       <TableCell align="right">{historyRow.maj}</TableCell>
