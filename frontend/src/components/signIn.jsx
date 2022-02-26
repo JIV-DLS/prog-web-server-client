@@ -43,14 +43,10 @@ export default function SignIn({setUser}) {
       console.log("login success! Getting user infos...")
       api.getUserInfo().then((_user)=> {
         console.log("user infos gotten",_user)
-        setUser(_user);
+        //setUser(_user);
         history.push("/");
       });
     })
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   return (

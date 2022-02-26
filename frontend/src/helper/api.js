@@ -87,6 +87,8 @@ export default class Api {
     }
     logout(){
         localStorage.removeItem(token)
+        localStorage.removeItem(userId)
+        localStorage.removeItem("user")
     }
 
     async getStations(longitude,latitude){

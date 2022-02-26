@@ -79,6 +79,7 @@ export default function Header({mode,stations,token}) {
             console.log("3",user);
         }
     }, [])
+    console.log(mode)
     return (
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">
@@ -131,7 +132,7 @@ export default function Header({mode,stations,token}) {
                               onClick={handleMenu}
                               color="inherit"
                           >
-                              <AccountCircle style={{color: mode ? 'gray' : 'white'}}/>
+                              <AccountCircle style={{color: mode ? 'white' : 'gray'}}/>
                           </IconButton>
                           <Menu
                               id="menu-appbar"
