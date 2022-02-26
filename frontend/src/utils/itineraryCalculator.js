@@ -18,21 +18,6 @@ export async function getItinerary(startXString, startYString, endXString, endYS
     });
 }
 
-export function testmethod(param1,param2,param3,param4){
-    console.log('received request');
-    console.log('param1 : ' + param1+'param2 : ' + param2+'param3 : ' + param3+'param4 : ' + param4);
-}
-
-export function testmethod2(){
-    console.log('received request2');
-}
-
-
-export function testmethod3(param1){
-    console.log('received request');
-    console.log('param1 : ' + param1);
-}
-
 export async function drawItinerary(endXString, endYString) {
 
     var address = await askOneAdress(document.getElementById("fromAddress"));
@@ -42,8 +27,6 @@ export async function drawItinerary(endXString, endYString) {
         alert("Please enter a valid input");
         return;
     }
-
-
 
     var itinerary = await getItinerary(startXString, startYString, endXString, endYString)
     for (var i = 1; i < itinerary.features[0].geometry.coordinates.length; i++) {

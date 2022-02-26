@@ -4,8 +4,8 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents , Polyline} from '
 import { Icon , LatLng} from "leaflet";
 import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
-import {getItinerary,testmethod2, testmethod3, drawItinerary} from "../utils/itineraryCalculator";
-
+import {drawItinerary} from "../utils/itineraryCalculator";
+import {modifyPrice, getOldPrice} from "../utils/priceEditor"
 
 var center = new LatLng(43.7101728, 7.2619532, 0);
 var mapA;
@@ -84,14 +84,19 @@ export default function MyMap(props) {
                {station.adresse}
             </div>
             <div className="m-2" style={okText}>
-
-                <button onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
-
+                <button className="itineraryButton" onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
                 <div className="m-2" style={popupHead}>
                 Les carburants :
               </div>
                {station.prix.map(p => (
-              <p>{p._nom}: {p._valeur}€</p>
+                   <div className="price">
+                       <b>{p._nom}: </b>
+                        <div className="pricerow">
+                            <div className="pricetag" id={"editValue-"+ p._nom + "-" + station._id} contentEditable={false}>{p._valeur} €</div>
+                            <div className="priceEdit"><button id={"editButton-" + station._id}  title="Corriger le prix" disabled={true} className="priceEditButton" onClick={() => modifyPrice(station._id, p._nom, document.getElementById("editValue-" + p._nom + "-" + station._id).innerText)}>Modifier</button></div>
+                            <div className="oldPrice"><button id={"oldPriceButton-" + station._id} title="Afficher l'ancien prix" disabled={true} className="oldPriceButton" onClick={() => getOldPrice(station._id, p._nom)}>Ancien prix</button></div>
+                        </div>
+                   </div>
               ))}
               <div className="m-2" style={popupHead}>
                 Les services :
