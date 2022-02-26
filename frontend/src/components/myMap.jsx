@@ -1,6 +1,6 @@
 import './myMap.css';
 import React, {useState, useEffect} from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup, useMapEvents , Polyline} from 'react-leaflet';
 import { Icon , LatLng} from "leaflet";
 import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
@@ -54,14 +54,12 @@ export default function MyMap(props) {
         map.target.on("move", function (e) {
           console.log(map.target.getCenter());
           center = map.target.getCenter();
-
         });
       } }>
       <TileLayer
        url= {props.displayMode}
        attribution= '&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors'
       />
-
       {stationList.map(station => (
         <Marker
           key={station._id}
@@ -86,7 +84,8 @@ export default function MyMap(props) {
                {station.adresse}
             </div>
             <div className="m-2" style={okText}>
-                <button onClick={() => drawItinerary(center.lng, center.lat, station._longitude,station._latitude)}>Itinerary</button>
+
+                <button onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
 
                 <div className="m-2" style={popupHead}>
                 Les carburants :

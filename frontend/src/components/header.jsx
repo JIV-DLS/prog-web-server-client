@@ -12,11 +12,14 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import MyMap from './myMap';
+
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import * as React from "react";
 import Api from "../helper/api";
 
 const api = new Api();
+import {loadFromList} from "../utils/addressLocator";
+import {drawItinerary} from "../utils/itineraryCalculator";
 
 export default function Header(mode) {
 
@@ -75,6 +78,10 @@ export default function Header(mode) {
                   <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       SmartCarburant
                   </Typography>
+                  <input className={"address"} id={"fromAddress"} type="text" onKeyUp={loadFromList} placeholder="Où êtes-vous ?" list="fromList"/>
+
+                  <datalist id="fromList">
+                  </datalist>
                   <Autocomplete
                       disablePortal
                       id="carburant-box"

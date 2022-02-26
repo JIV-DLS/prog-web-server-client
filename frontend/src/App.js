@@ -12,9 +12,12 @@ import EnhancedTable from './components/table';
 import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
+
 import Api from "./helper/api";
 
 const api = new Api();
+import BarChart from './components/chart';
+import { useState, useEffect } from 'react';
 
 export default function App() {
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
@@ -57,7 +60,24 @@ export default function App() {
   else{
       console.log("nop there is any token!")
   }
-    const [user, setUser] = useState(tmpUser);
+  
+  const [user, setUser] = useState(tmpUser);
+    
+  const [post, getPost] = useState([])
+  const API = 'http://localhost:9428/api/station/latitude=4319219&longitude=14590';
+  const fetchPost = () => {
+    fetch(API)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+        getPost(res)
+      })
+  }
+  useEffect(() => {
+    fetchPost()
+  }, [])
+  
+
   return (
     <Router>
       <div className={`App ${storageMode ? 'dark' : 'light'}`}>
@@ -78,6 +98,9 @@ export default function App() {
           </Route>
           <Route path="/dataTable">
            <EnhancedTable />
+          </Route>
+          <Route path="/chart">
+           <BarChart />
           </Route>
           <Route path="/">
             <Header mode={storageMode}/>

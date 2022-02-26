@@ -1,3 +1,4 @@
+
 const STATIONS = [
    {
        "adresse": "111, Avenue Saint-Augustin",
@@ -21,11 +22,22 @@ const STATIONS = [
              "_valeur": "1.766"
           },
           {
+            "_nom": "Gazole",
+            "_id": "1",
+            "_maj": "2022-01-30T09:07:55",
+            "_valeur": "1.78"
+         },
+          {
              "_nom": "SP95",
              "_id": "2",
              "_maj": "2022-01-19T12:31:38",
              "_valeur": "1.835"
-          }
+          },{
+            "_nom": "SP95",
+            "_id": "2",
+            "_maj": "2022-01-22T12:31:38",
+            "_valeur": "1.815"
+         }
        ],
        "_id": "6296001",
        "_latitude": "43.67750",
@@ -187,5 +199,8 @@ const STATIONS = [
     }
    
 ]
+
+
+
 
 export default STATIONS; 
