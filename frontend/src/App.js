@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState,useEffect} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -17,7 +17,6 @@ import Api from "./helper/api";
 
 const api = new Api();
 import BarChart from './components/chart';
-import { useState, useEffect } from 'react';
 
 export default function App() {
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
@@ -60,9 +59,9 @@ export default function App() {
   else{
       console.log("nop there is any token!")
   }
-  
+
   const [user, setUser] = useState(tmpUser);
-    
+
   const [post, getPost] = useState([])
   const API = 'http://localhost:9428/api/station/latitude=4319219&longitude=14590';
   const fetchPost = () => {
@@ -76,7 +75,7 @@ export default function App() {
   useEffect(() => {
     fetchPost()
   }, [])
-  
+
 
   return (
     <Router>
