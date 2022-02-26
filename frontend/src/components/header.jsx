@@ -28,14 +28,8 @@ export default function Header({mode,stations}) {
   const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
-  const [tileLayer, setTayelLayer] = useState('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
   const [anchorEl, setAnchorEl] = useState(null);
   useEffect(() => {
-    if(mode.mode) {
-        setTayelLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
-    } else {
-        setTayelLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-    }
     
   }, [mode,stations]);
 
@@ -130,6 +124,6 @@ export default function Header({mode,stations}) {
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap displayMode={tileLayer} onChange={gasFilter} service={serviceFilter}/></>
+      </Box><MyMap onChange={gasFilter} service={serviceFilter}/></>
   );
 }

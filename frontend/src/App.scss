@@ -141,6 +141,10 @@ html {
       overflow: hidden;
     }
 
+    .leaflet-container {
+      opacity: 65%;
+    }
+  
     .leaflet-popup-content-wrapper {
       background-color: #282c35;
       overflow-y: auto;

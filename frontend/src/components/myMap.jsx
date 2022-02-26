@@ -10,7 +10,6 @@ import {modifyPrice, getOldPrice} from "../utils/priceEditor"
 var center = new LatLng(43.7101728, 7.2619532, 0);
 var mapA;
 
-
 export default function MyMap(props) {
   const [stationList, setStationList] = useState([]);
   useEffect(() => {
@@ -57,7 +56,7 @@ export default function MyMap(props) {
         });
       } }>
       <TileLayer
-       url= {props.displayMode}
+       url= 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
        attribution= '&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors'
       />
       {stationList.map(station => (

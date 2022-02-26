@@ -17,9 +17,6 @@ import Api from "./helper/api";
 
 const api = new Api();
 
-
-
-
 export default function App() {
 
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
@@ -31,15 +28,6 @@ export default function App() {
       },
       [setStorageMode],
   );
-  /*const handleUserInfoLoaded = useCallback(
-      (userInfos) => {
-          setUser(userInfos);
-      },
-      [setUser],
-  );*/
-
-  
-
 
 
     const token = localStorage.getItem("token")
@@ -73,11 +61,7 @@ export default function App() {
   var DataStations=[];
   useEffect(() => {
       api.getStations(14590,4319219).then((data)=>{
-          //console.log("Stations to show",data)
-          //console.log("Statons in APPjs",DataStations)
           setStationsChart(data);
-          
-
           data.map( d => {
             var NewPrix=[];
             var NewPrix=[];
@@ -119,7 +103,6 @@ export default function App() {
       })
   }, [])
 
-
   return (
     <Router>
       <div className={`App ${storageMode ? 'dark' : 'light'}`}>
@@ -145,7 +128,7 @@ export default function App() {
            <BarChart dataFromParent = {DataStations}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode}  stations={stationsMap}/>
+            <Header mode={storageMode} stations={stationsMap}/>
           </Route>
         </Switch>
       </div>
