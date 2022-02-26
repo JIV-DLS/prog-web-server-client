@@ -124,7 +124,7 @@ function Row(props) {
                   <TableRow style={{ backgroundColor:'#211E1E' }}>
                     <TableHeaderCellNested>Nom</TableHeaderCellNested>
                     <TableHeaderCellNested>Prix</TableHeaderCellNested>
-                    <TableHeaderCellNested align="right">Date dernière Màj</TableHeaderCellNested>
+                    <TableHeaderCellNested align="right">Date</TableHeaderCellNested>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -418,7 +418,7 @@ export default function CollapsibleTable() {
     
     <div style={{ height: "100%", width: '100%',overflow:'scroll',textAlign:'center'}}>
     <Typography variant="h2" gutterBottom component="div" style={{ width:'100%'}}>
-                Gas Stations
+                Stations de services
               </Typography>
       <TableContainer component={Paper} >
         <Table aria-label="collapsible table" >
