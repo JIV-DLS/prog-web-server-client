@@ -14,6 +14,7 @@ import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
 import Api from "./helper/api";
+import MyHeader from './components/myHeader';
 
 const api = new Api();
 
@@ -122,9 +123,11 @@ export default function App() {
             <SignUp setUser={setUser}/>
           </Route>
           <Route path="/dataTable">
+            <MyHeader mode={storageMode} />
            <CollapsibleTable parentToChild = {stationsMap}/>
           </Route>
           <Route path="/chart">
+            <MyHeader mode={storageMode} />
            <BarChart dataFromParent = {DataStations}/>
           </Route>
           <Route path="/">

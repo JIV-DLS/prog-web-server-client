@@ -21,7 +21,6 @@ import {drawItinerary} from "../utils/itineraryCalculator";
 
 const api = new Api();
 
-
 export default function Header({mode,stations}) {
 
   const typeOfGas = ['SP98','SP95','Gazole'];
@@ -29,6 +28,39 @@ export default function Header({mode,stations}) {
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
+  const [open, setOpen] = useState(false);
+  const anchorRef = React.useRef(null);
+
+  const handleToggle = () => {
+    setOpen((prevOpen) => !prevOpen);
+  };
+
+  const handleCloseButton = (event) => {
+    if (anchorRef.current && anchorRef.current.contains(event.target)) {
+      return;
+    }
+
+    setOpen(false);
+  };
+
+  function handleListKeyDown(event) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      setOpen(false);
+    } else if (event.key === 'Escape') {
+      setOpen(false);
+    }
+  }
+
+  // return focus to the button when we transitioned from !open -> open
+  const prevOpen = React.useRef(open);
+  React.useEffect(() => {
+    if (prevOpen.current === true && open === false) {
+      anchorRef.current.focus();
+    }
+
+    prevOpen.current = open;
+  }, [open]);
   useEffect(() => {
     
   }, [mode,stations]);
@@ -36,6 +68,18 @@ export default function Header({mode,stations}) {
   let history = useHistory();
   const routeChange = () => {
     history.push("/signIn")
+  }
+
+  const mapRoute = () => {
+    history.push("/")
+  }
+
+  const listeRoute = () => {
+    history.push("/dataTable")
+  }
+
+  const grapheRoute = () => {
+    history.push("/chart")
   }
 
     const handleClose = () => {
@@ -56,21 +100,44 @@ export default function Header({mode,stations}) {
     if (user)
         user = JSON.parse(user)
 
-    console.log("in Header",user);
-    return (
+    return (    
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">
               <Toolbar>
 
-                  <IconButton
-                      size="large"
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                      sx={{ mr: 2 }}
-                  >
-                      <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
-                  </IconButton>
+                    <div>
+                        <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        ref={anchorRef}
+                        id="composition-button"
+                        aria-controls={open ? 'composition-menu' : undefined}
+                        aria-expanded={open ? 'true' : undefined}
+                        aria-haspopup="true"
+                        onClick={handleToggle}
+                        size="large"
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleMenu}
+                        color="inherit"
+                            >
+                            <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
+                    </IconButton>
+                          <Menu
+                              id="menu-appbar"
+                              anchorEl={anchorEl}
+                              open={Boolean(anchorEl)}
+                              onClose={handleClose}
+                          >
+                              <MenuItem onClick={mapRoute}>Map</MenuItem>
+                              <MenuItem onClick={listeRoute}>Liste</MenuItem>
+                              <MenuItem onClick={grapheRoute}>Graphe</MenuItem>
+                          </Menu>
+                      </div>
                   <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       SmartCarburant
                   </Typography>
