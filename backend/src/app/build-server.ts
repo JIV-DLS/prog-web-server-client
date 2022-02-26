@@ -82,7 +82,7 @@ function save_gases(prices) {
 
 function fetch_data_from_server(url:string) {
 
-  if(url.length>0){
+  if(url.length==0){
     const currentDate = new Date();
 
     const currentYear = currentDate.getFullYear();
@@ -216,7 +216,7 @@ export const buildServer = (cb) => {
           mongoose.set("useFindAndModify", false);
           mongoose.set("useCreateIndex", true);
 
-          fetch_data_from_server();
+          fetch_data_from_server('');
 
           cron.schedule('0 7 * * *', () => {
             console.log('running an automatic task...');

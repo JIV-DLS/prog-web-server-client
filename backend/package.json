@@ -12,7 +12,7 @@
     "tscWatch": "tsc -w",
     "compile": "tsc >logs.log 2>warnings.log || rm logs.log || rm warnings.log",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
-    "postinstall": "tsc",
+    "postinstall": "npm run compile",
     "launchServer": "node dist/app/app.js",
     "deploy": "git add . && git commit -m Heroku && git push heroku master"
   },
