@@ -17,9 +17,10 @@ import MyMap from './myMap';
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import * as React from "react";
 import Api from "../helper/api";
+import {drawItinerary} from "../utils/itineraryCalculator";
 
 const api = new Api();
-import {drawItinerary} from "../utils/itineraryCalculator";
+
 
 export default function Header(mode) {
 
