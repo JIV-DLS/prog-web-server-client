@@ -10,38 +10,40 @@ import MenuItem from '@mui/material/MenuItem';
 import Menu from '@mui/material/Menu';
 import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
-import { useHistory } from "react-router-dom";
-import { useState, useEffect } from 'react';
+import {useHistory} from "react-router-dom";
+import * as React from 'react';
+import {useEffect, useState} from 'react';
 import MyMap from './myMap';
 
 import AccountCircle from "@mui/icons-material/AccountCircle";
-import * as React from "react";
 import Api from "../helper/api";
-import {drawItinerary} from "../utils/itineraryCalculator";
+import useLocalStorage from "./useLocalStorage";
 
 const api = new Api();
 
 
-export default function Header(mode) {
+export default function Header(mode,setToken) {
 
-  const typeOfGas = ['SP98','SP95','Gazole'];
-  const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
-  const [gasFilter, setGasFilter] = useState('');
-  const [serviceFilter, setServiceFilter] = useState('');
-  const [tileLayer, setTayelLayer] = useState('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-  const [anchorEl, setAnchorEl] = useState(null);
-  useEffect(() => {
-    if(mode.mode) {
-        setTayelLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
-    } else {
-        setTayelLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    const typeOfGas = ['SP98', 'SP95', 'Gazole'];
+    const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
+    const [gasFilter, setGasFilter] = useState('');
+    const [serviceFilter, setServiceFilter] = useState('');
+    const [tileLayer, setTayelLayer] = useState('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const [user, setUser] = useState();
+
+    useEffect(() => {
+        if (mode.mode) {
+            setTayelLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
+        } else {
+            setTayelLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
+        }
+    }, [mode]);
+
+    let history = useHistory();
+    const routeChange = () => {
+        history.push("/signIn")
     }
-  }, [mode]);
-
-  let history = useHistory();
-  const routeChange = () => {
-    history.push("/signIn")
-  }
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -52,83 +54,120 @@ export default function Header(mode) {
         setAnchorEl(event.currentTarget);
     };
 
+
     const logout = (event) => {
-        //api.logout()
+        api.logout()
+        setUser(null)
+        handleClose();
+
     };
 
+    console.log(user);
+
+    function loadUserFromApi() {
+        api.getUserInfo().then((_user) => {
+            localStorage.setItem("user", JSON.stringify(_user));
+            //user = _user;
+            setUser(_user);
+        });
+    }
+
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        let userSaved = localStorage.getItem("user")
+        if (token) {
+            if (userSaved == null) {
+                loadUserFromApi();
+                console.log("1",user);
+            } else {
+                const _ = JSON.parse(userSaved);
+                //user = _;
+                setUser(_);
+                console.log("2",_,user);
+            }
+            console.log("3",user);
+        }
+    }, [])
+    /*
     let user = localStorage.getItem("user")
+
+    console.log("")
+
 
     if (user)
         user = JSON.parse(user)
-
-    console.log("in Header",user);
+*/
+    //console.log("in Header",user);
     return (
-        <><Box sx={{ flexGrow: 1 }}>
-          <AppBar id="AppBar" position="static">
-              <Toolbar>
+        <><Box sx={{flexGrow: 1}}>
+            <AppBar id="AppBar" position="static">
+                <Toolbar>
 
-                  <IconButton
-                      size="large"
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                      sx={{ mr: 2 }}
-                  >
-                      <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
-                  </IconButton>
-                  <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      SmartCarburant
-                  </Typography>
-                  <input className={"address"} id={"fromAddress"} type="text" onKeyUp={loadFromList} placeholder="Où êtes-vous ?" list="fromList"/>
+                    <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{mr: 2}}
+                    >
+                        <Avatar alt="Remy Sharp"
+                                src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg"/>
+                    </IconButton>
+                    <Typography id="AppBarTypo" variant="h6" component="div" sx={{flexGrow: 1}}>
+                        SmartCarburant
+                    </Typography>
+                    <input className={"address"} id={"fromAddress"} type="text" onKeyUp={loadFromList}
+                           placeholder="Où êtes-vous ?" list="fromList"/>
 
-                  <datalist id="fromList">
-                  </datalist>
-                  <Autocomplete
-                      disablePortal
-                      id="carburant-box"
-                      options={typeOfGas}
-                      style={{ marginRight: '1%', marginTop: '5px' }}
-                      sx={{ width: 200 }}
-                      onChange={(event, value) => setGasFilter(value)}
-                      renderInput={(params) => <TextField {...params} label="Carburants" />} />
-                  <Autocomplete
-                      disablePortal
-                      id="service-box"
-                      options={typeOfService}
-                      style={{ marginRight: '5%', marginTop: '5px' }}
-                      sx={{ width: 200 }}
-                      onChange={(event, value) => setServiceFilter(value)}
-                      renderInput={(params) => <TextField {...params} label="Services" />} />
+                    <datalist id="fromList">
+                    </datalist>
+                    <Autocomplete
+                        disablePortal
+                        id="carburant-box"
+                        options={typeOfGas}
+                        style={{marginRight: '1%', marginTop: '5px'}}
+                        sx={{width: 200}}
+                        onChange={(event, value) => setGasFilter(value)}
+                        renderInput={(params) => <TextField {...params} label="Carburants"/>}/>
+                    <Autocomplete
+                        disablePortal
+                        id="service-box"
+                        options={typeOfService}
+                        style={{marginRight: '5%', marginTop: '5px'}}
+                        sx={{width: 200}}
+                        onChange={(event, value) => setServiceFilter(value)}
+                        renderInput={(params) => <TextField {...params} label="Services"/>}/>
 
-                  { !user ?
-                      <Button id="AppBarTypoButton" color="inherit" onClick={routeChange}>
-                      Connexion
-                  </Button>
-                      :
-                      <div>
-                          <IconButton
-                              size="large"
-                              aria-label="account of current user"
-                              aria-controls="menu-appbar"
-                              aria-haspopup="true"
-                              onClick={handleMenu}
-                              color="inherit"
-                          >
-                              <AccountCircle style={{color:mode? 'gray' : 'white'}}/>
-                          </IconButton>
-                          <Menu
-                              id="menu-appbar"
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleClose}
-                          >
-                              <MenuItem onClick={handleClose} disabled={true}>Profile</MenuItem>
-                              <MenuItem onClick={logout}>Logout</MenuItem>
-                          </Menu>
-                      </div> }
+                    {!user?
+                        <Button id="AppBarTypoButton" color="inherit" onClick={routeChange}>
+                            Connexion
+                        </Button>
+                        :
+                        <div>
+                            <IconButton
+                                size="large"
+                                aria-label="account of current user"
+                                aria-controls="menu-appbar"
+                                aria-haspopup="true"
+                                onClick={handleMenu}
+                                color="inherit"
+                            >
+                                <AccountCircle style={{color: mode ? 'gray' : 'white'}}/>
+                            </IconButton>
+                            <Menu
+                                id="menu-appbar"
+                                anchorEl={anchorEl}
+                                open={Boolean(anchorEl)}
+                                onClose={handleClose}
+                            >
+                                <MenuItem onClick={handleClose}
+                                          disabled={true}>{user["firstName"] + " " + user["lastName"]}</MenuItem>
+                                <MenuItem onClick={logout}>Logout</MenuItem>
+                            </Menu>
+                        </div>}
 
-              </Toolbar>
-          </AppBar>
-      </Box><MyMap displayMode={tileLayer} onChange={gasFilter} service={serviceFilter}/></>
-  );
+                </Toolbar>
+            </AppBar>
+        </Box><MyMap displayMode={tileLayer} onChange={gasFilter} service={serviceFilter}/></>
+    );
 }

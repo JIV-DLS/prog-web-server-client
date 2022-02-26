@@ -1,4 +1,5 @@
 @import '~leaflet/dist/leaflet.css';
+
 html,
 body,
 #root,
@@ -6,13 +7,14 @@ body,
   height: 100%;
   margin: 0;
 }
+
 html {
   overflow: hidden;
 }
 
 .leaflet-popup-content-wrapper {
   overflow-y: auto;
-} 
+}
 
 .react-toggle {
   float: right;
@@ -43,14 +45,14 @@ html {
   border-radius: 10px;
 }
 
-.MuiAutocomplete-root .Mui-focused{
+.MuiAutocomplete-root .Mui-focused {
   border-radius: 10px;
 }
 
-.address{
+.address {
   border-radius: 10px;
   height: 51px;
-  width:300px;
+  width: 300px;
   margin-right: 20px;
   margin-top: 4px;
   background-color: ivory;
@@ -84,7 +86,7 @@ html {
 
 
 #signInBox {
-  #email ,#password, #firstName, #lastName {
+  #email, #password, #firstName, #lastName {
     background-color: #fff;
   }
 }
@@ -95,9 +97,9 @@ html {
 }
 
 .App {
-	&.dark {
-	  background-color: #282c35;
-	  color: #fff;
+  &.dark {
+    background-color: #282c35;
+    color: #fff;
 
     html {
       background-color: #282c35;
@@ -107,7 +109,7 @@ html {
     .leaflet-popup-content-wrapper {
       background-color: #282c35;
       overflow-y: auto;
-    } 
+    }
 
     .m-2 {
       color: #fff;
@@ -118,7 +120,7 @@ html {
       border: solid 1px #fff;
       height: 10vh;
     }
-    
+
     #AppBarTypo {
       color: white;
     }
@@ -144,7 +146,7 @@ html {
 
 
     #signInBox {
-      #email ,#password, #firstName, #lastName {
+      #email, #password, #firstName, #lastName {
         background-color: #fff;
       }
     }
@@ -153,6 +155,6 @@ html {
       color: #fff;
       text-decoration-color: #fff;
     }
-  
-	}
+
+  }
 }
