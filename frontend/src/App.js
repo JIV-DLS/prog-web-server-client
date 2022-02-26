@@ -9,7 +9,7 @@ import BarChart from './components/chart';
 import Header from './components/header';
 import SignIn from './components/signIn';
 import SignUp from './components/signUp';
-import EnhancedTable from './components/table';
+import CollapsibleTable from './components/table';
 import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
@@ -18,7 +18,10 @@ import Api from "./helper/api";
 const api = new Api();
 
 
+
+
 export default function App() {
+
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
 
   const handleChangeMode = useCallback(
@@ -34,6 +37,9 @@ export default function App() {
       },
       [setUser],
   );*/
+
+  
+
 
 
     const token = localStorage.getItem("token")
@@ -62,10 +68,48 @@ export default function App() {
 
   const [user, setUser] = useState(tmpUser);
 
-  const [post, getPost] = useState([])
+  const [stationsChart, setStationsChart] = useState([]);
+  const [stationsMap, setStationsMap] = useState([]);
+  var DataStations=[];
   useEffect(() => {
       api.getStations(14590,4319219).then((data)=>{
-          console.log("Stations to show",data)
+          //console.log("Stations to show",data)
+          //console.log("Statons in APPjs",DataStations)
+          setStationsChart(data);
+          
+
+          data.map( d => {
+            var NewPrix=[];
+            if(d.pdv_content.prix){
+              for(let i=0; i<d.pdv_content.prix.length-1;i++){
+              
+                let carburant=d.pdv_content.prix[i];
+
+                if(carburant.nom ){
+                  if( carburant.nom !== d.pdv_content.prix[i+1].nom){
+                    let temp=carburant.valeur;
+                    if(carburant.valeur.length<4)
+                      carburant.valeur=temp.slice(0, 0) + "0." + temp.slice(0 + Math.abs(0));
+                    else 
+                      carburant.valeur=temp.slice(0, 1) + "." + temp.slice(1 + Math.abs(0));
+                    NewPrix.push(carburant);
+                  }
+                    
+                  }
+
+                }
+            }
+            d.pdv_content.prix=NewPrix;
+            d.pdv_content.latitude=d.pdv_content.latitude.slice(0, 2) + "." + d.pdv_content.latitude.slice(2 + Math.abs(0));
+            d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 1) + "." + d.pdv_content.longitude.slice(1 + Math.abs(0));
+            DataStations.push(d.pdv_content);
+
+
+          })
+          
+          console.log("New data",DataStations);
+          setStationsMap(DataStations);
+
       })
   }, [])
 
@@ -89,13 +133,13 @@ export default function App() {
             <SignUp setUser={setUser}/>
           </Route>
           <Route path="/dataTable">
-           <EnhancedTable />
+           <CollapsibleTable parentToChild = {stationsMap}/>
           </Route>
           <Route path="/chart">
-           <BarChart />
+           <BarChart dataFromParent = {DataStations}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode}/>
+            <Header mode={storageMode}  stations={stationsMap}/>
           </Route>
         </Switch>
       </div>

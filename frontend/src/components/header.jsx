@@ -22,7 +22,7 @@ import {drawItinerary} from "../utils/itineraryCalculator";
 const api = new Api();
 
 
-export default function Header(mode) {
+export default function Header({mode,stations}) {
 
   const typeOfGas = ['SP98','SP95','Gazole'];
   const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
@@ -36,7 +36,8 @@ export default function Header(mode) {
     } else {
         setTayelLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
     }
-  }, [mode]);
+    
+  }, [mode,stations]);
 
   let history = useHistory();
   const routeChange = () => {

@@ -37,7 +37,7 @@ export default function MyMap(props) {
       );
       setStationList(filtredStations);
     }
-
+    
   }, [props]);
 
   const icon = new Icon({

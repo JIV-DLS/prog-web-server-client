@@ -28,6 +28,8 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
+import {useEffect,useState} from 'react';
+
 
 
 
@@ -108,9 +110,9 @@ function Row(props) {
           {row.adresse}
         </TableCell>
         <TableCell align="right">{row.ville}</TableCell>
-        <TableCell align="right">{row._id}</TableCell>
-        <TableCell align="right">{row._latitude}</TableCell>
-        <TableCell align="right">{row._longitude}</TableCell>
+        <TableCell align="right">{row.id}</TableCell>
+        <TableCell align="right">{row.latitude}</TableCell>
+        <TableCell align="right">{row.longitude}</TableCell>
       </TableRow>
       <TableRow>
         <TableCell style={{ paddingBottom: 0, paddingTop: 0 }} colSpan={6}>
@@ -129,12 +131,12 @@ function Row(props) {
                 </TableHead>
                 <TableBody>
                   {row.prix.map((historyRow) => (
-                    <TableRow key={historyRow._nom}>
+                    <TableRow key={historyRow.nom}>
                       <TableCell component="th" scope="row">
                         {historyRow._nom}
                       </TableCell>
-                      <TableCell>{historyRow._valeur}</TableCell>
-                      <TableCell align="right">{historyRow._maj}</TableCell>
+                      <TableCell>{historyRow.valeur}</TableCell>
+                      <TableCell align="right">{historyRow.maj}</TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
@@ -243,16 +245,7 @@ TablePaginationActions.propTypes = {
   createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
 ];*/
 
-const rows = STATIONS;
-
-
-
-
-
-
-
-
-
+var rows = [];
 
 
 
@@ -276,19 +269,19 @@ const headCells = [
     label: 'Ville',
   },
   {
-    id: '_cp',
+    id: 'cp',
     numeric: true,
     disablePadding: false,
     label: 'Code postal',
   },
   {
-    id: '_latitude',
+    id: 'latitude',
     numeric: true,
     disablePadding: false,
     label: 'Latitude',
   },
   {
-    id: '_longitude',
+    id: 'longitude',
     numeric: true,
     disablePadding: false,
     label: 'Longitude',
@@ -338,7 +331,7 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-
+/*
 EnhancedTableHead.propTypes = {
   numSelected: PropTypes.number.isRequired,
   onRequestSort: PropTypes.func.isRequired,
@@ -347,6 +340,7 @@ EnhancedTableHead.propTypes = {
   orderBy: PropTypes.string.isRequired,
   rowCount: PropTypes.number.isRequired,
 };
+*/
 
 
 
@@ -365,8 +359,18 @@ EnhancedTableHead.propTypes = {
 
 
 
+export default function CollapsibleTable({parentToChild}) {
 
-export default function CollapsibleTable() {
+  rows=parentToChild;
+
+  // useEffect(() => {
+  //   console.log("Hello from table");
+  //   //console.log("In table",props);
+  //   rows=parentToChild;
+
+  // }, [props]);
+
+  console.log("Heeeere",rows);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
