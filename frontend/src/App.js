@@ -13,6 +13,7 @@ import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
 import BarChart from './components/chart';
+import { useState, useEffect } from 'react';
 
 export default function App() {
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
@@ -24,6 +25,21 @@ export default function App() {
       },
       [setStorageMode],
   );
+
+  const [post, getPost] = useState([])
+  const API = 'http://localhost:9428/api/station/latitude=4319219&longitude=14590';
+  const fetchPost = () => {
+    fetch(API)
+      .then((res) => res.json())
+      .then((res) => {
+        console.log(res)
+        getPost(res)
+      })
+  }
+  useEffect(() => {
+    fetchPost()
+  }, [])
+  
 
   return (
     <Router>
