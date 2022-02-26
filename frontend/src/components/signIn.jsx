@@ -12,6 +12,8 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Api from "../helper/api";
+import {useHistory} from "react-router-dom";
 
 function Copyright(props) {
   return (
@@ -28,10 +30,23 @@ function Copyright(props) {
 
 const theme = createTheme();
 
-export default function SignIn() {
+const api = new Api()
+
+
+export default function SignIn({setUser}) {
+
+  const history = useHistory();
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
+    api.login(data.get('email'), data.get('password'),data.get('firstName'),data.get('lastName')).then((r) =>{
+      console.log("login success! Getting user infos...")
+      api.getUserInfo().then((_user)=> {
+        console.log("user infos gotten",_user)
+        setUser(_user);
+        history.push("/");
+      });
+    })
     console.log({
       email: data.get('email'),
       password: data.get('password'),

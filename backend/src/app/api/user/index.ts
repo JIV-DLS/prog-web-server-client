@@ -46,7 +46,7 @@ export const signup = (req: { body: { email: string;password: string; pseudo: st
                     res.status(500).json({ error });
                 });
 
-    } else { res.status(400).json({ message: "Tous les paramètres requis n'ont été fournis" }); }
+    } else { res.status(400).json({ message: "Tous les paramètres requis n'ont pas été fournis" }); }
 
 };
 export const get = (req: { userDoingRequest: { password: string; }; }, res: { status: (arg0: number) => { (): any; new(): any; json: { (arg0: any): void; new(): any; }; }; }) => {

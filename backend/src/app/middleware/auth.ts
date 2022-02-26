@@ -12,6 +12,10 @@ export const auth = (req, res, next) => {
         // @ts-ignore
         const userId = decodedToken.userId;
         req.body.userId = splitted[2];
+        console.log("req.body.userId",req.body.userId)
+        if(!req.body.userId) res.status(401).json({
+            error: new Error("Invalid request!"),
+        });
         User.findOne({ _id: splitted[2] })
             // @ts-ignore
             .then((user) => {
@@ -30,9 +34,9 @@ export const auth = (req, res, next) => {
             // @ts-ignore
             .catch((error) => res.status(500).json({ error }));
 
-    } catch {
-        res.status(401).json({
-            error: new Error("Invalid request!"),
+    } catch(e) {
+        res.status(500).json({
+            "error": e,
         });
     }
 };
