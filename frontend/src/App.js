@@ -12,6 +12,7 @@ import EnhancedTable from './components/table';
 import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
+import BarChart from './components/chart';
 
 export default function App() {
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
@@ -44,6 +45,9 @@ export default function App() {
           </Route>
           <Route path="/dataTable">
            <EnhancedTable />
+          </Route>
+          <Route path="/chart">
+           <BarChart />
           </Route>
           <Route path="/">
             <Header mode={storageMode}/>
