@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   BrowserRouter as Router,
   Switch,
@@ -12,6 +12,10 @@ import EnhancedTable from './components/table';
 import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
+
+import Api from "./helper/api";
+
+const api = new Api();
 import BarChart from './components/chart';
 import { useState, useEffect } from 'react';
 
@@ -25,7 +29,40 @@ export default function App() {
       },
       [setStorageMode],
   );
+  /*const handleUserInfoLoaded = useCallback(
+      (userInfos) => {
+          setUser(userInfos);
+      },
+      [setUser],
+  );*/
 
+
+    const token = localStorage.getItem("token")
+    let userSaved = localStorage.getItem("user")
+    if (userSaved) userSaved = JSON.parse(userSaved)
+
+    let tmpUser = null;
+  if (token){
+      console.log("yes there is a token")
+      if(!userSaved){
+          api.getUserInfo().then((_user)=> {
+              localStorage.setItem("user",JSON.stringify(_user))
+
+              setUser(_user);
+          });
+      }else {
+          if(tmpUser!==userSaved){
+              tmpUser = userSaved
+          }
+      }
+
+  }
+  else{
+      console.log("nop there is any token!")
+  }
+  
+  const [user, setUser] = useState(tmpUser);
+    
   const [post, getPost] = useState([])
   const API = 'http://localhost:9428/api/station/latitude=4319219&longitude=14590';
   const fetchPost = () => {
@@ -50,14 +87,14 @@ export default function App() {
            <ToggleModeNight
 						onChange={handleChangeMode}
 						mode={storageMode}
-					 /> 
+					 />
          </div>
         <Switch>
-          <Route path="/signIn">
-            <SignIn />
+          <Route path="/signIn" >
+            <SignIn setUser={setUser}/>
           </Route>
-          <Route path="/signUp">
-            <SignUp />
+          <Route path="/signUp" >
+            <SignUp setUser={setUser}/>
           </Route>
           <Route path="/dataTable">
            <EnhancedTable />

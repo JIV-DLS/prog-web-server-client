@@ -228,13 +228,13 @@ export const buildServer = (cb) => {
 
           const credentials = {key: privateKey, cert: certificate};
 
-          //const server = http.listen(process.env.PORT || 9428, () => cb && cb(server));
-
+          const server = http.listen(process.env.PORT || 9428, () => cb && cb(server));
+/*
           const SECURED_PORT = process.env.PORT || 9428;
           console.log("Launching secured server")
           const secured_server = https.createServer(credentials, app);
 
-          const secured_server_launched = secured_server.listen(SECURED_PORT,() => cb && cb(secured_server_launched));
+          const secured_server_launched = secured_server.listen(SECURED_PORT,() => cb && cb(secured_server_launched));*/
         })
         // tslint:disable-next-line:no-console
         .catch((err) => {

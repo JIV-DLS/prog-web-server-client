@@ -1,9 +1,10 @@
 import mongoose from "mongoose";
 
 const userSchema = new mongoose.Schema({
-  pseudo: {type: String, unique: true, required: true},
+  pseudo: {type: String},
   // tslint:disable-next-line:object-literal-sort-keys
-  lastName: {type: String},
+  email: {type: String, required: true, unique: true},
+  lastName: {type: String, required: true},
   firstName: {type: String, required: true},
   password: {type: String, required: true},
   // email: {type: String},
@@ -11,7 +12,7 @@ const userSchema = new mongoose.Schema({
   sex: {type: String},
   bornDate: {type: String},
   master: {type: Boolean, default: false},
-  phoneNumber: {type: Number, unique: true},
+  phoneNumber: {type: Number},
 },
     {
       timestamps: true,

@@ -6,7 +6,8 @@
   "scripts": {
     "localStart": "tsc>logs.log 2>warnings.log || rm logs.log || rm warnings.log && node dist/app/app.js",
     "test": "jest --detectOpenHandles",
-    "dev": "./node_modules/.bin/nodemon dist/app.js",
+    "dev": "clear && npm run compile && ./node_modules/.bin/nodemon dist/app/app.js",
+    "devAndTest": "clear && npm test && npm run compile && ./node_modules/.bin/nodemon dist/app/app.js",
     "start": "clear && npm test && npm run compile && npm run launchServer",
     "tscWatch": "tsc -w",
     "compile": "tsc >logs.log 2>warnings.log || rm logs.log || rm warnings.log",

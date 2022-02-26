@@ -4,7 +4,7 @@ import { MapContainer, TileLayer, Marker, Popup, useMapEvents , Polyline} from '
 import { Icon , LatLng} from "leaflet";
 import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
-import {getItinerary,testmethod, testmethod2, testmethod3, drawItinerary} from "../utils/itineraryCalculator";
+import {getItinerary,testmethod2, testmethod3, drawItinerary} from "../utils/itineraryCalculator";
 
 
 var center = new LatLng(43.7101728, 7.2619532, 0);
@@ -101,7 +101,7 @@ export default function MyMap(props) {
               ))}
             </div>
           </div>
-        </Popup>     
+        </Popup>
         </Marker>
       ))}
     </MapContainer>

@@ -12,7 +12,8 @@ export const currentUser = (req, res, next) => {
             //logger.info("here2");
             next();
         }
-    } catch {
+    } catch(error) {
+        console.log(error)
         res.status(401).json({
             error: new Error("Invalid request, You are registared as employee!"),
         });
