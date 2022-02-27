@@ -64,14 +64,9 @@ export default function App() {
   const [center, setCenter] = useState([null, null]);
 
   if(currentPosition!== undefined){
-    //console.log("Position Avant",center, (!center[0] && !center[1])  );
-
     if((center[0]==null &&center[1]==null)||(!center[0] && !center[1]) ){
-      //console.log("Par là");
       setCenter([currentPosition.coords.latitude,currentPosition.coords.longitude]);
     }
-    //console.log("Position",currentPosition.coords.latitude,currentPosition.coords.longitude);
-    //console.log("Position",currentPosition);
   }
 
   useEffect(()=>{
@@ -83,10 +78,6 @@ export default function App() {
     setCenter([center["lat"],center["lng"]]);
   };
 
-  //console.log(center);
-
-  //console.log(center);
-  //console.log("Center in App",[center[0],center[1]]);
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
 
   const handleChangeMode = useCallback(
@@ -182,7 +173,6 @@ export default function App() {
 
 
       })
-      //console.log("Chart data",ChartStations);
       setStationsChart(ChartStations);
 
       data.map( d => {
@@ -245,8 +235,6 @@ export default function App() {
   return (
     <Router>
       <div className={`App ${storageMode ? 'dark' : 'light'}`}>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
          <div class="Toggle">
            <ToggleModeNight
 						onChange={handleChangeMode}
