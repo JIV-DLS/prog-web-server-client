@@ -103,26 +103,29 @@ export default function App() {
 
           data.map( d => {
             var NewPrix=[];
+            var newPriceDict = {}
             if(!d.pdv_content.latitude.includes(".") ){
             if(d.pdv_content.prix){
+                for (let i=0; i<d.pdv_content.prix.length;i++){
+                    if(d.pdv_content.prix[i].nom in newPriceDict){
+                        let savedPrice = Date.parse(newPriceDict[d.pdv_content.prix[i].nom].maj);
+                        let currentPrice = Date.parse(d.pdv_content.prix[i]);
+                        if (savedPrice > currentPrice) continue;
+                    }
 
-              for(let i=0; i<d.pdv_content.prix.length-1;i++){
+                    let carburant = d.pdv_content.prix[i];
+                    let temp = carburant.valeur;
 
-                let carburant=d.pdv_content.prix[i];
-
-                if(carburant.nom  ){
-                  if( carburant.nom !== d.pdv_content.prix[i+1].nom){
-                    let temp=carburant.valeur;
                     if(carburant.valeur.length<4)
-                      carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
+                        carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
                     else
-                      carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
-                    NewPrix.push(carburant);
-                  }
-
+                        carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
+                    newPriceDict[d.pdv_content.prix[i].nom] = carburant
                 }
 
-                }
+              for(let stationKey in newPriceDict)
+                    NewPrix.push(newPriceDict[stationKey])
+
 
                 }
             }

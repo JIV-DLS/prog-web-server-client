@@ -6,7 +6,7 @@ export function modifyPrice(stationId, carburant,price){
     console.log("Updating station : " + stationId + "(" + carburant + ") : " + price + "...");
     api.updateGasPrice(stationId,{
         "nom": carburant,
-        "valeur":""+parseFloat(price)*1000
+        "valeur":""+parseFloat(price)
     }).then((res)=>{
         if(res)alert("Mise à jour suggérée avec succès pour la station " + stationId + ", Prix de carburant mis à jour " + carburant + ") : " + price + ".");
         else alert("Whoops something wrong happened! Please retry later!")
