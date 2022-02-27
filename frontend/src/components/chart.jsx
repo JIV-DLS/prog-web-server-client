@@ -30,29 +30,29 @@ function getAveragePrices(stations){
             if( stations[i].prix!== undefined){
                 stations[i].prix.map( p => {
                     if(p.nom.includes("Gazole")){
-                        Gazoile+= parseFloat(p.valeur); 
+                        Gazoile+= parseFloat(p.valeur);
                         l+=1;
                     }else if(p.nom.includes("SP95")){
-                        SP95+= parseFloat(p.valeur); 
+                        SP95+= parseFloat(p.valeur);
                         k+=1;
                     }
                     else if(p.nom.includes("E85")){
-                        E85+= parseFloat(p.valeur); 
+                        E85+= parseFloat(p.valeur);
                         j+=1;
                     }
                     else if(p.nom.includes("GPLc")){
-                        GPlc+= parseFloat(p.valeur); 
+                        GPlc+= parseFloat(p.valeur);
                         m+=1;
                     }else if(p.nom.includes("E10")){
-                        E10+= parseFloat(p.valeur); 
+                        E10+= parseFloat(p.valeur);
                         n+=1;
                     }
                   })
             }
-            
+
         }
     }
-    
+
     Gazoile=Gazoile/l;
     E85=E85/j;
     SP95=SP95/k;
@@ -66,7 +66,7 @@ function getAveragePrices(stations){
 function getGazolePrices(stations){
     let Gazoile = [];
     let dates =[];
-    
+
     if( stations!== undefined){
         for(let i=0;i<stations.length;i++){
 
@@ -75,21 +75,21 @@ function getGazolePrices(stations){
                     if(p.nom.includes("Gazole")){
                         Gazoile.push(parseFloat(p.valeur));
                         dates.push(p.maj)
-                        
+
                     }
                   })
             }
             }
     }
-  
-        
+
+
     return [Gazoile,dates]
 }
 
 function getSP95Prices(stations){
     let Gas = [];
     let dates =[];
-    
+
     if( stations!== undefined){
         for(let i=0;i<stations.length;i++){
             if( stations[i].prix!== undefined){
@@ -97,21 +97,21 @@ function getSP95Prices(stations){
                     if(p.nom.includes("SP95")){
                         Gas.push(parseFloat(p.valeur));
                         dates.push(p.maj)
-                        
+
                     }
                   })
             }
-            
+
         }
     }
-    
+
     return [Gas,dates]
 }
 
 function getE85Prices(stations){
     let Gas = [];
     let dates =[];
-    
+
     if( stations!== undefined){
         for(let i=0;i<stations.length;i++){
             if( stations[i].prix!== undefined){
@@ -119,21 +119,21 @@ function getE85Prices(stations){
                     if(p.nom.includes("E85")){
                         Gas.push(parseFloat(p.valeur));
                         dates.push(p.maj)
-                        
+
                     }
                   })
             }
-            
+
         }
     }
-    
+
     return [Gas,dates]
 }
 
 function getE10Prices(stations){
     let Gas = [];
     let dates =[];
-    
+
     if( stations!== undefined){
         for(let i=0;i<stations.length;i++){
             if( stations[i].prix!== undefined){
@@ -141,19 +141,19 @@ function getE10Prices(stations){
                     if(p.nom.includes("E10")){
                         Gas.push(parseFloat(p.valeur));
                         dates.push(p.maj)
-                        
+
                     }
                   })
             }
-            
+
         }
     }
-    
+
     return [Gas,dates]
 }
 
 
-  
+
 var StationData=[]
 
 export default function BarChart({dataFromParent}) {
@@ -165,7 +165,7 @@ export default function BarChart({dataFromParent}) {
         labels: ['Gazoile', 'E85', 'SP95','GPLc','E10'],
         datasets: [
             {
-                label: 'Average Gas prices Euro(€)',
+                label: 'Moyenne des prix de carburant en Euro(€)',
                 backgroundColor: 'rgba(75,192,192,1)',
                 borderColor: 'rgba(0,0,0,1)',
                 borderWidth: 2,
@@ -178,7 +178,7 @@ export default function BarChart({dataFromParent}) {
         labels:getGazolePrices(StationData)[1],
         datasets: [
           {
-            label: "Gaazole",
+            label: "Gazole",
             data: getGazolePrices(StationData)[0],
             fill: true,
             backgroundColor: "rgba(75,192,192,0.2)",
@@ -205,7 +205,7 @@ export default function BarChart({dataFromParent}) {
 
         ]
       };
-    
+
 
 
 
@@ -231,5 +231,5 @@ export default function BarChart({dataFromParent}) {
                 <Line data={data} />
             </div>
         );
-    
+
 }

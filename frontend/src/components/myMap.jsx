@@ -6,6 +6,7 @@ import { Icon , LatLng, polyline} from "leaflet";
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
 import {modifyPrice, getOldPrice} from "../utils/priceEditor"
 import {askOneAdress} from "../utils/addressLocator";
+import {drawItinerary} from "../utils/itineraryCalculator";
 
 
 var center = new LatLng(43.7101728, 7.2619532, 0);
@@ -22,53 +23,16 @@ var mapA;
 
 var openroute_api_key = "5b3ce3597851110001cf624802362b6174e54aa98a8f502fe809cafc";
 
-export async function getItinerary(startXString, startYString, endXString, endYString){
-    return new Promise(resolve => {
-        let xhr = new XMLHttpRequest();
-        let A;
-        var url = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=" + openroute_api_key + "&start="+startXString+","+startYString+"&end="+endXString+","+endYString;
-        console.log("sent request :" + url);
-        xhr.open("GET",url, true);
-        xhr.send();
-        xhr.onload = () => {
-            A = JSON.parse(xhr.responseText);
-            console.log(A)
-            resolve(A);
-        }
-    });
-}
-
-export async function drawItinerary(endXString, endYString) {
-    var address = await askOneAdress(document.getElementById("fromList").firstChild.value);
-    console.log("Adressse Dans la Map ",address);
-    var startYString = address.features[0].geometry.coordinates[1];
-    var startXString = address.features[0].geometry.coordinates[0];
-    if(startXString === "" || startYString === ""){
-        alert("Please enter a valid input");
-        return;
-    }
-
-    var itinerary = await getItinerary(startXString, startYString, endXString, endYString)
-    for (var i = 1; i < itinerary.features[0].geometry.coordinates.length; i++) {
-        drawLine(itinerary.features[0].geometry.coordinates[i][1], itinerary.features[0].geometry.coordinates[i][0], itinerary.features[0].geometry.coordinates[i - 1][1], itinerary.features[0].geometry.coordinates[i - 1][0], '#6f79c9');
-    }
-    console.log("zabii",polyLine);
-}
-
-function drawLine(fromX, fromY, toX, toY, color){
-    POLYLINE.push([fromX,fromY]);
-    POLYLINE.push([toX,toY]);
-    //console.log("Drawing [" + fromX+", " + fromY +"] to [" + toX + ", " + toY + "]");
-}
-
 
 export default function MyMap(props) {
   const [stationList, setStationList] = useState([]);
+  const [itinerary, setItinerary] = useState([]);
+    //console.log("Current position",props.currentPosition);
   useEffect(() => {
-    
+
     STATIONS = props.stations;
     setStationList(STATIONS);
-    console.log("map: ",STATIONS);
+    //console.log("map: ",STATIONS);
     // if(!props.onChange && !props.service) {
     //   setStationList(STATIONS);
     // } else if (props.onChange) {
@@ -99,6 +63,11 @@ export default function MyMap(props) {
     iconSize: [20, 20]
   });
 
+    const currentPositionIcon = new Icon({
+        iconUrl: "https://img.icons8.com/ios/50/000000/place-marker--v1.png",
+        iconSize: [20, 20]
+    });
+    //<a href="https://icons8.com/icon/89368/place-marker">Place Marker icon by Icons8</a>
   function NumberList(props) {
     const numbers = props.numbers;
     const listItems = numbers.map((number) =>
@@ -123,7 +92,7 @@ export default function MyMap(props) {
           //console.log(map.target.getCenter());
           center = map.target.getCenter();
           props.updateCenter(center);
-          
+
         });
       } }>
       <TileLayer
@@ -132,7 +101,31 @@ export default function MyMap(props) {
       />
 
       <Polyline positions={POLYLINE} />
-
+        {props.currentPosition?
+            <Marker
+                key="currentPosition"
+                position={[
+                    props.currentPosition.coords.latitude,
+                    props.currentPosition.coords.longitude
+                ]}
+                icon={currentPositionIcon}
+            />
+            :
+            <Marker
+                key="currentPosition"
+                position={[
+                    0,
+                    0
+                ]}
+                icon={currentPositionIcon}
+            />
+        }
+        {itinerary.map(line =>(
+                <Polyline
+                    positions = {[line[0],line[1]]}
+                />
+            )
+        )}
       {stationList.map(station => (
         <Marker
           key={station.id}
@@ -155,10 +148,14 @@ export default function MyMap(props) {
                 Station :
               </div>
                {station.adresse}
-               
+
             </div>
             <div className="m-2" style={okText}>
-                <button className="itineraryButton" onClick={() => drawItinerary(station.longitude,station.latitude)}>Itinéraire</button>
+                <button className="itineraryButton" onClick={() => {
+                    drawItinerary(props.currentPosition,station.longitude, station.latitude).then((lines)=>{
+                        setItinerary(lines)
+                    }).catch((error)=>console.log(error))
+                }}>Itinéraire</button>
                 <div className="m-2" style={popupHead}>
                 Les carburants :
               </div>

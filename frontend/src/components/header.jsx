@@ -22,7 +22,7 @@ import {drawItinerary} from "../utils/itineraryCalculator";
 const api = new Api();
 
 
-export default function Header({mode,stations,token,onChange}) {
+export default function Header({mode,stations,token,onChange,currentPosition}) {
 
   const typeOfGas = ['SP98','SP95','Gazole'];
   const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
@@ -47,11 +47,11 @@ export default function Header({mode,stations,token,onChange}) {
     const mapRoute = () => {
         history.push("/")
       }
-    
+
       const listeRoute = () => {
         history.push("/dataTable")
       }
-    
+
       const grapheRoute = () => {
         history.push("/chart")
       }
@@ -73,7 +73,6 @@ export default function Header({mode,stations,token,onChange}) {
 
     };
 
-    console.log(user);
 
     function loadUserFromApi() {
         api.getUserInfo().then((_user) => {
@@ -89,17 +88,14 @@ export default function Header({mode,stations,token,onChange}) {
         if (token) {
             if (userSaved == null) {
                 loadUserFromApi();
-                console.log("1",user);
             } else {
                 const _ = JSON.parse(userSaved);
                 //user = _;
                 setUser(_);
-                console.log("2",_,user);
             }
-            console.log("3",user);
         }
     }, [onChange])
-    console.log(mode)
+
     return (
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">
@@ -185,6 +181,6 @@ export default function Header({mode,stations,token,onChange}) {
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations} updateCenter={onChange}/></>
+      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations} updateCenter={onChange} currentPosition={currentPosition}/></>
   );
 }

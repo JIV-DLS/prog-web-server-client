@@ -148,7 +148,7 @@ function Row(props) {
               </Typography>
               <NumberList numbers={row.services.service} />
             </Box>
-            
+
           </Collapse>
         </TableCell>
       </TableRow>
@@ -369,7 +369,6 @@ export default function CollapsibleTable({parentToChild}) {
 
   // }, [props]);
 
-  console.log("Heeeere",rows);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -392,7 +391,7 @@ export default function CollapsibleTable({parentToChild}) {
 
 
 
-  
+
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
@@ -418,7 +417,7 @@ export default function CollapsibleTable({parentToChild}) {
   }))(TableCell);
 
   return (
-    
+
     <div style={{ height: "100%", width: '100%',overflow:'scroll',textAlign:'center'}}>
     <Typography variant="h2" gutterBottom component="div" style={{ width:'100%'}}>
                 Stations de services
@@ -453,7 +452,7 @@ export default function CollapsibleTable({parentToChild}) {
             </TableBody>
           <TableFooter >
           <TableRow>
-            <TablePagination 
+            <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               colSpan={3}
               count={rows.length}
@@ -468,15 +467,15 @@ export default function CollapsibleTable({parentToChild}) {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
-    
+
             />
           </TableRow>
         </TableFooter>
         </Table>
       </TableContainer>
     </div>
-    
-      
-     
+
+
+
   );
 }

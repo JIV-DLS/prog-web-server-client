@@ -24,17 +24,17 @@ let previousCenter=null;
 function getLocation(callBack) {
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(callBack);
-  } else { 
+  } else {
     console.log("Geolocation is not supported by this browser.");
   }
 }
 
-function calcCrow(lat1, lon1, lat2, lon2) 
+function calcCrow(lat1, lon1, lat2, lon2)
     {
-      console.log("lat1",lat1);
-      console.log("lon1",lon1);
-      console.log("lat2",lat2);
-      console.log("lon2",lon2);
+      //console.log("lat1",lat1);
+      //console.log("lon1",lon1);
+      //console.log("lat2",lat2);
+      //console.log("lon2",lon2);
       var R = 6371; // km
       var dLat = toRad(lat2-lat1);
       var dLon = toRad(lon2-lon1);
@@ -42,13 +42,13 @@ function calcCrow(lat1, lon1, lat2, lon2)
       var lat2 = toRad(lat2);
 
       var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
       var d = R * c;
       return d;
     }
 
-    function toRad(Value) 
+    function toRad(Value)
     {
         return Value * Math.PI / 180;
     }
@@ -59,34 +59,34 @@ export default function App() {
 
   const [currentPosition, setCurrentPosition] = useState();
 
-  getLocation(setCurrentPosition);
-  
+
+
   const [center, setCenter] = useState([null, null]);
 
   if(currentPosition!== undefined){
-    console.log("Position Avant",center, (!center[0] && !center[1])  );
+    //console.log("Position Avant",center, (!center[0] && !center[1])  );
 
     if((center[0]==null &&center[1]==null)||(!center[0] && !center[1]) ){
-      console.log("Par là");
+      //console.log("Par là");
       setCenter([currentPosition.coords.latitude,currentPosition.coords.longitude]);
     }
-    console.log("Position",currentPosition.coords.latitude,currentPosition.coords.longitude);
+    //console.log("Position",currentPosition.coords.latitude,currentPosition.coords.longitude);
     //console.log("Position",currentPosition);
   }
 
+  useEffect(()=>{
+    getLocation(setCurrentPosition);
+  },[])
 
 
   const handleChange = (center) => {
     setCenter([center["lat"],center["lng"]]);
   };
 
-  console.log(center);
-  //center[0]=parseInt(center.lat*100000);
+  //console.log(center);
 
-  //center[1]=parseInt(center.lng*100000);
-
-  console.log(center);
-  console.log("Center in App",[center[0],center[1]]);
+  //console.log(center);
+  //console.log("Center in App",[center[0],center[1]]);
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
 
   const handleChangeMode = useCallback(
@@ -104,7 +104,7 @@ export default function App() {
 
     let tmpUser = null;
   if (token){
-      console.log("yes there is a token")
+      //console.log("yes there is a token")
       if(!userSaved){
           api.getUserInfo().then((_user)=> {
               localStorage.setItem("user",JSON.stringify(_user))
@@ -119,7 +119,7 @@ export default function App() {
 
   }
   else{
-      console.log("nop there is any token!")
+      //console.log("nop there is any token!")
   }
 
   const [user, setUser] = useState(tmpUser);
@@ -130,66 +130,68 @@ export default function App() {
   var DataStations=[];
   var ChartStations=[];
 
-  
+
 
     let distance =0;
-    
+
 
     if(center[0]!==NaN &&center[1]!==NaN  && previousCenter!==null ){
-      console.log("TTTT",previousCenter[0],previousCenter[1],center[0],center[1])
+      //console.log("TTTT",previousCenter[0],previousCenter[1],center[0],center[1])
 
       distance=calcCrow(previousCenter[0],previousCenter[1],center[0],center[1]);
       console.log(distance);
-    } 
+    }
     previousCenter=center;
+
     if(  distance>0.03){
-    
+
 
 
     api.getStations(parseInt(center[1]*100000),parseInt(center[0]*100000)).then((data)=>{
-      //console.log("Stations to show",data)
-      //console.log("Statons in APPjs",DataStations
+
       DataStationsChart =[...data];
 
-
+      if(DataStationsChart.length===0){
+        return
+      }
       DataStationsChart.map( d => {
-    
+
         if(!d.pdv_content.latitude.includes(".") ){
         if(d.pdv_content.prix){
 
             for(let i=0; i<d.pdv_content.prix.length;i++){
-              
+
               let carburant=d.pdv_content.prix[i];
 
               if(carburant.nom){
                   let temp=carburant.valeur;
                   if(carburant.valeur.length<4)
                     carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
-                  else 
-                    carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));  
+                  else
+                    carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
               }
 
               }
         }
-        
+
         if(d.pdv_content.services===undefined){
           d.pdv_content["services"]  = {service:["Aucun serivce"]};
         }
- 
+
         ChartStations.push(d.pdv_content);}
-        
+
 
       })
-      console.log("Chart data",ChartStations);
+      //console.log("Chart data",ChartStations);
       setStationsChart(ChartStations);
-      
+
       data.map( d => {
         var NewPrix=[];
         if(!d.pdv_content.latitude.includes(".") ){
         if(d.pdv_content.prix){
-          
+
           for(let i=0; i<d.pdv_content.prix.length-1;i++){
-          
+
             let carburant=d.pdv_content.prix[i];
 
             if(carburant.nom  ){
@@ -197,11 +199,11 @@ export default function App() {
                 let temp=carburant.valeur;
                 if(carburant.valeur.length<4)
                   carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
-                else 
+                else
                   carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
                 NewPrix.push(carburant);
               }
-                
+
             }
 
             }
@@ -212,8 +214,8 @@ export default function App() {
         if(d.pdv_content.services===undefined){
           d.pdv_content["services"]  = {service:["Aucun serivce"]};
         }
-        
-        
+
+
         d.pdv_content.prix=NewPrix;
         let x = parseInt(d.pdv_content.longitude)/100000
 
@@ -226,19 +228,19 @@ export default function App() {
         DataStations.push(d.pdv_content);
 
       })
-      
-      console.log("New data",DataStations);
+
+      //console.log("New data",DataStations);
       setStationsMap(DataStations);
 
 
-      
-      
+
+
     })
-  
+
 
   }
-    
-  
+
+
 
   return (
     <Router>
@@ -267,7 +269,7 @@ export default function App() {
            <BarChart dataFromParent = {stationsChart}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode} stations={stationsMap} onChange={handleChange}/>
+            <Header mode={storageMode} stations={stationsMap} currentPosition={currentPosition} onChange={handleChange}/>
           </Route>
         </Switch>
       </div>

@@ -47,7 +47,7 @@ export default class Api {
 
                 return response;
             }).catch((error)=>{
-                console.log(error);
+                //console.log(error);
             });
 
         } catch (e) {
@@ -57,9 +57,9 @@ export default class Api {
     }
 
     setCredentials(response) {
-        console.log("saving token",response[token])
+        //console.log("saving token",response[token])
         localStorage.setItem(token, response[token])
-        console.log("saving userId",response[userId])
+        //console.log("saving userId",response[userId])
         localStorage.setItem(userId, response[userId])
     }
     getUserId(){
@@ -73,11 +73,11 @@ export default class Api {
             },this.getConfig()).then((response) => {
                 if (response == null) return false;
                 response = response["data"]
-                console.log("saving credentials",response)
+                //console.log("saving credentials",response)
                 this.setCredentials(response)
                 return response;
             }).catch((error)=>{
-                console.log(error);
+                //console.log(error);
             });
 
         } catch (e) {
@@ -92,27 +92,27 @@ export default class Api {
     }
     async updateGasPrice(idStation,price){
         return axios.put(`${this.api_url}/api/station/${idStation}`,price).then((res)=>{
-            console.log(res);
+            //console.log(res);
             return res;
         }).catch((error)=>{
-            console.log(error);
+            //console.log(error);
         });
     }
     async getStations(longitude,latitude){
         return axios.get(`${this.api_url}/api/station/latitude=${latitude}&longitude=${longitude}`,this.getConfig()).then((response) => {
-            console.log("Stations gotten",response["data"])
+            //console.log("Stations gotten",response["data"])
             return response["data"];
         }).catch((error)=>{
-            console.log(error);
+            //console.log(error);
         });
     }
 
     async getUserInfo(){
         return axios.get(`${this.api_url}/api/auth/${this.getUserId()}`,this.getConfig()).then((response) => {
-            console.log("User info gotten",response["data"])
+            //console.log("User info gotten",response["data"])
             return response["data"];
         }).catch((error)=>{
-            console.log(error);
+            //console.log(error);
         });
     }
     getUserList = (params) => {
