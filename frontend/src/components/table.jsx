@@ -147,7 +147,6 @@ function Row(props) {
                 Services
               </Typography>
               <NumberList numbers={row.services.service} />
-              
             </Box>
             
           </Collapse>

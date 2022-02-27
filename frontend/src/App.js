@@ -59,13 +59,50 @@ export default function App() {
 
   const [stationsChart, setStationsChart] = useState([]);
   const [stationsMap, setStationsMap] = useState([]);
+  var DataStationsChart=[];
   var DataStations=[];
+  var ChartStations=[]
   useEffect(() => {
       api.getStations(14590,4319219).then((data)=>{
-          setStationsChart(data);
+          //console.log("Stations to show",data)
+          //console.log("Statons in APPjs",DataStations
+          DataStationsChart =[...data];
+
+
+          DataStationsChart.map( d => {
+        
+            if(!d.pdv_content.latitude.includes(".") ){
+            if(d.pdv_content.prix){
+    
+                for(let i=0; i<d.pdv_content.prix.length;i++){
+                  
+                  let carburant=d.pdv_content.prix[i];
+    
+                  if(carburant.nom){
+                      let temp=carburant.valeur;
+                      if(carburant.valeur.length<4)
+                        carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
+                      else 
+                        carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));  
+                  }
+    
+                  }
+            }
+            
+            if(d.pdv_content.services===undefined){
+              d.pdv_content["services"]  = "non definied"
+            }
+     
+            ChartStations.push(d.pdv_content);}
+            
+    
+          })
+          console.log("Chart data",ChartStations);
+          setStationsChart(ChartStations);
+          
           data.map( d => {
             var NewPrix=[];
-            var NewPrix=[];
+            if(!d.pdv_content.latitude.includes(".") ){
             if(d.pdv_content.prix){
               
               for(let i=0; i<d.pdv_content.prix.length-1;i++){
@@ -85,23 +122,39 @@ export default function App() {
                 }
 
                 }
+
+                }
+            }
+
+            if(d.pdv_content.services===undefined){
+              d.pdv_content["services"]  = "non definied"
             }
             
             if(d.pdv_content.services===undefined){
               d.pdv_content["services"]  = "non definied"
             }
             d.pdv_content.prix=NewPrix;
-            d.pdv_content.latitude=d.pdv_content.latitude.slice(0, 2) + "." + d.pdv_content.latitude.slice(2 + Math.abs(0));
-            d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 1) + "." + d.pdv_content.longitude.slice(1 + Math.abs(0));
-            DataStations.push(d.pdv_content);
+            let x = parseInt(d.pdv_content.longitude)/100000
 
+            d.pdv_content.longitude=x.toString();
+
+            let y = parseInt(d.pdv_content.latitude)/100000
+
+            d.pdv_content.latitude=y.toString();
+
+            DataStations.push(d.pdv_content);
 
           })
           
           console.log("New data",DataStations);
           setStationsMap(DataStations);
 
-      })
+
+          
+          
+        })
+      
+
   }, [])
 
   return (
@@ -127,8 +180,7 @@ export default function App() {
            <CollapsibleTable parentToChild = {stationsMap}/>
           </Route>
           <Route path="/chart">
-            <MyHeader mode={storageMode} />
-           <BarChart dataFromParent = {DataStations}/>
+           <BarChart dataFromParent = {stationsChart}/>
           </Route>
           <Route path="/">
             <Header mode={storageMode} stations={stationsMap}/>
@@ -137,4 +189,4 @@ export default function App() {
       </div>
     </Router>
   );
-}
+  }

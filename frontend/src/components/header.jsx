@@ -176,6 +176,6 @@ export default function Header({mode,stations,token}) {
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap onChange={gasFilter} service={serviceFilter}/></>
+      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations}/></>
   );
 }
