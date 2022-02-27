@@ -22,7 +22,7 @@ import {drawItinerary} from "../utils/itineraryCalculator";
 const api = new Api();
 
 
-export default function Header({mode,stations,token}) {
+export default function Header({mode,stations,token,onChange}) {
 
   const typeOfGas = ['SP98','SP95','Gazole'];
   const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
@@ -98,7 +98,7 @@ export default function Header({mode,stations,token}) {
             }
             console.log("3",user);
         }
-    }, [])
+    }, [onChange])
     console.log(mode)
     return (
         <><Box sx={{ flexGrow: 1 }}>
@@ -185,6 +185,6 @@ export default function Header({mode,stations,token}) {
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations}/></>
+      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations} updateCenter={onChange}/></>
   );
 }

@@ -1,23 +1,74 @@
 import './myMap.css';
 import React, {useState, useEffect} from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents , Polyline} from 'react-leaflet';
-import { Icon , LatLng} from "leaflet";
+import { Icon , LatLng, polyline} from "leaflet";
 // import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
-import {drawItinerary} from "../utils/itineraryCalculator";
 import {modifyPrice, getOldPrice} from "../utils/priceEditor"
+import {askOneAdress} from "../utils/addressLocator";
+
 
 var center = new LatLng(43.7101728, 7.2619532, 0);
 var STATIONS = [];
+var POLYLINE = [];
+const polyLine = [
+  [47.89540903698003, 16.307462373367308],
+  [48.845072,6.592791]
+];
+var tempPoly = [];
+
 var mapA;
+
+
+var openroute_api_key = "5b3ce3597851110001cf624802362b6174e54aa98a8f502fe809cafc";
+
+export async function getItinerary(startXString, startYString, endXString, endYString){
+    return new Promise(resolve => {
+        let xhr = new XMLHttpRequest();
+        let A;
+        var url = "https://api.openrouteservice.org/v2/directions/driving-car?api_key=" + openroute_api_key + "&start="+startXString+","+startYString+"&end="+endXString+","+endYString;
+        console.log("sent request :" + url);
+        xhr.open("GET",url, true);
+        xhr.send();
+        xhr.onload = () => {
+            A = JSON.parse(xhr.responseText);
+            console.log(A)
+            resolve(A);
+        }
+    });
+}
+
+export async function drawItinerary(endXString, endYString) {
+    var address = await askOneAdress(document.getElementById("fromList").firstChild.value);
+    console.log("Adressse Dans la Map ",address);
+    var startYString = address.features[0].geometry.coordinates[1];
+    var startXString = address.features[0].geometry.coordinates[0];
+    if(startXString === "" || startYString === ""){
+        alert("Please enter a valid input");
+        return;
+    }
+
+    var itinerary = await getItinerary(startXString, startYString, endXString, endYString)
+    for (var i = 1; i < itinerary.features[0].geometry.coordinates.length; i++) {
+        drawLine(itinerary.features[0].geometry.coordinates[i][1], itinerary.features[0].geometry.coordinates[i][0], itinerary.features[0].geometry.coordinates[i - 1][1], itinerary.features[0].geometry.coordinates[i - 1][0], '#6f79c9');
+    }
+    console.log("zabii",polyLine);
+}
+
+function drawLine(fromX, fromY, toX, toY, color){
+    POLYLINE.push([fromX,fromY]);
+    POLYLINE.push([toX,toY]);
+    //console.log("Drawing [" + fromX+", " + fromY +"] to [" + toX + ", " + toY + "]");
+}
+
 
 export default function MyMap(props) {
   const [stationList, setStationList] = useState([]);
   useEffect(() => {
+    
     STATIONS = props.stations;
     setStationList(STATIONS);
-    console.log("map: ",STATIONS)
-
+    console.log("map: ",STATIONS);
     // if(!props.onChange && !props.service) {
     //   setStationList(STATIONS);
     // } else if (props.onChange) {
@@ -60,6 +111,8 @@ export default function MyMap(props) {
     );
   }
 
+
+
   return (
     <MapContainer
       center={[43.7101728, 7.2619532]}
@@ -67,14 +120,19 @@ export default function MyMap(props) {
       scrollWheelZoom={true}
       whenReady={(map) => {
         map.target.on("move", function (e) {
-          console.log(map.target.getCenter());
+          //console.log(map.target.getCenter());
           center = map.target.getCenter();
+          props.updateCenter(center);
+          
         });
       } }>
       <TileLayer
        url= 'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
        attribution= '&copy; <a href=\"http://osm.org/copyright\">OpenStreetMap</a> contributors'
       />
+
+      <Polyline positions={POLYLINE} />
+
       {stationList.map(station => (
         <Marker
           key={station.id}
@@ -100,7 +158,7 @@ export default function MyMap(props) {
                
             </div>
             <div className="m-2" style={okText}>
-                <button className="itineraryButton" onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
+                <button className="itineraryButton" onClick={() => drawItinerary(station.longitude,station.latitude)}>Itinéraire</button>
                 <div className="m-2" style={popupHead}>
                 Les carburants :
               </div>
