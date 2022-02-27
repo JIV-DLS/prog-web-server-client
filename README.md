@@ -21,4 +21,6 @@ Open a new terminal and run the following commands to start the frontend:
     $ npm start
 
 
+## Reports
 
+All the reports are in the "reports" floder in the root of the project
