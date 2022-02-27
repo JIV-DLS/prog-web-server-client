@@ -21,19 +21,72 @@ import { ConstructionOutlined } from '@mui/icons-material';
 const api = new Api();
 let previousCenter=null;
 
+function getLocation(callBack) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(callBack);
+  } else { 
+    console.log("Geolocation is not supported by this browser.");
+  }
+}
+
+function calcCrow(lat1, lon1, lat2, lon2) 
+    {
+      console.log("lat1",lat1);
+      console.log("lon1",lon1);
+      console.log("lat2",lat2);
+      console.log("lon2",lon2);
+      var R = 6371; // km
+      var dLat = toRad(lat2-lat1);
+      var dLon = toRad(lon2-lon1);
+      var lat1 = toRad(lat1);
+      var lat2 = toRad(lat2);
+
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+      var d = R * c;
+      return d;
+    }
+
+    function toRad(Value) 
+    {
+        return Value * Math.PI / 180;
+    }
+
+
+
 export default function App() {
 
-  const [center, setCenter] = useState([437101728, 72619532]);
+  const [currentPosition, setCurrentPosition] = useState();
+
+  getLocation(setCurrentPosition);
+  
+  const [center, setCenter] = useState([null, null]);
+
+  if(currentPosition!== undefined){
+    console.log("Position Avant",center, (!center[0] && !center[1])  );
+
+    if((center[0]==null &&center[1]==null)||(!center[0] && !center[1]) ){
+      console.log("Par là");
+      setCenter([currentPosition.coords.latitude,currentPosition.coords.longitude]);
+    }
+    console.log("Position",currentPosition.coords.latitude,currentPosition.coords.longitude);
+    //console.log("Position",currentPosition);
+  }
+
+
+
   const handleChange = (center) => {
-    setCenter(center);
+    setCenter([center["lat"],center["lng"]]);
   };
-  
-  center["lat"]=parseInt(center.lat*100000);
 
-  center["lng"]=parseInt(center.lng*100000);
+  console.log(center);
+  //center[0]=parseInt(center.lat*100000);
 
-  
-  console.log("Center in App",[center["lat"],center["lng"]]);
+  //center[1]=parseInt(center.lng*100000);
+
+  console.log(center);
+  console.log("Center in App",[center[0],center[1]]);
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
 
   const handleChangeMode = useCallback(
@@ -77,45 +130,23 @@ export default function App() {
   var DataStations=[];
   var ChartStations=[];
 
-  function calcCrow(lat1, lon1, lat2, lon2) 
-    {
-      console.log("lat1",lat1);
-      console.log("lon1",lon1);
-      console.log("lat2",lat2);
-      console.log("lon2",lon2);
-      var R = 6371; // km
-      var dLat = toRad(lat2-lat1);
-      var dLon = toRad(lon2-lon1);
-      var lat1 = toRad(lat1);
-      var lat2 = toRad(lat2);
-
-      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
-      var d = R * c;
-      return d;
-    }
-
-    function toRad(Value) 
-    {
-        return Value * Math.PI / 180;
-    }
+  
 
     let distance =0;
     
 
-    if(center["lat"]!==NaN &&center["lng"]!==NaN  && previousCenter!==null ){
-      console.log("TTTT",previousCenter["lat"],previousCenter["lng"],center["lat"],center["lng"])
+    if(center[0]!==NaN &&center[1]!==NaN  && previousCenter!==null ){
+      console.log("TTTT",previousCenter[0],previousCenter[1],center[0],center[1])
 
-      distance=calcCrow(previousCenter["lat"],previousCenter["lng"],center["lat"],center["lng"]);
+      distance=calcCrow(previousCenter[0],previousCenter[1],center[0],center[1]);
       console.log(distance);
     } 
     previousCenter=center;
-    if(  distance>10000){
+    if(  distance>0.03){
     
 
 
-    api.getStations(center["lng"],center["lat"]).then((data)=>{
+    api.getStations(parseInt(center[1]*100000),parseInt(center[0]*100000)).then((data)=>{
       //console.log("Stations to show",data)
       //console.log("Statons in APPjs",DataStations
       DataStationsChart =[...data];
