@@ -47,11 +47,11 @@ export default function Header({mode,stations,token}) {
     const mapRoute = () => {
         history.push("/")
       }
-    
+
       const listeRoute = () => {
         history.push("/dataTable")
       }
-    
+
       const grapheRoute = () => {
         history.push("/chart")
       }
@@ -179,12 +179,12 @@ export default function Header({mode,stations,token}) {
                           >
                               <MenuItem onClick={handleClose}
                                         disabled={true}>{user["firstName"] + " " + user["lastName"]}</MenuItem>
-                              <MenuItem onClick={logout}>Logout</MenuItem>
+                              <MenuItem onClick={logout}>Se déconnecter</MenuItem>
                           </Menu>
                       </div>}
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations}/></>
+      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations} user={user}/></>
   );
 }
