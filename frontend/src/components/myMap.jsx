@@ -2,11 +2,9 @@ import './myMap.css';
 import React, {useState, useEffect} from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents , Polyline} from 'react-leaflet';
 import { Icon , LatLng, polyline} from "leaflet";
-// import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
 import {modifyPrice, getOldPrice} from "../utils/priceEditor"
 import {askOneAdress} from "../utils/addressLocator";
-
 
 var center = new LatLng(43.7101728, 7.2619532, 0);
 var STATIONS = [];
@@ -15,10 +13,6 @@ const polyLine = [
   [47.89540903698003, 16.307462373367308],
   [48.845072,6.592791]
 ];
-var tempPoly = [];
-
-var mapA;
-
 
 var openroute_api_key = "5b3ce3597851110001cf624802362b6174e54aa98a8f502fe809cafc";
 
@@ -52,7 +46,7 @@ export async function drawItinerary(endXString, endYString) {
     for (var i = 1; i < itinerary.features[0].geometry.coordinates.length; i++) {
         drawLine(itinerary.features[0].geometry.coordinates[i][1], itinerary.features[0].geometry.coordinates[i][0], itinerary.features[0].geometry.coordinates[i - 1][1], itinerary.features[0].geometry.coordinates[i - 1][0], '#6f79c9');
     }
-    console.log("zabii",polyLine);
+    //console.log("itinéraire",polyLine);
 }
 
 function drawLine(fromX, fromY, toX, toY, color){
@@ -69,34 +63,42 @@ export default function MyMap(props) {
     STATIONS = props.stations;
     setStationList(STATIONS);
     console.log("map: ",STATIONS);
-    // if(!props.onChange && !props.service) {
-    //   setStationList(STATIONS);
-    // } else if (props.onChange) {
-    //   const filtredStations = stationList.filter( station => {
-    //     let flag = false;
-    //     station.prix.map( p => {
-    //        if(p._nom.includes(props.onChange)) flag = true;
-    //      })
-    //      return flag;
-    //   }
-    //   );
-    //   setStationList(filtredStations);
-    // } else {
-    //   const filtredStations = stationList.filter( station => {
-    //     let flag = false;
-    //     station.services.service.map( s => {
-    //        if(s.includes(props.service)) flag = true;
-    //      })
-    //      return flag;
-    //   }
-    //   );
-    //   setStationList(filtredStations);
-    // }
+    if(!props.onChange && !props.service) {
+      setStationList(STATIONS);
+    } else if (props.onChange) {
+      const filtredStations = stationList.filter( station => {
+        let flag = false;
+        station.prix.map( p => {
+           if(p.nom.includes(props.onChange)) flag = true;
+         })
+         return flag;
+      }
+      );
+      setStationList(filtredStations);
+    } else {
+      const filtredStations = stationList.filter( station => {
+        let flag = false;
+        if( station.services){
+          let services = station.services.service;
+          for(let i = 0; i < services.length; i++) {
+            if(services[i].includes(props.service)) {
+              flag = true;
+            }
+          }
+        }
+
+        return flag;
+        
+      }
+      );
+      console.log(filtredStations);
+      setStationList(filtredStations);
+    }
   }, [props]);
 
   const icon = new Icon({
     iconUrl: "https://cdn-icons-png.flaticon.com/512/784/784867.png",
-    iconSize: [20, 20]
+    iconSize: [35, 35]
   });
 
   function NumberList(props) {
@@ -112,7 +114,6 @@ export default function MyMap(props) {
   }
 
 
-
   return (
     <MapContainer
       center={[43.7101728, 7.2619532]}
@@ -120,7 +121,6 @@ export default function MyMap(props) {
       scrollWheelZoom={true}
       whenReady={(map) => {
         map.target.on("move", function (e) {
-          //console.log(map.target.getCenter());
           center = map.target.getCenter();
           props.updateCenter(center);
           

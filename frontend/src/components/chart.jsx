@@ -1,12 +1,7 @@
 import React,{useEffect,useState} from 'react';
-import {Pie, Doughnut,Bar} from 'react-chartjs-2';
+import {Bar} from 'react-chartjs-2';
 
 import 'chart.js/auto';
-import { Chart } from 'react-chartjs-2';
-
-import STATIONS from "../data/stations.mock";
-import { letterSpacing } from '@mui/system';
-
 import { Line } from "react-chartjs-2";
 
 import Api from "../helper/api";
@@ -206,13 +201,9 @@ export default function BarChart({dataFromParent}) {
         ]
       };
     
-
-
-
-
         getGazolePrices(StationData);
         return (
-            <div style={{ height: "100%", width: '100%',overflow:'scroll',textAlign:'center'}}>
+            <div style={{ maxHeight: "80%", width: '100%',overflow:'scroll',textAlign:'center'}}>
                 <Bar
                     data={state}
                     options={{

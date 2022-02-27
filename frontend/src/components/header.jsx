@@ -13,19 +13,18 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { useHistory } from "react-router-dom";
 import { useState, useEffect } from 'react';
 import MyMap from './myMap';
-
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import * as React from "react";
 import Api from "../helper/api";
-import {drawItinerary} from "../utils/itineraryCalculator";
 
 const api = new Api();
 
 
 export default function Header({mode,stations,token,onChange}) {
 
-  const typeOfGas = ['SP98','SP95','Gazole'];
-  const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
+  const typeOfGas = ['Gazole', 'SP95','SP98', 'E10', 'GPLc'];
+  const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire',
+                          'Automate CB 24/24', 'Piste poinds lourds', 'Boutique non alimentaire' , 'Toilettes publiques', 'Vente de gaz domestique (Butane, Propane)'];
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
@@ -78,7 +77,6 @@ export default function Header({mode,stations,token,onChange}) {
     function loadUserFromApi() {
         api.getUserInfo().then((_user) => {
             localStorage.setItem("user", JSON.stringify(_user));
-            //user = _user;
             setUser(_user);
         });
     }
@@ -92,14 +90,13 @@ export default function Header({mode,stations,token,onChange}) {
                 console.log("1",user);
             } else {
                 const _ = JSON.parse(userSaved);
-                //user = _;
                 setUser(_);
                 console.log("2",_,user);
             }
             console.log("3",user);
         }
     }, [onChange])
-    console.log(mode)
+    
     return (
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">

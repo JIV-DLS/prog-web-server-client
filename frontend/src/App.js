@@ -35,7 +35,7 @@ function calcCrow(lat1, lon1, lat2, lon2)
       console.log("lon1",lon1);
       console.log("lat2",lat2);
       console.log("lon2",lon2);
-      var R = 6371; // km
+      var R = 6371; 
       var dLat = toRad(lat2-lat1);
       var dLon = toRad(lon2-lon1);
       var lat1 = toRad(lat1);
@@ -64,14 +64,9 @@ export default function App() {
   const [center, setCenter] = useState([null, null]);
 
   if(currentPosition!== undefined){
-    console.log("Position Avant",center, (!center[0] && !center[1])  );
-
     if((center[0]==null &&center[1]==null)||(!center[0] && !center[1]) ){
-      console.log("Par là");
       setCenter([currentPosition.coords.latitude,currentPosition.coords.longitude]);
     }
-    console.log("Position",currentPosition.coords.latitude,currentPosition.coords.longitude);
-    //console.log("Position",currentPosition);
   }
 
 
@@ -80,13 +75,7 @@ export default function App() {
     setCenter([center["lat"],center["lng"]]);
   };
 
-  console.log(center);
-  //center[0]=parseInt(center.lat*100000);
 
-  //center[1]=parseInt(center.lng*100000);
-
-  console.log(center);
-  console.log("Center in App",[center[0],center[1]]);
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
 
   const handleChangeMode = useCallback(
@@ -147,8 +136,7 @@ export default function App() {
 
 
     api.getStations(parseInt(center[1]*100000),parseInt(center[0]*100000)).then((data)=>{
-      //console.log("Stations to show",data)
-      //console.log("Statons in APPjs",DataStations
+      
       DataStationsChart =[...data];
 
 
@@ -180,7 +168,6 @@ export default function App() {
         
 
       })
-      console.log("Chart data",ChartStations);
       setStationsChart(ChartStations);
       
       data.map( d => {
@@ -226,16 +213,8 @@ export default function App() {
         DataStations.push(d.pdv_content);
 
       })
-      
-      console.log("New data",DataStations);
       setStationsMap(DataStations);
-
-
-      
-      
     })
-  
-
   }
     
   
@@ -243,8 +222,6 @@ export default function App() {
   return (
     <Router>
       <div className={`App ${storageMode ? 'dark' : 'light'}`}>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
          <div class="Toggle">
            <ToggleModeNight
 						onChange={handleChangeMode}
