@@ -21,66 +21,32 @@ import {drawItinerary} from "../utils/itineraryCalculator";
 
 const api = new Api();
 
-export default function Header({mode,stations}) {
+
+export default function Header({mode,stations,token}) {
 
   const typeOfGas = ['SP98','SP95','Gazole'];
   const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-  const [open, setOpen] = useState(false);
-  const anchorRef = React.useRef(null);
+    const [user, setUser] = useState();
 
-  const handleToggle = () => {
-    setOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleCloseButton = (event) => {
-    if (anchorRef.current && anchorRef.current.contains(event.target)) {
-      return;
+    let history = useHistory();
+    const routeChange = () => {
+        history.push("/signIn")
     }
 
-    setOpen(false);
-  };
-
-  function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  }
-
-  // return focus to the button when we transitioned from !open -> open
-  const prevOpen = React.useRef(open);
-  React.useEffect(() => {
-    if (prevOpen.current === true && open === false) {
-      anchorRef.current.focus();
-    }
-
-    prevOpen.current = open;
-  }, [open]);
-  useEffect(() => {
+    const mapRoute = () => {
+        history.push("/")
+      }
     
-  }, [mode,stations]);
-
-  let history = useHistory();
-  const routeChange = () => {
-    history.push("/signIn")
-  }
-
-  const mapRoute = () => {
-    history.push("/")
-  }
-
-  const listeRoute = () => {
-    history.push("/dataTable")
-  }
-
-  const grapheRoute = () => {
-    history.push("/chart")
-  }
+      const listeRoute = () => {
+        history.push("/dataTable")
+      }
+    
+      const grapheRoute = () => {
+        history.push("/chart")
+      }
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -91,39 +57,56 @@ export default function Header({mode,stations}) {
         setAnchorEl(event.currentTarget);
     };
 
+
     const logout = (event) => {
-        //api.logout()
+        api.logout()
+        setUser(null)
+        handleClose();
+
     };
 
-    let user = localStorage.getItem("user")
+    console.log(user);
 
-    if (user)
-        user = JSON.parse(user)
+    function loadUserFromApi() {
+        api.getUserInfo().then((_user) => {
+            localStorage.setItem("user", JSON.stringify(_user));
+            //user = _user;
+            setUser(_user);
+        });
+    }
 
-    return (    
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        let userSaved = localStorage.getItem("user")
+        if (token) {
+            if (userSaved == null) {
+                loadUserFromApi();
+                console.log("1",user);
+            } else {
+                const _ = JSON.parse(userSaved);
+                //user = _;
+                setUser(_);
+                console.log("2",_,user);
+            }
+            console.log("3",user);
+        }
+    }, [])
+    return (
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">
               <Toolbar>
 
-                    <div>
+              <div>
                         <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
                         aria-label="menu"
                         sx={{ mr: 2 }}
-                        ref={anchorRef}
-                        id="composition-button"
-                        aria-controls={open ? 'composition-menu' : undefined}
-                        aria-expanded={open ? 'true' : undefined}
-                        aria-haspopup="true"
-                        onClick={handleToggle}
-                        size="large"
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
                         onClick={handleMenu}
-                        color="inherit"
                             >
                             <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
                     </IconButton>
@@ -138,6 +121,7 @@ export default function Header({mode,stations}) {
                               <MenuItem onClick={grapheRoute}>Graphe</MenuItem>
                           </Menu>
                       </div>
+
                   <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       SmartCarburant
                   </Typography>
@@ -162,10 +146,10 @@ export default function Header({mode,stations}) {
                       onChange={(event, value) => setServiceFilter(value)}
                       renderInput={(params) => <TextField {...params} label="Services" />} />
 
-                  { !user ?
+                  {!user?
                       <Button id="AppBarTypoButton" color="inherit" onClick={routeChange}>
-                      Connexion
-                  </Button>
+                          Connexion
+                      </Button>
                       :
                       <div>
                           <IconButton
@@ -176,7 +160,7 @@ export default function Header({mode,stations}) {
                               onClick={handleMenu}
                               color="inherit"
                           >
-                              <AccountCircle style={{color:mode? 'gray' : 'white'}}/>
+                              <AccountCircle style={{color: mode ? 'gray' : 'white'}}/>
                           </IconButton>
                           <Menu
                               id="menu-appbar"
@@ -184,10 +168,11 @@ export default function Header({mode,stations}) {
                               open={Boolean(anchorEl)}
                               onClose={handleClose}
                           >
-                              <MenuItem onClick={handleClose} disabled={true}>Profile</MenuItem>
+                              <MenuItem onClick={handleClose}
+                                        disabled={true}>{user["firstName"] + " " + user["lastName"]}</MenuItem>
                               <MenuItem onClick={logout}>Logout</MenuItem>
                           </Menu>
-                      </div> }
+                      </div>}
 
               </Toolbar>
           </AppBar>
