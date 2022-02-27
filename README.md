@@ -12,7 +12,7 @@ Run the following commands to start the backend:
     $ git clone https://github.com/JIV-DLS/prog-web-server-client.git
     $ cd backend
     $ npm install
-    $ npm run dev ou npm start
+    $ npm run dev 
     
 Open a new terminal and run the following commands to start the frontend:
 
