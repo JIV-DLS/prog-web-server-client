@@ -130,6 +130,6 @@ export default function Header({mode,stations}) {
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap displayMode={tileLayer} onChange={gasFilter} service={serviceFilter}/></>
+      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations}/></>
   );
 }

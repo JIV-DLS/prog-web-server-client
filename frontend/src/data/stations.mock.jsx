@@ -10,38 +10,38 @@ const STATIONS = [
              "Station de gonflage",
              "Boutique non alimentaire",
              "Vente de gaz domestique (Butane, Propane)",
-             "Piste poids lourds",
+             "Piste pids lourds",
              "Lavage manuel"
           ]
        },
        "prix": [
           {
-             "_nom": "Gazole",
-             "_id": "1",
-             "_maj": "2022-01-29T09:07:55",
-             "_valeur": "1.766"
+             "nom": "Gazole",
+             "id": "1",
+             "maj": "2022-01-29T09:07:55",
+             "valeur": "1.766"
           },
           {
-            "_nom": "Gazole",
-            "_id": "1",
-            "_maj": "2022-01-30T09:07:55",
-            "_valeur": "1.78"
+            "nom": "Gazole",
+            "id": "1",
+            "maj": "2022-01-30T09:07:55",
+            "valeur": "1.78"
          },
           {
-             "_nom": "SP95",
-             "_id": "2",
-             "_maj": "2022-01-19T12:31:38",
-             "_valeur": "1.835"
+             "nom": "SP95",
+             "id": "2",
+             "maj": "2022-01-19T12:31:38",
+             "valeur": "1.835"
           },{
-            "_nom": "SP95",
-            "_id": "2",
-            "_maj": "2022-01-22T12:31:38",
-            "_valeur": "1.815"
+            "nom": "SP95",
+            "id": "2",
+            "maj": "2022-01-22T12:31:38",
+            "valeur": "1.815"
          }
        ],
-       "_id": "6296001",
-       "_latitude": "43.67750",
-       "_longitude": "7.22636",
+       "id": "6296001",
+       "latitude": "43.67750",
+       "longitude": "7.22636",
        "_cp": "06200",
        "_pop": "R"
     },
@@ -55,7 +55,7 @@ const STATIONS = [
              "Station de gonflage",
              "Boutique non alimentaire",
              "Services r�paration / entretien",
-             "Piste poids lourds",
+             "Piste pids lourds",
              "DAB (Distributeur automatique de billets)",
              "Lavage automatique",
              "Lavage manuel",
@@ -64,35 +64,35 @@ const STATIONS = [
        },
        "prix": [
           {
-             "_nom": "Gazole",
-             "_id": "1",
-             "_maj": "2022-02-09T06:48:50",
-             "_valeur": "1.779"
+             "nom": "Gazole",
+             "id": "1",
+             "maj": "2022-02-09T06:48:50",
+             "valeur": "1.779"
           },
           {
-             "_nom": "SP95",
-             "_id": "2",
-             "_maj": "2022-02-09T06:49:19",
-             "_valeur": "1.815"
+             "nom": "SP95",
+             "id": "2",
+             "maj": "2022-02-09T06:49:19",
+             "valeur": "1.815"
           },
           {
-             "_nom": "SP98",
-             "_id": "6",
-             "_maj": "2022-02-09T06:49:54",
-             "_valeur": "1.908"
+             "nom": "SP98",
+             "id": "6",
+             "maj": "2022-02-09T06:49:54",
+             "valeur": "1.908"
           }
        ],
        "rupture": [
           {
-             "_id": "5",
-             "_nom": "E10",
+             "id": "5",
+             "nom": "E10",
              "_debut": "2014-06-26T15:27:00",
              "_fin": ""
           }
        ],
-       "_id": "6300002",
-       "_latitude": "43.70049",
-       "_longitude": "7.28739",
+       "id": "6300002",
+       "latitude": "43.70049",
+       "longitude": "7.28739",
        "_cp": "06300",
        "_pop": "R"
     },
@@ -102,38 +102,38 @@ const STATIONS = [
        "horaires": {
           "jour": [
              {
-                "_id": "1",
-                "_nom": "Lundi",
+                "id": "1",
+                "nom": "Lundi",
                 "_ferme": ""
              },
              {
-                "_id": "2",
-                "_nom": "Mardi",
+                "id": "2",
+                "nom": "Mardi",
                 "_ferme": ""
              },
              {
-                "_id": "3",
-                "_nom": "Mercredi",
+                "id": "3",
+                "nom": "Mercredi",
                 "_ferme": ""
              },
              {
-                "_id": "4",
-                "_nom": "Jeudi",
+                "id": "4",
+                "nom": "Jeudi",
                 "_ferme": ""
              },
              {
-                "_id": "5",
-                "_nom": "Vendredi",
+                "id": "5",
+                "nom": "Vendredi",
                 "_ferme": ""
              },
              {
-                "_id": "6",
-                "_nom": "Samedi",
+                "id": "6",
+                "nom": "Samedi",
                 "_ferme": ""
              },
              {
-                "_id": "7",
-                "_nom": "Dimanche",
+                "id": "7",
+                "nom": "Dimanche",
                 "_ferme": ""
              }
           ],
@@ -153,47 +153,47 @@ const STATIONS = [
        },
        "prix": [
           {
-             "_nom": "Gazole",
-             "_id": "1",
-             "_maj": "2022-02-04T16:42:25",
-             "_valeur": "1.799"
+             "nom": "Gazole",
+             "id": "1",
+             "maj": "2022-02-04T16:42:25",
+             "valeur": "1.799"
           },
           {
-             "_nom": "SP95",
-             "_id": "2",
-             "_maj": "2022-02-01T08:43:51",
-             "_valeur": "1.889"
+             "nom": "SP95",
+             "id": "2",
+             "maj": "2022-02-01T08:43:51",
+             "valeur": "1.889"
           },
           {
-             "_nom": "SP98",
-             "_id": "6",
-             "_maj": "2022-02-01T08:43:52",
-             "_valeur": "1.929"
+             "nom": "SP98",
+             "id": "6",
+             "maj": "2022-02-01T08:43:52",
+             "valeur": "1.929"
           }
        ],
        "rupture": [
           {
-             "_id": "4",
-             "_nom": "GPLc",
+             "id": "4",
+             "nom": "GPLc",
              "_debut": "2019-06-11T12:28:52",
              "_fin": ""
           },
           {
-             "_id": "5",
-             "_nom": "E10",
+             "id": "5",
+             "nom": "E10",
              "_debut": "2019-06-11T12:28:52",
              "_fin": ""
           },
           {
-             "_id": "3",
-             "_nom": "E85",
+             "id": "3",
+             "nom": "E85",
              "_debut": "2019-06-11T12:28:52",
              "_fin": ""
           }
        ],
-       "_id": "6300012",
-       "_latitude": "43.70200",
-       "_longitude": "7.29400",
+       "id": "6300012",
+       "latitude": "43.70200",
+       "longitude": "7.29400",
        "_cp": "06300",
        "_pop": "R"
     }

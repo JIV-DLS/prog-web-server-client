@@ -14,15 +14,14 @@ import useLocalStorage from './components/useLocalStorage';
 import { ToggleModeNight } from './components/theme';
 import { useCallback } from 'react';
 import Api from "./helper/api";
+import MyMap from './components/myMap';
 
 const api = new Api();
-
-
-
 
 export default function App() {
 
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
+    const [token, setToken] = useLocalStorage('token');
 
   const handleChangeMode = useCallback(
       (e) => {
@@ -31,88 +30,114 @@ export default function App() {
       },
       [setStorageMode],
   );
-  /*const handleUserInfoLoaded = useCallback(
-      (userInfos) => {
-          setUser(userInfos);
-      },
-      [setUser],
-  );*/
-
-  
-
-
-
-    const token = localStorage.getItem("token")
-    let userSaved = localStorage.getItem("user")
-    if (userSaved) userSaved = JSON.parse(userSaved)
-
-    let tmpUser = null;
-  if (token){
-      console.log("yes there is a token")
-      if(!userSaved){
-          api.getUserInfo().then((_user)=> {
-              localStorage.setItem("user",JSON.stringify(_user))
-
-              setUser(_user);
-          });
-      }else {
-          if(tmpUser!==userSaved){
-              tmpUser = userSaved
-          }
-      }
-
-  }
-  else{
-      console.log("nop there is any token!")
-  }
-
-  const [user, setUser] = useState(tmpUser);
 
   const [stationsChart, setStationsChart] = useState([]);
   const [stationsMap, setStationsMap] = useState([]);
+  var DataStationsChart=[];
   var DataStations=[];
+  var ChartStations=[]
   useEffect(() => {
       api.getStations(14590,4319219).then((data)=>{
           //console.log("Stations to show",data)
-          //console.log("Statons in APPjs",DataStations)
-          setStationsChart(data);
-          
+          //console.log("Statons in APPjs",DataStations
+          DataStationsChart =[...data];
 
+
+          DataStationsChart.map( d => {
+        
+            if(!d.pdv_content.latitude.includes(".") ){
+            if(d.pdv_content.prix){
+    
+                for(let i=0; i<d.pdv_content.prix.length;i++){
+                  
+                  let carburant=d.pdv_content.prix[i];
+    
+                  if(carburant.nom){
+                      let temp=carburant.valeur;
+                      if(carburant.valeur.length<4)
+                        carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
+                      else 
+                        carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));  
+                  }
+    
+                  }
+            }
+            
+            if(d.pdv_content.services===undefined){
+              d.pdv_content["services"]  = "non definied"
+            }
+     
+            ChartStations.push(d.pdv_content);}
+            
+    
+          })
+          console.log("Chart data",ChartStations);
+          setStationsChart(ChartStations);
+          
           data.map( d => {
             var NewPrix=[];
+            var NewPrix=[];
+            if(!d.pdv_content.latitude.includes(".") ){
             if(d.pdv_content.prix){
+
               for(let i=0; i<d.pdv_content.prix.length-1;i++){
-              
+
                 let carburant=d.pdv_content.prix[i];
 
-                if(carburant.nom ){
+                if(carburant.nom  ){
                   if( carburant.nom !== d.pdv_content.prix[i+1].nom){
                     let temp=carburant.valeur;
                     if(carburant.valeur.length<4)
-                      carburant.valeur=temp.slice(0, 0) + "0." + temp.slice(0 + Math.abs(0));
-                    else 
-                      carburant.valeur=temp.slice(0, 1) + "." + temp.slice(1 + Math.abs(0));
+                      carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
+                    else
+                      carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
                     NewPrix.push(carburant);
-                  }
-                    
                   }
 
                 }
+
+                }
+            }
+
+            if(d.pdv_content.services===undefined){
+              d.pdv_content["services"]  = "non definied"
             }
             d.pdv_content.prix=NewPrix;
-            d.pdv_content.latitude=d.pdv_content.latitude.slice(0, 2) + "." + d.pdv_content.latitude.slice(2 + Math.abs(0));
-            d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 1) + "." + d.pdv_content.longitude.slice(1 + Math.abs(0));
-            DataStations.push(d.pdv_content);
+            let x = parseInt(d.pdv_content.longitude)/100000
 
+            d.pdv_content.longitude=x.toString();
+
+            let y = parseInt(d.pdv_content.latitude)/100000
+
+            d.pdv_content.latitude=y.toString();
+
+            /*
+            if(d.pdv_content.longitude.includes("-") && d.pdv_content.longitude.length<6){
+              d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 1) + "0." + d.pdv_content.longitude.slice(1 + Math.abs(0));
+            }else if(d.pdv_content.longitude.includes("-") && d.pdv_content.longitude.length>=6){
+              d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 2) + "." + d.pdv_content.longitude.slice(2 + Math.abs(0));
+            }else if(!d.pdv_content.longitude.includes("-") && d.pdv_content.longitude.length<5){
+              d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 0) + "0." + d.pdv_content.longitude.slice(0 + Math.abs(0));
+            }else{
+              d.pdv_content.longitude=d.pdv_content.longitude.slice(0, 1) + "." + d.pdv_content.longitude.slice(1 + Math.abs(0));
+            }
+            d.pdv_content.latitude=d.pdv_content.latitude.slice(0, 2) + "." + d.pdv_content.latitude.slice(2 + Math.abs(0));*/
+          
+            DataStations.push(d.pdv_content);}
+            
 
           })
-          
+
           console.log("New data",DataStations);
           setStationsMap(DataStations);
 
-      })
-  }, [])
 
+          
+          
+
+      })
+
+  }, [])
 
   return (
     <Router>
@@ -127,19 +152,19 @@ export default function App() {
          </div>
         <Switch>
           <Route path="/signIn" >
-            <SignIn setUser={setUser}/>
+            <SignIn setUser={setToken}/>
           </Route>
           <Route path="/signUp" >
-            <SignUp setUser={setUser}/>
+            <SignUp setUser={setToken}/>
           </Route>
           <Route path="/dataTable">
            <CollapsibleTable parentToChild = {stationsMap}/>
           </Route>
           <Route path="/chart">
-           <BarChart dataFromParent = {DataStations}/>
+           <BarChart dataFromParent = {stationsChart}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode}  stations={stationsMap}/>
+            <Header mode={storageMode} stations={stationsMap} />
           </Route>
         </Switch>
       </div>
