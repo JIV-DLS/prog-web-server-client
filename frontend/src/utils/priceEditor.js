@@ -1,8 +1,8 @@
 import Api from "../helper/api";
 
 const api = new Api()
-export function modifyPrice(stationId, carburant,price){
 
+function updatePrice(stationId, carburant,price){
     console.log("Updating station : " + stationId + "(" + carburant + ") : " + price + "...");
     api.updateGasPrice(stationId,{
         "nom": carburant,
@@ -16,6 +16,10 @@ export function modifyPrice(stationId, carburant,price){
     })
 }
 
-export function getOldPrice(stationId, carburant){
-    console.log("Getting old price station : " + stationId + "(" + carburant + ")");
+export function modifyPrice(stationId, carburant,price){
+    updatePrice(stationId, carburant,price);
+}
+
+export function getOldPrice(stationId, carburant,price){
+    //updatePrice(stationId, carburant,price);
 }

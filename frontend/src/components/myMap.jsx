@@ -49,6 +49,14 @@ export default function MyMap(props) {
     iconSize: [20, 20]
   });
 
+  function handlePriceTag(event){
+    console.log(event);
+    /*()=>{
+      console.log("enabling old price button")
+      document.getElementById("oldPriceButton-" + p.nom + "-" + station.id).disabled = false
+    }*/
+  }
+
   function NumberList(props) {
     const numbers = props.numbers;
     const listItems = numbers.map((number) =>
@@ -109,9 +117,12 @@ export default function MyMap(props) {
                    <div className="price">
                        <b>{p.nom}: </b>
                         <div className="pricerow">
-                            <div className="pricetag" id={"editValue-"+ p.nom + "-" + station.id} contentEditable={props.user!=null}>{p.valeur} €</div>
+                            <div className="pricetag" id={"editValue-"+ p.nom + "-" + station.id} contentEditable={props.user!=null} onChange={handlePriceTag}>{p.valeur} €</div>
                             <div className="priceEdit"><button id={"editButton-" + station.id}  title="Corriger le prix" disabled={props.user==null} className="priceEditButton" onClick={() => modifyPrice(station.id, p.nom, document.getElementById("editValue-" + p.nom + "-" + station.id).innerText)}>Suggérer une maj</button></div>
-                            <div className="oldPrice"><button id={"oldPriceButton-" + station.id} title="Afficher l'ancien prix" disabled={props.user==null} className="oldPriceButton" onClick={() => getOldPrice(station.id, p.nom)}>Ancien prix</button></div>
+                            <div className="oldPrice"><button id={"oldPriceButton-" + station.id} title="Afficher l'ancien prix" disabled={props.user==null} className="oldPriceButton" onClick={() => {
+                              //getOldPrice(station.id, p.nom,p.valeur);
+                              document.getElementById("editValue-" + p.nom + "-" + station.id).innerText = p.valeur + " €"
+                            }}>Ancien prix</button></div>
                         </div>
                    </div>
               ))}
