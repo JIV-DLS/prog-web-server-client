@@ -10,7 +10,7 @@ import {modifyPrice, getOldPrice} from "../utils/priceEditor"
 var center = new LatLng(43.7101728, 7.2619532, 0);
 var mapA;
 
-export default function MyMap(props) {
+export default function MyMap({props}) {
   const [stationList, setStationList] = useState([]);
   useEffect(() => {
     if(!props.onChange && !props.service) {
@@ -36,7 +36,7 @@ export default function MyMap(props) {
       );
       setStationList(filtredStations);
     }
-    
+
   }, [props]);
 
   const icon = new Icon({
