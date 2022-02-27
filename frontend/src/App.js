@@ -113,9 +113,9 @@ export default function App() {
                   if( carburant.nom !== d.pdv_content.prix[i+1].nom){
                     let temp=carburant.valeur;
                     if(carburant.valeur.length<4)
-                      carburant.valeur=temp.slice(0, 0) + "0." + temp.slice(0 + Math.abs(0));
+                      carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
                     else 
-                      carburant.valeur=temp.slice(0, 1) + "." + temp.slice(1 + Math.abs(0));
+                      carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
                     NewPrix.push(carburant);
                   }
                     
@@ -180,6 +180,7 @@ export default function App() {
            <CollapsibleTable parentToChild = {stationsMap}/>
           </Route>
           <Route path="/chart">
+          <MyHeader mode={storageMode} />
            <BarChart dataFromParent = {stationsChart}/>
           </Route>
           <Route path="/">

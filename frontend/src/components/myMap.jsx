@@ -107,9 +107,9 @@ export default function MyMap(props) {
               <div className="m-2" style={popupHead}>
                 Les services :
               </div>
-               {/*station.services.service.map(s => (
+               {station.services.service.map(s => (
               <p>{s}</p>
-              ))*/}
+              ))}
             </div>
           </div>
         </Popup>
