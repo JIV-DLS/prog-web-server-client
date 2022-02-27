@@ -29,7 +29,15 @@ export default function Header({mode,stations,token}) {
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-    const [user, setUser] = useState();
+  const [anchorE2, setAnchorE2] = useState(null);
+  const [user, setUser] = useState();
+
+  const handleNavMenu = (event) => {
+    setAnchorE2(event.currentTarget);
+};
+  const handleCloseMenu = () => {
+    setAnchorE2(null);
+};
 
     let history = useHistory();
     const routeChange = () => {
@@ -106,15 +114,15 @@ export default function Header({mode,stations,token}) {
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
-                        onClick={handleMenu}
+                        onClick={handleNavMenu}
                             >
                             <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
                     </IconButton>
                           <Menu
                               id="menu-appbar"
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleClose}
+                              anchorEl={anchorE2}
+                              open={Boolean(anchorE2)}
+                              onClose={handleCloseMenu}
                           >
                               <MenuItem onClick={mapRoute}>Map</MenuItem>
                               <MenuItem onClick={listeRoute}>Liste</MenuItem>
