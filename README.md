@@ -1,6 +1,9 @@
 # Web Project - Smart Carburant
 **Group members**
-  Mehdi Cherkaoui - Hamza Ayoub - Soulaiman zabourdine- Aniglo Johnas Vihoalé
+  - Mehdi Cherkaoui : mehdicherkaoui
+  - Hamza Ayoub  : hamzaayoub98
+  - Soulaiman zabourdine : ZabourdineSoulaiman
+  - Aniglo Johnas Vihoalé : JIV-DLS
 
 
 ## How to start the project
