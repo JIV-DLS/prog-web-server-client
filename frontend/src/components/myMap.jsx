@@ -51,7 +51,7 @@ export default function MyMap(props) {
         }
 
         return flag;
-        
+
       }
       );
       console.log(filtredStations);
@@ -66,7 +66,7 @@ export default function MyMap(props) {
 
     const currentPositionIcon = new Icon({
         iconUrl: "https://img.icons8.com/ios/50/000000/place-marker--v1.png",
-        iconSize: [20, 20]
+        iconSize: [35, 35]
     });
     //<a href="https://icons8.com/icon/89368/place-marker">Place Marker icon by Icons8</a>
   function NumberList(props) {
