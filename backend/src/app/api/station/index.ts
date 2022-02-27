@@ -82,7 +82,7 @@ router.get("/:id", async (req, res) => {
     }
 })
 
-router.put("/:id", auth, currentUser,async (req, res) => {
+router.put("/:id", auth, async (req, res) => {
     try {
 
         let pdv = await Station.findOne({"id": req.params.id});
@@ -94,6 +94,8 @@ router.put("/:id", auth, currentUser,async (req, res) => {
             //await Station.deleteMany({"id": req.params.id});
 
             const price = req.body;
+
+            console.log("updating price",price);
             price["maj"] = new Date();
 
             while("pdv_content" in pdv){
@@ -105,7 +107,8 @@ router.put("/:id", auth, currentUser,async (req, res) => {
             const response = await Station.updateOne({"id": req.params.id},{"id":req.params.id,"pdv_content":pdv});
 
             console.log("Station " + response["id"] + " created at " + response.createdAt + " updated at " + response.updatedAt);
-            res.status(200).json(response);
+
+            res.status(200).json({"state": true});
         }
 
 

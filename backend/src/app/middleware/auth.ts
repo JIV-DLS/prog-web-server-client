@@ -6,7 +6,6 @@ import {User} from "../models/user.model";
 export const auth = (req, res, next) => {
     try {
         const splitted = req.headers.authorization.split(" ");
-        console.log("req.body.userId",splitted)
         const token = splitted[1];
         const decodedToken = jwt.verify(token, Password);
 
@@ -19,16 +18,15 @@ export const auth = (req, res, next) => {
         User.findOne({ _id: splitted[2] })
             // @ts-ignore
             .then((user) => {
-
                 if (!user) {
                     res.status(401).json({ error: "Utilisateur non trouvé !" });
+                    return
                 }
                 req.userDoingRequest = user
-                console.log("I am here")
-                console.log(req.body.userId,userId,req.body.userId !== userId)
                 if (req.body.userId && req.body.userId !== userId) {
                     throw new Error("Invalid user ID");
                 } else {
+
                     next();
                 }
             })

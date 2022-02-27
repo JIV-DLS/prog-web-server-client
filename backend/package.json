@@ -10,7 +10,7 @@
     "devAndTest": "clear && npm test && npm run compile && ./node_modules/.bin/nodemon dist/app/app.js",
     "start": "clear && npm test && npm run compile && npm run launchServer",
     "tscWatch": "tsc -w",
-    "compile": "tsc >logs.log 2>warnings.log || rm logs.log || rm warnings.log",
+    "compile": "tsc >logs.log 2>logs_.log || rm logs.log || rm warnings.log",
     "coverage": "nyc -r lcov -e .ts -x \"*.test.ts\" npm run test",
     "postinstall": "npm run compile",
     "launchServer": "node dist/app/app.js",
