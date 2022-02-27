@@ -13,7 +13,7 @@ var mapA;
 
 export default function MyMap(props) {
   const [stationList, setStationList] = useState([]);
-  console.log("user_prop",props.user)
+  //console.log("user_prop",props.user)
   useEffect(() => {
     STATIONS = props.stations;
     setStationList(STATIONS);
@@ -109,9 +109,9 @@ export default function MyMap(props) {
                    <div className="price">
                        <b>{p.nom}: </b>
                         <div className="pricerow">
-                            <div className="pricetag" id={"editValue-"+ p.nom + "-" + station.id} contentEditable={false}>{p.valeur} €</div>
-                            <div className="priceEdit"><button id={"editButton-" + station.id}  title="Corriger le prix" disabled={true} className="priceEditButton" onClick={() => modifyPrice(station.id, p.nom, document.getElementById("editValue-" + p.nom + "-" + station.id).innerText)}>Modifier</button></div>
-                            <div className="oldPrice"><button id={"oldPriceButton-" + station.id} title="Afficher l'ancien prix" disabled={true} className="oldPriceButton" onClick={() => getOldPrice(station.id, p.nom)}>Ancien prix</button></div>
+                            <div className="pricetag" id={"editValue-"+ p.nom + "-" + station.id} contentEditable={props.user!=null}>{p.valeur} €</div>
+                            <div className="priceEdit"><button id={"editButton-" + station.id}  title="Corriger le prix" disabled={props.user==null} className="priceEditButton" onClick={() => modifyPrice(station.id, p.nom, document.getElementById("editValue-" + p.nom + "-" + station.id).innerText)}>Suggérer une maj</button></div>
+                            <div className="oldPrice"><button id={"oldPriceButton-" + station.id} title="Afficher l'ancien prix" disabled={props.user==null} className="oldPriceButton" onClick={() => getOldPrice(station.id, p.nom)}>Ancien prix</button></div>
                         </div>
                    </div>
               ))}

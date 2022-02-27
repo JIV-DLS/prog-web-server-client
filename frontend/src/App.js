@@ -68,45 +68,46 @@ export default function App() {
           //console.log("Statons in APPjs",DataStations
           DataStationsChart =[...data];
 
-
           DataStationsChart.map( d => {
-        
+
             if(!d.pdv_content.latitude.includes(".") ){
             if(d.pdv_content.prix){
-    
+
                 for(let i=0; i<d.pdv_content.prix.length;i++){
-                  
+
                   let carburant=d.pdv_content.prix[i];
-    
-                  if(carburant.nom){
+
+                  if(carburant.nom && carburant.valeur){
+                      console.log(carburant);
                       let temp=carburant.valeur;
+                      if (typeof temp != "string") temp+=""
                       if(carburant.valeur.length<4)
                         carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
-                      else 
-                        carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));  
+                      else
+                        carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
                   }
-    
+
                   }
             }
-            
+
             if(d.pdv_content.services===undefined){
               d.pdv_content["services"]  = {service:["Aucun serivce"]};
             }
-     
+
             ChartStations.push(d.pdv_content);}
-            
-    
+
+
           })
           console.log("Chart data",ChartStations);
           setStationsChart(ChartStations);
-          
+
           data.map( d => {
             var NewPrix=[];
             if(!d.pdv_content.latitude.includes(".") ){
             if(d.pdv_content.prix){
-              
+
               for(let i=0; i<d.pdv_content.prix.length-1;i++){
-              
+
                 let carburant=d.pdv_content.prix[i];
 
                 if(carburant.nom  ){
@@ -114,11 +115,11 @@ export default function App() {
                     let temp=carburant.valeur;
                     if(carburant.valeur.length<4)
                       carburant.valeur=temp.slice(0, 0) + "0" + temp.slice(0 + Math.abs(0));
-                    else 
+                    else
                       carburant.valeur=temp.slice(0, 1) + "" + temp.slice(1 + Math.abs(0));
                     NewPrix.push(carburant);
                   }
-                    
+
                 }
 
                 }
@@ -129,8 +130,8 @@ export default function App() {
             if(d.pdv_content.services===undefined){
               d.pdv_content["services"]  = {service:["Aucun serivce"]};
             }
-            
-            
+
+
             d.pdv_content.prix=NewPrix;
             let x = parseInt(d.pdv_content.longitude)/100000
 
@@ -143,15 +144,15 @@ export default function App() {
             DataStations.push(d.pdv_content);
 
           })
-          
+
           console.log("New data",DataStations);
           setStationsMap(DataStations);
 
 
-          
-          
+
+
         })
-      
+
 
   }, [])
 

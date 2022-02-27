@@ -91,7 +91,7 @@ export default class Api {
         localStorage.removeItem("user")
     }
     async updateGasPrice(idStation,price){
-        return axios.put(`${this.api_url}/api/station/${idStation}`,price).then((res)=>{
+        return axios.put(`${this.api_url}/api/station/${idStation}`,price,this.getConfig()).then((res)=>{
             console.log(res);
             return res;
         }).catch((error)=>{
