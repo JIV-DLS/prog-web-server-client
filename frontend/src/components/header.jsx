@@ -29,7 +29,15 @@ export default function Header({mode,stations,token}) {
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-    const [user, setUser] = useState();
+  const [anchorE2, setAnchorE2] = useState(null);
+  const [user, setUser] = useState();
+
+  const handleNavMenu = (event) => {
+    setAnchorE2(event.currentTarget);
+};
+  const handleCloseMenu = () => {
+    setAnchorE2(null);
+};
 
     let history = useHistory();
     const routeChange = () => {
@@ -91,6 +99,7 @@ export default function Header({mode,stations,token}) {
             console.log("3",user);
         }
     }, [])
+    console.log(mode)
     return (
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">
@@ -106,15 +115,15 @@ export default function Header({mode,stations,token}) {
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
-                        onClick={handleMenu}
+                        onClick={handleNavMenu}
                             >
                             <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
                     </IconButton>
                           <Menu
                               id="menu-appbar"
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleClose}
+                              anchorEl={anchorE2}
+                              open={Boolean(anchorE2)}
+                              onClose={handleCloseMenu}
                           >
                               <MenuItem onClick={mapRoute}>Map</MenuItem>
                               <MenuItem onClick={listeRoute}>Liste</MenuItem>
@@ -123,7 +132,7 @@ export default function Header({mode,stations,token}) {
                       </div>
 
                   <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      SmartCarburant
+                      SmartGas
                   </Typography>
                   <input className={"address"} id={"fromAddress"} type="text" onKeyUp={loadFromList} placeholder="Où êtes-vous ?" list="fromList"/>
 
@@ -160,7 +169,7 @@ export default function Header({mode,stations,token}) {
                               onClick={handleMenu}
                               color="inherit"
                           >
-                              <AccountCircle style={{color: mode ? 'gray' : 'white'}}/>
+                              <AccountCircle style={{color: mode ? 'white' : 'gray'}}/>
                           </IconButton>
                           <Menu
                               id="menu-appbar"

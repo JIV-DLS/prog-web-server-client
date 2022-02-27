@@ -11,7 +11,7 @@ var center = new LatLng(43.7101728, 7.2619532, 0);
 var STATIONS = [];
 var mapA;
 
-export default function MyMap(props) {
+export default function MyMap({props}) {
   const [stationList, setStationList] = useState([]);
   useEffect(() => {
     STATIONS = props.stations;

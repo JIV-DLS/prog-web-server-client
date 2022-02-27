@@ -20,7 +20,7 @@ function Copyright(props) {
     <Typography id="signInTypo" variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        www.smartcarburant.com
+        www.smartgas.com
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}
@@ -42,7 +42,7 @@ const theme = createTheme();
 
 const api = new Api()
 
-export default function SignUp() {
+export default function SignUp(setUser) {
 
   const history = useHistory();
   const handleSubmit = (event) => {
@@ -50,12 +50,12 @@ export default function SignUp() {
     const data = new FormData(event.currentTarget);
 
     api.subscribe(data.get('email'), data.get('password'),data.get('firstName'),data.get('lastName')).then((r) =>{
-      console.log(r);
+      api.getUserInfo().then((_user)=> {
+        console.log("user infos gotten",_user)
+        //setUser(_user);
+        history.push("/");
+      });
     })
-    console.log({
-      email: data.get('email'),
-      password: data.get('password'),
-    });
   };
 
   return (

@@ -87,8 +87,17 @@ export default class Api {
     }
     logout(){
         localStorage.removeItem(token)
+        localStorage.removeItem(userId)
+        localStorage.removeItem("user")
     }
-
+    async updateGasPrice(idStation,price){
+        return axios.put(`${this.api_url}/api/station/${idStation}`,price).then((res)=>{
+            console.log(res);
+            return res;
+        }).catch((error)=>{
+            console.log(error);
+        });
+    }
     async getStations(longitude,latitude){
         return axios.get(`${this.api_url}/api/station/latitude=${latitude}&longitude=${longitude}`,this.getConfig()).then((response) => {
             console.log("Stations gotten",response["data"])

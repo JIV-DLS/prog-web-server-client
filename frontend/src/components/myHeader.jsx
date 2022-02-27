@@ -22,16 +22,9 @@ const api = new Api();
 
 export default function Header({mode,stations}) {
   const [anchorEl, setAnchorEl] = useState(null);
+  const [anchorE2, setAnchorE2] = useState(null);
   const [open, setOpen] = useState(false);
   const anchorRef = React.useRef(null);
-  function handleListKeyDown(event) {
-    if (event.key === 'Tab') {
-      event.preventDefault();
-      setOpen(false);
-    } else if (event.key === 'Escape') {
-      setOpen(false);
-    }
-  }
   const prevOpen = React.useRef(open);
   React.useEffect(() => {
     if (prevOpen.current === true && open === false) {
@@ -43,6 +36,13 @@ export default function Header({mode,stations}) {
   useEffect(() => {
     
   }, [mode,stations]);
+
+  const handleNavMenu = (event) => {
+      setAnchorE2(event.currentTarget);
+  };
+    const handleCloseMenu = () => {
+      setAnchorE2(null);
+  };
 
   let history = useHistory();
   const routeChange = () => {
@@ -94,15 +94,15 @@ export default function Header({mode,stations}) {
                         aria-label="account of current user"
                         aria-controls="menu-appbar"
                         aria-haspopup="true"
-                        onClick={handleMenu}
+                        onClick={handleNavMenu}
                             >
                             <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
                     </IconButton>
                           <Menu
                               id="menu-appbar"
-                              anchorEl={anchorEl}
-                              open={Boolean(anchorEl)}
-                              onClose={handleClose}
+                              anchorEl={anchorE2}
+                              open={Boolean(anchorE2)}
+                              onClose={handleCloseMenu}
                           >
                               <MenuItem onClick={mapRoute}>Map</MenuItem>
                               <MenuItem onClick={listeRoute}>Liste</MenuItem>
