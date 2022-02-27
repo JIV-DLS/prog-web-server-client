@@ -2,41 +2,45 @@ import './myMap.css';
 import React, {useState, useEffect} from "react";
 import { MapContainer, TileLayer, Marker, Popup, useMapEvents , Polyline} from 'react-leaflet';
 import { Icon , LatLng} from "leaflet";
-import STATIONS from "../data/stations.mock"
+// import STATIONS from "../data/stations.mock"
 import { popupContent, popupHead, popupText, okText } from "./popupStyles";
 import {drawItinerary} from "../utils/itineraryCalculator";
 import {modifyPrice, getOldPrice} from "../utils/priceEditor"
 
 var center = new LatLng(43.7101728, 7.2619532, 0);
+var STATIONS = [];
 var mapA;
 
 export default function MyMap({props}) {
   const [stationList, setStationList] = useState([]);
   useEffect(() => {
-    if(!props.onChange && !props.service) {
-      setStationList(STATIONS);
-    } else if (props.onChange) {
-      const filtredStations = stationList.filter( station => {
-        let flag = false;
-        station.prix.map( p => {
-           if(p._nom.includes(props.onChange)) flag = true;
-         })
-         return flag;
-      }
-      );
-      setStationList(filtredStations);
-    } else {
-      const filtredStations = stationList.filter( station => {
-        let flag = false;
-        station.services.service.map( s => {
-           if(s.includes(props.service)) flag = true;
-         })
-         return flag;
-      }
-      );
-      setStationList(filtredStations);
-    }
+    STATIONS = props.stations;
+    setStationList(STATIONS);
+    console.log("map: ",STATIONS)
 
+    // if(!props.onChange && !props.service) {
+    //   setStationList(STATIONS);
+    // } else if (props.onChange) {
+    //   const filtredStations = stationList.filter( station => {
+    //     let flag = false;
+    //     station.prix.map( p => {
+    //        if(p._nom.includes(props.onChange)) flag = true;
+    //      })
+    //      return flag;
+    //   }
+    //   );
+    //   setStationList(filtredStations);
+    // } else {
+    //   const filtredStations = stationList.filter( station => {
+    //     let flag = false;
+    //     station.services.service.map( s => {
+    //        if(s.includes(props.service)) flag = true;
+    //      })
+    //      return flag;
+    //   }
+    //   );
+    //   setStationList(filtredStations);
+    // }
   }, [props]);
 
   const icon = new Icon({
@@ -61,10 +65,10 @@ export default function MyMap({props}) {
       />
       {stationList.map(station => (
         <Marker
-          key={station._id}
+          key={station.id}
           position={[
-            station._latitude,
-            station._longitude
+            station.latitude,
+            station.longitude
           ]}
           icon={icon}
         >
@@ -80,7 +84,10 @@ export default function MyMap({props}) {
               <div className="m-2" style={popupHead}>
                 Station :
               </div>
-               {station.adresse}
+               {station.latitude}
+               <br/>
+              
+               {station.longitude}
             </div>
             <div className="m-2" style={okText}>
                 <button className="itineraryButton" onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
@@ -89,11 +96,11 @@ export default function MyMap({props}) {
               </div>
                {station.prix.map(p => (
                    <div className="price">
-                       <b>{p._nom}: </b>
+                       <b>{p.nom}: </b>
                         <div className="pricerow">
-                            <div className="pricetag" id={"editValue-"+ p._nom + "-" + station._id} contentEditable={false}>{p._valeur} €</div>
-                            <div className="priceEdit"><button id={"editButton-" + station._id}  title="Corriger le prix" disabled={true} className="priceEditButton" onClick={() => modifyPrice(station._id, p._nom, document.getElementById("editValue-" + p._nom + "-" + station._id).innerText)}>Modifier</button></div>
-                            <div className="oldPrice"><button id={"oldPriceButton-" + station._id} title="Afficher l'ancien prix" disabled={true} className="oldPriceButton" onClick={() => getOldPrice(station._id, p._nom)}>Ancien prix</button></div>
+                            <div className="pricetag" id={"editValue-"+ p.nom + "-" + station.id} contentEditable={false}>{p.valeur} €</div>
+                            <div className="priceEdit"><button id={"editButton-" + station.id}  title="Corriger le prix" disabled={true} className="priceEditButton" onClick={() => modifyPrice(station.id, p.nom, document.getElementById("editValue-" + p.nom + "-" + station.id).innerText)}>Modifier</button></div>
+                            <div className="oldPrice"><button id={"oldPriceButton-" + station.id} title="Afficher l'ancien prix" disabled={true} className="oldPriceButton" onClick={() => getOldPrice(station.id, p.nom)}>Ancien prix</button></div>
                         </div>
                    </div>
               ))}

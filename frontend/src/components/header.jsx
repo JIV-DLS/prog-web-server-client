@@ -29,12 +29,32 @@ export default function Header({mode,stations,token}) {
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
   const [anchorEl, setAnchorEl] = useState(null);
-    const [user, setUser] = useState();
+  const [anchorE2, setAnchorE2] = useState(null);
+  const [user, setUser] = useState();
+
+  const handleNavMenu = (event) => {
+    setAnchorE2(event.currentTarget);
+};
+  const handleCloseMenu = () => {
+    setAnchorE2(null);
+};
 
     let history = useHistory();
     const routeChange = () => {
         history.push("/signIn")
     }
+
+    const mapRoute = () => {
+        history.push("/")
+      }
+    
+      const listeRoute = () => {
+        history.push("/dataTable")
+      }
+    
+      const grapheRoute = () => {
+        history.push("/chart")
+      }
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -85,15 +105,32 @@ export default function Header({mode,stations,token}) {
           <AppBar id="AppBar" position="static">
               <Toolbar>
 
-                  <IconButton
-                      size="large"
-                      edge="start"
-                      color="inherit"
-                      aria-label="menu"
-                      sx={{ mr: 2 }}
-                  >
-                      <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
-                  </IconButton>
+              <div>
+                        <IconButton
+                        size="large"
+                        edge="start"
+                        color="inherit"
+                        aria-label="menu"
+                        sx={{ mr: 2 }}
+                        aria-label="account of current user"
+                        aria-controls="menu-appbar"
+                        aria-haspopup="true"
+                        onClick={handleNavMenu}
+                            >
+                            <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
+                    </IconButton>
+                          <Menu
+                              id="menu-appbar"
+                              anchorEl={anchorE2}
+                              open={Boolean(anchorE2)}
+                              onClose={handleCloseMenu}
+                          >
+                              <MenuItem onClick={mapRoute}>Map</MenuItem>
+                              <MenuItem onClick={listeRoute}>Liste</MenuItem>
+                              <MenuItem onClick={grapheRoute}>Graphe</MenuItem>
+                          </Menu>
+                      </div>
+
                   <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
                       SmartGas
                   </Typography>
@@ -148,6 +185,6 @@ export default function Header({mode,stations,token}) {
 
               </Toolbar>
           </AppBar>
-      </Box><MyMap onChange={gasFilter} service={serviceFilter}/></>
+      </Box><MyMap  onChange={gasFilter} service={serviceFilter} stations={stations}/></>
   );
 }
