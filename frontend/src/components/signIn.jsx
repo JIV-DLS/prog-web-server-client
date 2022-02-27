@@ -20,7 +20,7 @@ function Copyright(props) {
     <Typography id="signInTypo" variant="body2" color="text.secondary" align="center" {...props}>
       {'Copyright © '}
       <Link color="inherit" href="https://mui.com/">
-        www.smartcarburant.com
+        www.smartgas.com
       </Link>{' '}
       {new Date().getFullYear()}
       {'.'}

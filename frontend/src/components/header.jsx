@@ -95,7 +95,7 @@ export default function Header({mode,stations,token}) {
                       <Avatar alt="Remy Sharp" src="https://www.ecologie.gouv.fr/sites/default/files/logo-carburants.jpg" />
                   </IconButton>
                   <Typography id="AppBarTypo" variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                      SmartCarburant
+                      SmartGas
                   </Typography>
                   <input className={"address"} id={"fromAddress"} type="text" onKeyUp={loadFromList} placeholder="Où êtes-vous ?" list="fromList"/>
 
