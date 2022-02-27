@@ -216,7 +216,7 @@ export const buildServer = (cb) => {
           mongoose.set("useFindAndModify", false);
           mongoose.set("useCreateIndex", true);
 
-          fetch_data_from_server('');
+          //fetch_data_from_server('');
 
           cron.schedule('0 7 * * *', () => {
             console.log('running an automatic task...');
