@@ -14,13 +14,10 @@ import Typography from '@material-ui/core/Typography';
 import Paper from '@material-ui/core/Paper';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import STATIONS from "../data/stations.mock";
 import './table.css';
 import { withStyles } from '@material-ui/core';
-
 import TableSortLabel from '@mui/material/TableSortLabel';
 import { visuallyHidden } from '@mui/utils';
-
 import { useTheme } from '@mui/material/styles';
 import TableFooter from '@mui/material/TableFooter';
 import TablePagination from '@mui/material/TablePagination';
@@ -28,7 +25,6 @@ import FirstPageIcon from '@mui/icons-material/FirstPage';
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft';
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight';
 import LastPageIcon from '@mui/icons-material/LastPage';
-import {useEffect,useState} from 'react';
 
 
 
@@ -49,8 +45,7 @@ function getComparator(order, orderBy) {
     : (a, b) => -descendingComparator(a, b, orderBy);
 }
 
-// This method is created for cross-browser compatibility, if you don't
-// need to support IE11, you can use Array.prototype.sort() directly
+
 function stableSort(array, comparator) {
   const stabilizedThis = array.map((el, index) => [el, index]);
   stabilizedThis.sort((a, b) => {
@@ -148,7 +143,7 @@ function Row(props) {
               </Typography>
               <NumberList numbers={row.services.service} />
             </Box>
-            
+
           </Collapse>
         </TableCell>
       </TableRow>
@@ -217,32 +212,6 @@ TablePaginationActions.propTypes = {
   rowsPerPage: PropTypes.number.isRequired,
 };
 
-
-/*Row.propTypes = {
-  row: PropTypes.shape({
-    calories: PropTypes.number.isRequired,
-    carbs: PropTypes.number.isRequired,
-    fat: PropTypes.number.isRequired,
-    history: PropTypes.arrayOf(
-      PropTypes.shape({
-        amount: PropTypes.number.isRequired,
-        customerId: PropTypes.string.isRequired,
-        date: PropTypes.string.isRequired,
-      }),
-    ).isRequired,
-    name: PropTypes.string.isRequired,
-    price: PropTypes.number.isRequired,
-    protein: PropTypes.number.isRequired,
-  }).isRequired,
-  */
-
-/*const rows = [
-  createData('Frozen yoghurt', 159, 6.0, 24, 4.0, 3.99),
-  createData('Ice cream sandwich', 237, 9.0, 37, 4.3, 4.99),
-  createData('Eclair', 262, 16.0, 24, 6.0, 3.79),
-  createData('Cupcake', 305, 3.7, 67, 4.3, 2.5),
-  createData('Gingerbread', 356, 16.0, 49, 3.9, 1.5),
-];*/
 
 var rows = [];
 
@@ -330,32 +299,6 @@ function EnhancedTableHead(props) {
     </TableHead>
   );
 }
-/*
-EnhancedTableHead.propTypes = {
-  numSelected: PropTypes.number.isRequired,
-  onRequestSort: PropTypes.func.isRequired,
-  onSelectAllClick: PropTypes.func.isRequired,
-  order: PropTypes.oneOf(['asc', 'desc']).isRequired,
-  orderBy: PropTypes.string.isRequired,
-  rowCount: PropTypes.number.isRequired,
-};
-*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 export default function CollapsibleTable({parentToChild}) {
@@ -369,7 +312,6 @@ export default function CollapsibleTable({parentToChild}) {
 
   // }, [props]);
 
-  console.log("Heeeere",rows);
   const [order, setOrder] = React.useState('asc');
   const [orderBy, setOrderBy] = React.useState('calories');
   const [selected, setSelected] = React.useState([]);
@@ -392,12 +334,11 @@ export default function CollapsibleTable({parentToChild}) {
 
 
 
-  
+
 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(5);
 
-  // Avoid a layout jump when reaching the last page with empty rows.
   const emptyRows =
     page > 0 ? Math.max(0, (1 + page) * rowsPerPage - rows.length) : 0;
 
@@ -419,7 +360,7 @@ export default function CollapsibleTable({parentToChild}) {
 
   return (
     
-    <div style={{ height: "100%", width: '100%',overflow:'scroll',textAlign:'center'}}>
+    <div style={{ maxHeight: "80%", width: '100%',overflow:'scroll',textAlign:'center'}}>
     <Typography variant="h2" gutterBottom component="div" style={{ width:'100%'}}>
                 Stations de services
               </Typography>
@@ -434,8 +375,6 @@ export default function CollapsibleTable({parentToChild}) {
               rowCount={rows.length}
             />
           <TableBody>
-              {/* if you don't need to support IE11, you can replace the `stableSort` call with:
-                 rows.slice().sort(getComparator(order, orderBy)) */}
               {stableSort(rows, getComparator(order, orderBy))
                 .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
                 .map((row) => (
@@ -453,7 +392,7 @@ export default function CollapsibleTable({parentToChild}) {
             </TableBody>
           <TableFooter >
           <TableRow>
-            <TablePagination 
+            <TablePagination
               rowsPerPageOptions={[5, 10, 25]}
               colSpan={3}
               count={rows.length}
@@ -468,15 +407,15 @@ export default function CollapsibleTable({parentToChild}) {
               onPageChange={handleChangePage}
               onRowsPerPageChange={handleChangeRowsPerPage}
               ActionsComponent={TablePaginationActions}
-    
+
             />
           </TableRow>
         </TableFooter>
         </Table>
       </TableContainer>
     </div>
-    
-      
-     
+
+
+
   );
 }

@@ -17,8 +17,60 @@ import Api from "./helper/api";
 import MyHeader from './components/myHeader';
 
 const api = new Api();
+let previousCenter=null;
+
+function getLocation(callBack) {
+  if (navigator.geolocation) {
+    navigator.geolocation.getCurrentPosition(callBack);
+  } else {
+    alert("Geolocation is not supported by this browser.");
+  }
+}
+
+function calcCrow(lat1, lon1, lat2, lon2)
+    {
+      var R = 6371; // km
+      var dLat = toRad(lat2-lat1);
+      var dLon = toRad(lon2-lon1);
+      var lat1 = toRad(lat1);
+      var lat2 = toRad(lat2);
+
+      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+        Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
+      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+      var d = R * c;
+      return d;
+    }
+
+    function toRad(Value)
+    {
+        return Value * Math.PI / 180;
+    }
+
+
 
 export default function App() {
+
+  const [currentPosition, setCurrentPosition] = useState();
+
+
+
+  const [center, setCenter] = useState([null, null]);
+
+  if(currentPosition!== undefined){
+    if((center[0]==null &&center[1]==null)||(!center[0] && !center[1]) ){
+      setCenter([currentPosition.coords.latitude,currentPosition.coords.longitude]);
+    }
+  }
+
+  useEffect(()=>{
+    getLocation(setCurrentPosition);
+  },[])
+
+
+  const handleChange = (center) => {
+    setCenter([center["lat"],center["lng"]]);
+  };
 
   const [storageMode, setStorageMode] = useLocalStorage('darkmode');
 
@@ -37,7 +89,7 @@ export default function App() {
 
     let tmpUser = null;
   if (token){
-      console.log("yes there is a token")
+      //console.log("yes there is a token")
       if(!userSaved){
           api.getUserInfo().then((_user)=> {
               localStorage.setItem("user",JSON.stringify(_user))
@@ -52,7 +104,7 @@ export default function App() {
 
   }
   else{
-      console.log("nop there is any token!")
+      //console.log("nop there is any token!")
   }
 
   const [user, setUser] = useState(tmpUser);
@@ -61,13 +113,31 @@ export default function App() {
   const [stationsMap, setStationsMap] = useState([]);
   var DataStationsChart=[];
   var DataStations=[];
-  var ChartStations=[]
-  useEffect(() => {
-      api.getStations(14590,4319219).then((data)=>{
-          //console.log("Stations to show",data)
-          //console.log("Statons in APPjs",DataStations
-          DataStationsChart =[...data];
+  var ChartStations=[];
 
+
+
+    let distance =0;
+
+
+    if(center[0]!==NaN &&center[1]!==NaN  && previousCenter!==null ){
+      //console.log("TTTT",previousCenter[0],previousCenter[1],center[0],center[1])
+
+      distance=calcCrow(previousCenter[0],previousCenter[1],center[0],center[1]);
+      //console.log(distance);
+    }
+    previousCenter=center;
+
+    if(  distance>0.03){
+
+
+
+    api.getStations(parseInt(center[1]*100000),parseInt(center[0]*100000)).then((data)=>{
+
+      DataStationsChart =[...data];
+        if(DataStationsChart.length===0){
+            return
+        }
           DataStationsChart.map( d => {
 
             if(!d.pdv_content.latitude.includes(".") ){
@@ -78,7 +148,7 @@ export default function App() {
                   let carburant=d.pdv_content.prix[i];
 
                   if(carburant.nom && carburant.valeur){
-                      console.log(carburant);
+                     //console.log(carburant);
                       let temp=carburant.valeur;
                       if (typeof temp != "string") temp+=""
                       if(carburant.valeur.length<4)
@@ -98,7 +168,8 @@ export default function App() {
 
 
           })
-          console.log("Chart data",ChartStations);
+
+          //console.log("Chart data",ChartStations);
           setStationsChart(ChartStations);
 
           data.map( d => {
@@ -126,44 +197,43 @@ export default function App() {
               for(let stationKey in newPriceDict)
                     NewPrix.push(newPriceDict[stationKey])
 
-
-                }
             }
 
-            if(d.pdv_content.services===undefined){
-              d.pdv_content["services"]  = {service:["Aucun serivce"]};
             }
 
 
-            d.pdv_content.prix=NewPrix;
-            let x = parseInt(d.pdv_content.longitude)/100000
-
-            d.pdv_content.longitude=x.toString();
-
-            let y = parseInt(d.pdv_content.latitude)/100000
-
-            d.pdv_content.latitude=y.toString();
-
-            DataStations.push(d.pdv_content);
-
-          })
-
-          console.log("New data",DataStations);
-          setStationsMap(DataStations);
+        if(d.pdv_content.services===undefined){
+          d.pdv_content["services"]  = {service:["Aucun serivce"]};
+        }
 
 
+        d.pdv_content.prix=NewPrix;
+        let x = parseInt(d.pdv_content.longitude)/100000
+
+        d.pdv_content.longitude=x.toString();
+
+        let y = parseInt(d.pdv_content.latitude)/100000
+
+        d.pdv_content.latitude=y.toString();
+
+        DataStations.push(d.pdv_content);
+
+        //console.log("New data",DataStations);
+
+      })
+
+        setStationsMap(DataStations);
+    })
 
 
-        })
+
+  }
 
 
-  }, [])
 
   return (
     <Router>
       <div className={`App ${storageMode ? 'dark' : 'light'}`}>
-        {/* A <Switch> looks through its children <Route>s and
-            renders the first one that matches the current URL. */}
          <div class="Toggle">
            <ToggleModeNight
 						onChange={handleChangeMode}
@@ -186,7 +256,7 @@ export default function App() {
            <BarChart dataFromParent = {stationsChart}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode} stations={stationsMap}/>
+            <Header mode={storageMode} stations={stationsMap} currentPosition={currentPosition} onChange={handleChange}/>
           </Route>
         </Switch>
       </div>
