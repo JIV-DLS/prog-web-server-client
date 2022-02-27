@@ -13,6 +13,7 @@ var mapA;
 
 export default function MyMap(props) {
   const [stationList, setStationList] = useState([]);
+  console.log("user_prop",props.user)
   useEffect(() => {
     STATIONS = props.stations;
     setStationList(STATIONS);
@@ -47,6 +48,18 @@ export default function MyMap(props) {
     iconUrl: "https://cdn-icons-png.flaticon.com/512/784/784867.png",
     iconSize: [20, 20]
   });
+
+  function NumberList(props) {
+    const numbers = props.numbers;
+    const listItems = numbers.map((number) =>
+      <li key={number.toString()}>
+        {number}
+      </li>
+    );
+    return (
+      <ul>{listItems}</ul>
+    );
+  }
 
   return (
     <MapContainer
@@ -84,10 +97,8 @@ export default function MyMap(props) {
               <div className="m-2" style={popupHead}>
                 Station :
               </div>
-               {station.latitude}
-               <br/>
+               {station.adresse}
 
-               {station.longitude}
             </div>
             <div className="m-2" style={okText}>
                 <button className="itineraryButton" onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
@@ -107,9 +118,7 @@ export default function MyMap(props) {
               <div className="m-2" style={popupHead}>
                 Les services :
               </div>
-               {station.services.service.map(s => (
-              <p>{s}</p>
-              ))}
+              <NumberList numbers={station.services.service} />
             </div>
           </div>
         </Popup>
