@@ -76,7 +76,6 @@ export default function App() {
           
           data.map( d => {
             var NewPrix=[];
-            var NewPrix=[];
             if(!d.pdv_content.latitude.includes(".") ){
             if(d.pdv_content.prix){
 
@@ -97,6 +96,12 @@ export default function App() {
                 }
 
                 }
+
+                }
+            }
+
+            if(d.pdv_content.services===undefined){
+              d.pdv_content["services"]  = "non definied"
             }
 
             if(d.pdv_content.services===undefined){
@@ -123,7 +128,7 @@ export default function App() {
             }
             d.pdv_content.latitude=d.pdv_content.latitude.slice(0, 2) + "." + d.pdv_content.latitude.slice(2 + Math.abs(0));*/
           
-            DataStations.push(d.pdv_content);}
+            DataStations.push(d.pdv_content);
             
 
           })
@@ -134,8 +139,8 @@ export default function App() {
 
           
           
-
-      })
+        })
+      
 
   }, [])
 
@@ -164,10 +169,10 @@ export default function App() {
            <BarChart dataFromParent = {stationsChart}/>
           </Route>
           <Route path="/">
-            <Header mode={storageMode} stations={stationsMap} />
+            <Header mode={storageMode} stations={stationsMap} token={token}/>
           </Route>
         </Switch>
       </div>
     </Router>
   );
-}
+  }

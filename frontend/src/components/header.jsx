@@ -22,27 +22,19 @@ import {drawItinerary} from "../utils/itineraryCalculator";
 const api = new Api();
 
 
-export default function Header({mode,stations}) {
+export default function Header({mode,stations,token}) {
 
   const typeOfGas = ['SP98','SP95','Gazole'];
   const typeOfService = ['Lavage automatique', 'Lavage manuel', 'Boutique alimentaire', 'Station de gonflage', 'Boutique non alimentaire', 'Automate CB 24/24'];
   const [gasFilter, setGasFilter] = useState('');
   const [serviceFilter, setServiceFilter] = useState('');
-  const [tileLayer, setTayelLayer] = useState('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
   const [anchorEl, setAnchorEl] = useState(null);
-  useEffect(() => {
-    if(mode.mode) {
-        setTayelLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png');
-    } else {
-        setTayelLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png');
-    }
-    
-  }, [mode,stations]);
+    const [user, setUser] = useState();
 
-  let history = useHistory();
-  const routeChange = () => {
-    history.push("/signIn")
-  }
+    let history = useHistory();
+    const routeChange = () => {
+        history.push("/signIn")
+    }
 
     const handleClose = () => {
         setAnchorEl(null);
@@ -53,16 +45,40 @@ export default function Header({mode,stations}) {
         setAnchorEl(event.currentTarget);
     };
 
+
     const logout = (event) => {
-        //api.logout()
+        api.logout()
+        setUser(null)
+        handleClose();
+
     };
 
-    let user = localStorage.getItem("user")
+    console.log(user);
 
-    if (user)
-        user = JSON.parse(user)
+    function loadUserFromApi() {
+        api.getUserInfo().then((_user) => {
+            localStorage.setItem("user", JSON.stringify(_user));
+            //user = _user;
+            setUser(_user);
+        });
+    }
 
-    console.log("in Header",user);
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        let userSaved = localStorage.getItem("user")
+        if (token) {
+            if (userSaved == null) {
+                loadUserFromApi();
+                console.log("1",user);
+            } else {
+                const _ = JSON.parse(userSaved);
+                //user = _;
+                setUser(_);
+                console.log("2",_,user);
+            }
+            console.log("3",user);
+        }
+    }, [])
     return (
         <><Box sx={{ flexGrow: 1 }}>
           <AppBar id="AppBar" position="static">
@@ -101,10 +117,10 @@ export default function Header({mode,stations}) {
                       onChange={(event, value) => setServiceFilter(value)}
                       renderInput={(params) => <TextField {...params} label="Services" />} />
 
-                  { !user ?
+                  {!user?
                       <Button id="AppBarTypoButton" color="inherit" onClick={routeChange}>
-                      Connexion
-                  </Button>
+                          Connexion
+                      </Button>
                       :
                       <div>
                           <IconButton
@@ -115,7 +131,7 @@ export default function Header({mode,stations}) {
                               onClick={handleMenu}
                               color="inherit"
                           >
-                              <AccountCircle style={{color:mode? 'gray' : 'white'}}/>
+                              <AccountCircle style={{color: mode ? 'gray' : 'white'}}/>
                           </IconButton>
                           <Menu
                               id="menu-appbar"
@@ -123,10 +139,11 @@ export default function Header({mode,stations}) {
                               open={Boolean(anchorEl)}
                               onClose={handleClose}
                           >
-                              <MenuItem onClick={handleClose} disabled={true}>Profile</MenuItem>
+                              <MenuItem onClick={handleClose}
+                                        disabled={true}>{user["firstName"] + " " + user["lastName"]}</MenuItem>
                               <MenuItem onClick={logout}>Logout</MenuItem>
                           </Menu>
-                      </div> }
+                      </div>}
 
               </Toolbar>
           </AppBar>
