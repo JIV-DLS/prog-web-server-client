@@ -90,7 +90,7 @@ export default function App() {
             }
             
             if(d.pdv_content.services===undefined){
-              d.pdv_content["services"]  = "non definied"
+              d.pdv_content["services"]  = {service:["Aucun serivce"]};
             }
      
             ChartStations.push(d.pdv_content);}
@@ -127,12 +127,10 @@ export default function App() {
             }
 
             if(d.pdv_content.services===undefined){
-              d.pdv_content["services"]  = "non definied"
+              d.pdv_content["services"]  = {service:["Aucun serivce"]};
             }
             
-            if(d.pdv_content.services===undefined){
-              d.pdv_content["services"]  = "non definied"
-            }
+            
             d.pdv_content.prix=NewPrix;
             let x = parseInt(d.pdv_content.longitude)/100000
 

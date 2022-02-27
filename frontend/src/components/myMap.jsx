@@ -48,6 +48,18 @@ export default function MyMap(props) {
     iconSize: [20, 20]
   });
 
+  function NumberList(props) {
+    const numbers = props.numbers;
+    const listItems = numbers.map((number) =>
+      <li key={number.toString()}>
+        {number}
+      </li>
+    );
+    return (
+      <ul>{listItems}</ul>
+    );
+  }
+
   return (
     <MapContainer
       center={[43.7101728, 7.2619532]}
@@ -84,10 +96,8 @@ export default function MyMap(props) {
               <div className="m-2" style={popupHead}>
                 Station :
               </div>
-               {station.latitude}
-               <br/>
-              
-               {station.longitude}
+               {station.adresse}
+               
             </div>
             <div className="m-2" style={okText}>
                 <button className="itineraryButton" onClick={() => drawItinerary(station._longitude,station._latitude)}>Itinéraire</button>
@@ -107,9 +117,7 @@ export default function MyMap(props) {
               <div className="m-2" style={popupHead}>
                 Les services :
               </div>
-               {station.services.service.map(s => (
-              <p>{s}</p>
-              ))}
+              <NumberList numbers={station.services.service} />
             </div>
           </div>
         </Popup>
