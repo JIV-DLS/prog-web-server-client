@@ -9,6 +9,8 @@
 ## How to start the project
 Run the following commands to start the backend:
 
+In a separate terminal run this command to start docker : docker run -it -p 27016:27016 mongo
+
     $ git clone https://github.com/JIV-DLS/prog-web-server-client.git
     $ cd backend
     $ npm install
