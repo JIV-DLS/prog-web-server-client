@@ -7,9 +7,13 @@
 
 
 ## How to start the project
-Run the following commands to start the backend:
+Run the following commands to start the :
 
-In a separate terminal run this command to start docker : docker run -it -p 27016:27016 mongo
+In a separate terminal run this command to start the MongoDb server in local : 
+
+    $ docker run -it -p 27016:27017 mongo
+
+After that open a new terminal and run the following commands to start the backend:
 
     $ git clone https://github.com/JIV-DLS/prog-web-server-client.git
     $ cd backend
